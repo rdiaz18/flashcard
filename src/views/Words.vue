@@ -8,14 +8,6 @@
     		<md-table-head>Meaning</md-table-head>
     	</md-table-row>
     	<WordRow v-for="(word, index) in $store.getters.allWords" :index="index" :word="word[0]" :meaning="word[1]"></WordRow>
-    	<!-- <md-table-row>
-    		<md-table-cell>
-    			<md-input></md-input>
-    		</md-table-cell>
-    		<md-table-cell>
-    			<md-input></md-input>
-    		</md-table-cell>
-    	</md-table-row> -->
     </md-table>
   </div>
 </template>
@@ -30,9 +22,7 @@
 		mounted(){
 			// Check if List Has Empty Row if Not Add 
 			let lastWord = this.$store.getters.lastWord;
-			alert(lastWord);
 			if (lastWord[0].length > 0 || lastWord[1].length > 0) {
-				alert("if check exec");
 				this.$store.commit("addEmptyWord");
 			}
 		},

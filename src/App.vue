@@ -8,6 +8,18 @@
   </div>
 </template>
 
+<script>
+  export default {
+    watch: {
+      $route (to, from){
+        if (this.$store.state.login == false) {
+          this.$router.push({ name: "home" })
+        }
+      }
+    }  
+  }
+</script>
+
 <style lang="scss">
 html, body, #app {
   height: 100%;

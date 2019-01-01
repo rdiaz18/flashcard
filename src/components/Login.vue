@@ -29,7 +29,6 @@ export default {
   },
   methods: {
     login(){
-      alert("login");
       this.$store.commit("login");
     }
   }
