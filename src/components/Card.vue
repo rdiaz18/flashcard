@@ -1,11 +1,16 @@
 <template>
 	<div class="flashcardContainer">
-		<div id="soundIcon" @click="playTTS"></div>
+		<div id="info-wrap">
+			<h1 id="incorrect">- {{ $store.getters.incorrectCount }}</h1>
+			<div id="soundIcon" @click="playTTS"></div>
+			<h1 id="correct">+ {{ $store.getters.correctCount }}</h1>
+		</div>
 		<div id="flashcard">
 			<h1>{{ $store.state.words[$store.state.currentWord][0] }}</h1>
+			<h2>{{ cardAnswer }}</h2>
 		</div>
 		<div id="flashcardControls">
-			<input type="text" name="meaningInput" placeholder="Enter Meaning" v-model="cardInput">
+			<input type="text" name="meaningInput" placeholder="Enter Meaning" v-model="cardInput" @keyup.enter="checkSubmission">
 			<md-button @click="skipWord">Skip</md-button>
 			<md-button @click="checkSubmission">Check</md-button>
 		</div>
@@ -17,28 +22,76 @@
 		name: "Card",
 		watch: {
 			'$store.state.currentWord': function (newVal) {
-	            console.log(newVal);
-	            store.dispatch('handleMyStateChange');
+				let that = this;
+	            setTimeout(function(){ that.playTTS() }, 3000);
 	        }
+		},
+		mounted(){
+			// Get or Create Correct in Local Storage -> Update Store
+			if (localStorage.getItem("correct") == null) {
+				localStorage.setItem("correct", 0);
+			} else {
+				this.$store.commit("setCorrect", parseInt(localStorage.getItem("correct")) );
+			}
+			// Get or Create Incorrect in Local Storage -> Update Store
+			if (localStorage.getItem("incorrect") == null) {
+				localStorage.setItem("incorrect", 0)
+			} else {
+				this.$store.commit("setIncorrect", parseInt(localStorage.getItem("incorrect")) );
+			}
+			// Get or Create Current Word in Local Storage -> Update Store
+			if (localStorage.getItem("currentWord") == null) {
+				localStorage.setItem("currentWord", 0);
+			} else {
+				this.$store.commit("setCurrentWord", parseInt(localStorage.getItem("currentWord")) )
+			}
 		},
 		methods: {
 			checkSubmission(){
-				if (this.$store.getters.currentMeaning == this.cardInput) {
-					this.$store.commit("addCorrect")
+				var flashcard = document.getElementById("flashcard"),
+					that = this,
+					submission = this.cardInput.toLowerCase(),
+					match = false,
+					meaningArr = this.$store.getters.currentMeaning.toLowerCase().split(",");
+
+				// Show Card Answer
+				this.cardAnswer = this.$store.getters.currentMeaning;
+
+				// Loop over possible matches in meaning
+				match = meaningArr.find((e) => { return e == submission; });
+
+				if (match) {
+					localStorage.setItem("correct", this.$store.getters.correctCount + 1);
+					flashcard.classList.add("correct");
+					that.$store.commit("addCorrect");
+					setTimeout(function(){
+						flashcard.classList.remove("correct");
+						that.cardAnswer = "";
+					}, 2500);
 				} else {
-					this.$store.commit("addIncorrect");
+					localStorage.setItem("incorrect", this.$store.getters.incorrectCount + 1);
+					flashcard.classList.add("incorrect");
+					that.$store.commit("addIncorrect");
+					setTimeout(function(){					
+						flashcard.classList.remove("incorrect");
+						that.cardAnswer = "";
+					}, 2500);
 				}
+
+				// Empty Input
+				this.cardInput = "";
+				// Update Local Storage Current Word
+				localStorage.setItem("currentWord", this.$store.getters.currentWordCount);
 			},
 			skipWord(){
 				this.$store.commit("addSkip");
 			},
 			playTTS(){
-
 				var xhr = new XMLHttpRequest(),
 					audioCtx = new (window.AudioContext || window.webkitAudioContext)(),
 					source = audioCtx.createBufferSource();
 
-				xhr.open('GET', `http://api.voicerss.org/?key=ad3a12d9c8d6452191ce16c63f9114cd&hl=ru-ru&f=8khz_16bit_stereo&src=${this.$store.getters.currentWord}`, true);
+				xhr.open('GET', `http://api.voicerss.org/?key=ad3a12d9c8d6452191ce16c63f9114cd&hl=${this.$store.getters.currentLang}&f=8khz_16bit_stereo&src=${this.$store.getters.currentWord}`, true);
 				xhr.responseType = 'arraybuffer';
 
 				xhr.onload = function(){
@@ -61,7 +114,8 @@
 		},
 		data(){
 			return {
-				cardInput: ""
+				cardInput: "",
+				cardAnswer: ""
 			}
 		}
 	}
@@ -70,8 +124,17 @@
 <style scoped lang="scss">
 	.flashcardContainer {
 		height: 300px;
-		width: 400px;
+		width: 500px;
 		margin: auto;
+
+		#info-wrap {
+			display: flex;
+
+			h1 {
+				top: -50%;
+				transform: translateY(50%);
+			}
+		}
 
 		#flashcard {
 			background-color: #fdfdfd;
@@ -80,6 +143,9 @@
 			width: 100%;
 			margin: auto;
 			position: relative;
+			-webkit-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+	        -moz-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+			box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
 
 			h1 {
 				font-size: 3em;
@@ -87,6 +153,44 @@
 				transform: translateY(-50%);
 				position: relative;
 				margin: 0 auto;
+			}
+
+			&.correct {
+				animation: correct 1s;
+			}
+
+			&.incorrect {
+				animation: incorrect 1s;
+			}
+
+			@keyframes correct {
+				0% { 
+					background: white;
+					right: 0px; 
+				}
+				50% { 
+					background: green;
+					right: -50px; 
+				}
+				100% { 
+					background: white;
+					right: 0px; 
+				}
+			}
+
+			@keyframes incorrect {
+				0% { 
+					background: white;
+					left: 0px; 
+				}
+				50% { 
+					background: red;
+					left: -50px; 
+				}
+				100% { 
+					background: white;
+					left: 0px; 
+				}
 			}
 
 		}
@@ -99,6 +203,10 @@
 				height: 50px;
 				padding-left: 5px;
 				margin: auto;
+				border: none;
+				-webkit-box-shadow: inset 0px 0px 10px 0px rgba(0,0,0,0.75);
+                -moz-box-shadow: inset 0px 0px 10px 0px rgba(0,0,0,0.75);
+				box-shadow: inset 0px 0px 10px 0px rgba(0,0,0,0.75);
 			}
 
 			button {

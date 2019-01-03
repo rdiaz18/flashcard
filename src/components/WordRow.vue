@@ -1,5 +1,8 @@
 <template>
 	<md-table-row :id="index">
+		<md-table-cell id="index-cell">
+			{{ index + 1 }}
+		</md-table-cell>
 		<md-table-cell>
 			<input v-model="word" @keyup="inputChange" placeholder="Enter Word">
 		</md-table-cell>
@@ -44,6 +47,9 @@
 </script>
 
 <style scoped lang="scss">
+	#index-cell {
+		text-align: left !important;
+	}
 	input {
 		width: 100%;
 		padding: 2.5px 0px 2.5px 5px;

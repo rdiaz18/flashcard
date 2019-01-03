@@ -7,29 +7,42 @@
       <md-card-content>
         <md-field>
           <label>Email</label>
-          <md-input name="email"></md-input>
+          <md-input name="email" v-model="email"></md-input>
         </md-field>
         <md-field>
           <label>Password</label>
-          <md-input name="password"></md-input>
+          <md-input name="password" v-model="password"></md-input>
         </md-field>
-        <md-card-actions>
-          <md-button type="submit" class="md-primary" :disabled="sending" @click="login">Login</md-button>
-        </md-card-actions>
       </md-card-content>
+      <md-button type="submit" class="md-primary" :disabled="sending" @click="register">Register</md-button>
+      <md-button type="submit" class="md-primary" :disabled="sending" @click="login">Login</md-button>
     </md-card>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Login',
+  name: 'LoginModal',
   props: {
     msg: String
   },
   methods: {
     login(){
-      this.$store.commit("login");
+      this.$store.dispatch("login",
+        { "email": this.email, "password": this.password }
+      );
+    },
+    register(){
+      this.$store.dispatch("register",
+        { "email": this.email, "password": this.password }
+      );      
+    }
+  },
+  data(){
+    return {
+      register: false,
+      email: "",
+      password: ""
     }
   }
 }

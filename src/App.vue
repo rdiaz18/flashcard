@@ -1,7 +1,8 @@
 <template>
   <div id="app">
     <div id="nav" v-if="$store.state.login == true">
-      <router-link to="/">Cards</router-link> |
+      <router-link to="/account">Account</router-link> |
+      <router-link to="/cards">Cards</router-link> |
       <router-link to="/words">Words</router-link>
     </div>
     <router-view/>
@@ -13,7 +14,7 @@
     watch: {
       $route (to, from){
         if (this.$store.state.login == false) {
-          this.$router.push({ name: "home" })
+          this.$router.push({ name: "login" })
         }
       }
     }  
@@ -34,7 +35,9 @@ html, body, #app {
   text-align: center;
   color: #2c3e50;
   background-color: #337EFF;
-  background-image: url("./assets/background.png");
+/* background-image: url("./assets/background.png"); -->
+  background-color: #0062ad; */
+  background-image: url("https://www.transparenttextures.com/patterns/foggy-birds.png");  
   background-repeat: repeat;
   background-position: center;
 }
@@ -42,9 +45,11 @@ html, body, #app {
   padding: 30px;
   a {
     font-weight: bold;
-    color: #2c3e50;
+    color: white;
+    display: inline-block;
     &.router-link-exact-active {
-      color: #42b983;
+      transform: scale(1.4);
+      margin: 20px;
     }
   }
 }
