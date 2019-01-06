@@ -10,6 +10,17 @@
   		<div class="tts-lang" id="ru" data-lang="ru-ru" @click="langCheck($event)"></div>
   		<div class="tts-lang" id="us" data-lang="en-us" @click="langCheck($event)"></div>
   	</div>
+  	<h1>Word List Select</h1>
+  	<div id="list-select-container">
+  		<md-field>
+  			<label for="list">Word List</label>
+  			<md-select id="list-select" v-model="currentList" @change="listCheck">
+	  			<md-option v-for="(list, index) in $store.getters.wordLists" :value="list.title">{{ list.title }}</md-option>
+	  			<md-option value="newList">Make New List</md-option>
+	  		</md-select>
+  		</md-field>
+  		<md-button @click="saveList">Save List</md-button>
+  	</div>
     <md-table>
     	<md-table-row>
     		<md-table-head>Index</md-table-head>
@@ -53,22 +64,33 @@
 						icons[i].dataset["lang"] == lang ? icons[i].classList.add("selectedLang") : icons[i].classList.remove("selectedLang");
 					}
 				}
-			}
+			},
+			newListCheck(){
+				// If Make New List Selected
+				return this.currentList == "newList" ? true : false;
+			},
+			saveList(){}
 		},
 		data() {
 			return {
-
+				currentList: this.$store.getters.currentListTitle
 			}
 		}
 	}
 </script>
 
 <style scoped lang="scss">
-	#lang-container {
+	#lang-container,
+	#list-select-container {
 		height: 100px;
 		display: flex;
 		max-width: 800px;
 		margin: auto;
+	}
+
+	#list-select {
+		padding: 5px !important;
+		background-color: white !important;
 	}
 
 	.tts-lang {
@@ -122,7 +144,7 @@
 	}		
 
 	h1 {
-		padding-top: 80px;
+		padding-top: 20px;
 		margin-top: 0px;
 	}
 
