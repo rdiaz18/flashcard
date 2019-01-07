@@ -1142,15 +1142,25 @@ export default new Vuex.Store({
   		return state.currentWord;
   	},
   	currentWord(state){
-  		let word = state.words[state.currentWord];
-  		return word[0];
+      for (var i = 0; i < state.wordList.length; i++) {
+        if (state.wordList[i].title == state.currentList){
+          return state.wordList[i].words[state.currentWord][0];
+        }
+      }
   	},
   	currentMeaning(state){
-  		let meaning = state.words[state.currentWord];
-  		return meaning[1];
+      for (var i = 0; i < state.wordList.length; i++) {
+        if (state.wordList[i].title == state.currentList){
+          return state.wordList[i].words[state.currentWord][1];
+        }
+      }
   	},
   	lastWord(state){
-  		return state.words[state.words.length-1]
+      for (var i = 0; i < state.wordList.length; i++) {
+        if (state.wordList[i]["title"] == state.currentList){
+          return state.wordList[i]["words"][state.wordList[i]["words"].length-1];
+        }
+      }
   	},
   	duplicateEmptyCheck(state){
   		if (state.words.length >= 2) {
@@ -1183,12 +1193,20 @@ export default new Vuex.Store({
   		state.login = true;
   	},
   	addEmptyWord(state){
-  		state.words.push(["",""]);
+      for (var i = 0; i < state.wordLists.length; i++) {
+        if (state.wordLists[i]["title"] == state.currentListTitle){
+          state.wordLists[i]["words"].push(["",""]);
+        }
+      }
   	},
   	updateWord(state, payload){
   		// Index, Word, Meaning
-  		state.words[payload["index"]][0] = payload["word"];
-  		state.words[payload["index"]][1] = payload["meaning"];
+      for (var i = 0; i < state.wordLists.length; i++) {
+        if (state.wordLists[i]["title"] == state.currentListTitle){
+          state.wordLists[i]["words"][payload["index"]][0] = payload["word"];
+          state.wordLists[i]["words"][payload["index"]][1] = payload["meaning"];
+        }
+      }
   	},
   	addCorrect(state){
   		state.correct++;
@@ -1213,7 +1231,18 @@ export default new Vuex.Store({
   	},
   	updateLang(state, payload){
   		state.language = payload;
-  	}
+  	},
+    addList(state, payload){
+      state.wordList.push({
+        "title": payload,
+        "id": state.wordList.length, // id = index for now
+        "words": [
+          ["", ""]
+        ]
+      });
+      state.currentList = payload;
+      console.log(state.wordList);
+    }
   	// removeLastWord(state){
   	// 	state.words.pop();
   	// }

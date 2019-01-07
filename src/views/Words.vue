@@ -12,14 +12,27 @@
   	</div>
   	<h1>Word List Select</h1>
   	<div id="list-select-container">
-  		<md-field>
-  			<label for="list">Word List</label>
-  			<md-select id="list-select" v-model="currentList" @change="listCheck">
-	  			<md-option v-for="(list, index) in $store.getters.wordLists" :value="list.title">{{ list.title }}</md-option>
-	  			<md-option value="newList">Make New List</md-option>
-	  		</md-select>
-  		</md-field>
-  		<md-button @click="saveList">Save List</md-button>
+  		<div>
+	  		<md-field>
+	  			<label>New List Name</label>
+	  			<md-input v-model="newListName"></md-input>
+	  		</md-field>
+	  		<md-button @click="createNewList">Create New List</md-button>
+	  	</div>
+	  	<div>
+	  		<md-field>
+	  			<label style="margin-left: 5px">Word List</label>
+	  			<md-select id="list-select" v-model="currentList">
+		  			<md-option v-for="(list, index) in $store.getters.wordLists" :value="list.title">{{ list.title }}</md-option>
+		  		</md-select>
+	  		</md-field>
+	  		<md-field v-show="newListCheck == true">
+	  			<label>New List Name</label>
+	  			<md-input></md-input>
+	  		</md-field>
+	  		<md-button @click="deleteList">Delete List</md-button>
+	  		<md-button @click="saveList">Save List</md-button>
+	  	</div>
   	</div>
     <md-table>
     	<md-table-row>
@@ -69,23 +82,62 @@
 				// If Make New List Selected
 				return this.currentList == "newList" ? true : false;
 			},
-			saveList(){}
+			createNewList(){
+				if (this.newListName.length > 0){
+					this.$store.commit("addList", this.newListName);
+					this.newListName = '';
+				} else {
+					alert("Please Add List Title");
+				}
+			},
+			saveList(){
+				// this.$store.dispatch("saveList");
+			},
+			deleteList(){
+				// this.$store.dispatch("deleteList");
+			}
 		},
 		data() {
 			return {
-				currentList: this.$store.getters.currentListTitle
+				currentList: this.$store.getters.currentListTitle,
+				newListName: ''
 			}
 		}
 	}
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 	#lang-container,
 	#list-select-container {
 		height: 100px;
 		display: flex;
 		max-width: 800px;
 		margin: auto;
+	}
+
+	#list-select-container {
+		background-color: lightgray;
+		border-bottom: 1px solid black;
+
+		h1 {
+			color: white;
+		}
+
+		& div {
+			width: 50%;
+		}
+
+		& div:first-of-type {
+			border-right: 5px solid lightgray;
+		}
+
+		& div:last-of-type {
+			border-left: 5px solid lightgray;
+		}
+
+		& div div {
+			width: 100%;
+		}
 	}
 
 	#list-select {
@@ -154,5 +206,22 @@
 		
 		margin: auto;
 		background-color: #dfdfdf;
+	}
+
+	.md-field {
+		margin: 4px 0px 0px;
+	}
+
+	.md-list, .md-input {
+		background-color: white !important;
+	}
+
+	.md-input, input {
+		padding: 5px !important;
+		font-size: 1.8em;
+	}
+
+	.md-button:hover {
+		background-color: lightgray !important;
 	}
 </style>

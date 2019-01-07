@@ -22,9 +22,13 @@
 </script>
 
 <style lang="scss">
+html {
+  background-color: #337EFF;
+  background-image: url("https://www.transparenttextures.com/patterns/foggy-birds.png");  
+  background-repeat: repeat;
+  background-position: center;
+}
 html, body, #app {
-  height: 100%;
-  width: 100%;
   padding: 0px;
   margin: 0px;
 }
@@ -34,12 +38,7 @@ html, body, #app {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  background-color: #337EFF;
-/* background-image: url("./assets/background.png"); -->
-  background-color: #0062ad; */
-  background-image: url("https://www.transparenttextures.com/patterns/foggy-birds.png");  
-  background-repeat: repeat;
-  background-position: center;
+  background-color: transparent;
 }
 #nav {
   padding: 30px;

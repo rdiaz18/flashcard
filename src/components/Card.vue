@@ -1,12 +1,22 @@
 <template>
 	<div class="flashcardContainer">
 		<div id="info-wrap">
-			<h1 id="incorrect">- {{ $store.getters.incorrectCount }}</h1>
-			<div id="soundIcon" @click="playTTS"></div>
-			<h1 id="correct">+ {{ $store.getters.correctCount }}</h1>
+			<div>
+				<md-field>
+					<label>Word List</label>
+					<md-select id="list-select" v-model="currentList" @change="changeList(e.target.value)">
+			  			<md-option v-for="(list, index) in $store.getters.wordLists" :value="list.title">{{ list.title }}</md-option>
+			  		</md-select>
+				</md-field>
+			</div>
+			<div id="control-wrap">
+				<!-- <h1 id="incorrect">- {{ $store.getters.incorrectCount }}</h1> -->
+				<div id="soundIcon" @click="playTTS"></div>
+				<!-- <h1 id="correct">+ {{ $store.getters.correctCount }}</h1> -->
+			</div>
 		</div>
 		<div id="flashcard">
-			<h1>{{ $store.state.words[$store.state.currentWord][0] }}</h1>
+			<h1>{{ $store.getters.currentWord }}</h1>
 			<h2>{{ cardAnswer }}</h2>
 		</div>
 		<div id="flashcardControls">
@@ -27,24 +37,36 @@
 	        }
 		},
 		mounted(){
-			// Get or Create Correct in Local Storage -> Update Store
-			if (localStorage.getItem("correct") == null) {
-				localStorage.setItem("correct", 0);
-			} else {
-				this.$store.commit("setCorrect", parseInt(localStorage.getItem("correct")) );
-			}
-			// Get or Create Incorrect in Local Storage -> Update Store
-			if (localStorage.getItem("incorrect") == null) {
-				localStorage.setItem("incorrect", 0)
-			} else {
-				this.$store.commit("setIncorrect", parseInt(localStorage.getItem("incorrect")) );
-			}
-			// Get or Create Current Word in Local Storage -> Update Store
-			if (localStorage.getItem("currentWord") == null) {
-				localStorage.setItem("currentWord", 0);
-			} else {
-				this.$store.commit("setCurrentWord", parseInt(localStorage.getItem("currentWord")) )
-			}
+			// if (localStorage.getItem("currentList") == null) {
+			// 	localStorage.setItem("currentList", null);
+			// } else {
+			// 	this.$store.commit("setCurrentList", localStorage.getItem("currentList"));
+			// }
+
+			// if (localStorage.getItem("currentListData") == null){
+			// 	localStorage.setItem("currentListData", {
+			// 		""
+			// 	});
+			// }
+
+			// // Get or Create Correct in Local Storage -> Update Store
+			// if (localStorage.getItem("correct") == null) {
+			// 	localStorage.setItem("correct", 0);
+			// } else {
+			// 	this.$store.commit("setCorrect", parseInt(localStorage.getItem("correct")) );
+			// }
+			// // Get or Create Incorrect in Local Storage -> Update Store
+			// if (localStorage.getItem("incorrect") == null) {
+			// 	localStorage.setItem("incorrect", 0)
+			// } else {
+			// 	this.$store.commit("setIncorrect", parseInt(localStorage.getItem("incorrect")) );
+			// }
+			// // Get or Create Current Word in Local Storage -> Update Store
+			// if (localStorage.getItem("currentWord") == null) {
+			// 	localStorage.setItem("currentWord", 0);
+			// } else {
+			// 	this.$store.commit("setCurrentWord", parseInt(localStorage.getItem("currentWord")) )
+			// }
 		},
 		methods: {
 			checkSubmission(){
@@ -61,27 +83,32 @@
 				match = meaningArr.find((e) => { return e == submission; });
 
 				if (match) {
-					localStorage.setItem("correct", this.$store.getters.correctCount + 1);
+					// localStorage.setItem("correct", this.$store.getters.correctCount + 1);
 					flashcard.classList.add("correct");
-					that.$store.commit("addCorrect");
 					setTimeout(function(){
 						flashcard.classList.remove("correct");
+						that.$store.commit("addCorrect");
 						that.cardAnswer = "";
-					}, 2500);
+					}, 3000);
 				} else {
-					localStorage.setItem("incorrect", this.$store.getters.incorrectCount + 1);
+					// localStorage.setItem("incorrect", this.$store.getters.incorrectCount + 1);
 					flashcard.classList.add("incorrect");
-					that.$store.commit("addIncorrect");
 					setTimeout(function(){					
 						flashcard.classList.remove("incorrect");
+						that.$store.commit("addIncorrect");
 						that.cardAnswer = "";
-					}, 2500);
+					}, 3000);
 				}
 
 				// Empty Input
 				this.cardInput = "";
 				// Update Local Storage Current Word
-				localStorage.setItem("currentWord", this.$store.getters.currentWordCount);
+				// localStorage.setItem("currentWord", this.$store.getters.currentWordCount);
+			},
+			changeList(payload){
+				this.$store.commit("setCurrentList", payload);
+				// Update Local Storage
+				// localStorage.setItem("currentList", payload);
 			},
 			skipWord(){
 				this.$store.commit("addSkip");
@@ -99,10 +126,13 @@
 
 					audioCtx.decodeAudioData(audioData, function(buffer) {
 				        let myBuffer = buffer,
-				        	songLength = buffer.duration;
+				        	songLength = buffer.duration,
+				        	gainNode = audioCtx.createGain()
 
 				        source.buffer = myBuffer;
-				        source.connect(audioCtx.destination);
+						gainNode.gain.value = 2; // 10 %
+						gainNode.connect(audioCtx.destination);
+				        source.connect(gainNode);
 				        source.loop = false;
 				        source.start(0);	
 				    })
@@ -115,25 +145,47 @@
 		data(){
 			return {
 				cardInput: "",
-				cardAnswer: ""
+				cardAnswer: "",
+				currentList: this.$store.getters.currentListTitle
 			}
 		}
 	}
 </script>
 
+<style>
+	.md-menu-content.md-select-menu .md-list {
+		background-color: white !important;
+	}
+	.md-menu.md-select .md-input {
+		color: black;
+	}
+</style>
+
 <style scoped lang="scss">
+
 	.flashcardContainer {
 		height: 300px;
 		width: 500px;
 		margin: auto;
 
 		#info-wrap {
-			display: flex;
+			display: block;
+			color: white;
+			
+			div input {
+				margin-bottom: 0px;
+				color: white !important;
+			}
 
 			h1 {
 				top: -50%;
 				transform: translateY(50%);
 			}
+
+			#control-wrap {
+				display: flex;
+			}
+
 		}
 
 		#flashcard {
