@@ -5,13 +5,16 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-  	login: true,
-  	currentWord: 0,
-  	correct: 0,
-  	incorrect: 0,
-  	skipped: 0,
-    currentList: "Top 1,000 Words",
-    wordList: [
+     email: "mpaccione1991@gmail.com",
+     password: "rspaccio",
+     ttsExpiry: "Not Purchased",
+     login: true,
+     currentWord: 0,
+     correct: 0,
+     incorrect: 0,
+     skipped: 0,
+     currentList: "Top 1,000 Words",
+     wordList: [
       {
         title: "Top 1,000 Words",
         id: 0,
@@ -1181,12 +1184,21 @@ export default new Vuex.Store({
   	incorrectCount(state){
   		return state.incorrect;
   	},
-    wordLists(state){
-      return state.wordList;
-    },
-    currentListTitle(state){
-      return state.currentList;
-    }
+     wordLists(state){
+          return state.wordList;
+     },
+     currentListTitle(state){
+          return state.currentList;
+     },
+     email(state){
+          return state.email;
+     },
+     password(state){
+          return state.password;
+     },
+     ttsExpiry(state){
+          return state.ttsExpiry;
+     }
   },
   mutations: {
   	login(state){
@@ -1225,6 +1237,9 @@ export default new Vuex.Store({
   	setCurrentWord(state, payload){
   		state.currentWord = payload;
   	},
+    setCurrentList(state, payload){
+      state.currentList = payload;
+    },
   	addSkip(state){
   		state.skipped++;
   		state.currentWord++;

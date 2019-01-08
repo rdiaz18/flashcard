@@ -12,25 +12,25 @@
   	</div>
   	<h1>Word List Select</h1>
   	<div id="list-select-container">
-  		<div>
+  		<div v-show="$store.getters.ttsExpiry != 'Not Purchased'">
 	  		<md-field>
 	  			<label>New List Name</label>
 	  			<md-input v-model="newListName"></md-input>
 	  		</md-field>
 	  		<md-button @click="createNewList">Create New List</md-button>
 	  	</div>
-	  	<div>
+	  	<div :class="{ center: centerIt }">
 	  		<md-field>
 	  			<label style="margin-left: 5px">Word List</label>
 	  			<md-select id="list-select" v-model="currentList">
 		  			<md-option v-for="(list, index) in $store.getters.wordLists" :value="list.title">{{ list.title }}</md-option>
 		  		</md-select>
 	  		</md-field>
-	  		<md-field v-show="newListCheck == true">
+	  		<md-field v-show="newListCheck == true && $store.getters.ttsExpiry != 'Not Purchased'">
 	  			<label>New List Name</label>
 	  			<md-input></md-input>
 	  		</md-field>
-	  		<md-button @click="deleteList">Delete List</md-button>
+	  		<md-button @click="deleteList" v-show="$store.getters.ttsExpiry != 'Not Purchased'">Delete List</md-button>
 	  		<md-button @click="saveList">Save List</md-button>
 	  	</div>
   	</div>
@@ -100,7 +100,8 @@
 		data() {
 			return {
 				currentList: this.$store.getters.currentListTitle,
-				newListName: ''
+				newListName: '',
+				centerIt: this.$store.getters.ttsExpiry == "Not Purchased" ? true : false
 			}
 		}
 	}
@@ -223,5 +224,10 @@
 
 	.md-button:hover {
 		background-color: lightgray !important;
+	}
+
+	.center {
+		margin: auto;
+		display: block;
 	}
 </style>

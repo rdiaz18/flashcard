@@ -36,6 +36,11 @@ export default {
       this.$store.dispatch("register",
         { "email": this.email, "password": this.password }
       );      
+    },
+    alertEmpty(){
+      if (this.email == "" || this.password == "") {
+        alert("Please Complete Email and Password Fields");
+      }
     }
   },
   data(){

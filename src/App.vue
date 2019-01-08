@@ -24,7 +24,7 @@
 <style lang="scss">
 html {
   background-color: #337EFF;
-  background-image: url("https://www.transparenttextures.com/patterns/foggy-birds.png");  
+  background-image: url("assets/foggy-birds.png");  
   background-repeat: repeat;
   background-position: center;
 }

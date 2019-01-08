@@ -153,7 +153,8 @@
 </script>
 
 <style>
-	.md-menu-content.md-select-menu .md-list {
+	.md-menu-content.md-select-menu .md-list,
+	input#list-select {
 		background-color: white !important;
 	}
 	.md-menu.md-select .md-input {
