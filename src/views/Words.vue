@@ -2,14 +2,25 @@
   <div id="words">
   	<h1>Language Select for TTS Audio</h1>
   	<div id="lang-container">
-  		<div class="tts-lang" id="de" data-lang="de-de" @click="langCheck($event)"></div>
+  		<md-field>
+	  		<md-select>
+	  			<option disabled selected>Select Language</option>
+	  			<optgroup v-for="(category, index) in $store.getters.languageCategories" :label="category">
+	  				<option v-for="(lang, i) in $store.state.languages[category]" :value="lang[1]" class="lang-flag" :style="{ backgroundImage: `url(./assets/flag-${lang[1]}.png)` }">
+	  					{{ lang[0] }}
+	  				</option>
+	  			</optgroup>
+	  		</md-select>
+	  	</md-field>
+
+<!--   		<div class="tts-lang" id="de" data-lang="de-de" @click="langCheck($event)"></div>
   		<div class="tts-lang" id="fi" data-lang="fi-fi" @click="langCheck($event)"></div>
   		<div class="tts-lang" id="fr" data-lang="fr-fr" @click="langCheck($event)"></div>
   		<div class="tts-lang" id="jp" data-lang="ja-jp" @click="langCheck($event)"></div>
   		<div class="tts-lang" id="nl" data-lang="nl-nl" @click="langCheck($event)"></div>
   		<div class="tts-lang" id="pl" data-lang="pl-pl" @click="langCheck($event)"></div>
   		<div class="tts-lang" id="ru" data-lang="ru-ru" @click="langCheck($event)"></div>
-  		<div class="tts-lang" id="us" data-lang="en-us" @click="langCheck($event)"></div>
+  		<div class="tts-lang" id="us" data-lang="en-us" @click="langCheck($event)"></div> -->
   	</div>
   	<h1>Word List Select</h1>
   	<div id="list-select-container">
@@ -173,36 +184,11 @@
 		}
 	}
 
-	#de {
-		background-image: url("./../assets/flag-de.png");
-	}
-
-	#fi {
-		background-image: url("./../assets/flag-fi.png");
-	}
-
-	#fr {
-		background-image: url("./../assets/flag-fr.png")
-	}
-
-	#jp {
-		background-image: url("./../assets/flag-ja-jp.png");		
-	}
-
-	#nl {
-		background-image: url("./../assets/flag-nl.png");		
-	}
-
-	#pl {
-		background-image: url("./../assets/flag-pl.png");		
-	}
-
-	#ru {
-		background-image: url("./../assets/flag-ru.png");		
-	}
-
-	#us {
-		background-image: url("./../assets/flag-us.png");		
+	.lang-flag {
+		background-size: 30px;
+		background-repeat: no-repeat;
+		background-position: 30px;
+		padding-left: 30px;
 	}		
 
 	h1 {
