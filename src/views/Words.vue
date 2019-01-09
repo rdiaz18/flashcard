@@ -7,6 +7,7 @@
   		<div class="tts-lang" id="fr" data-lang="fr-fr" @click="langCheck($event)"></div>
   		<div class="tts-lang" id="jp" data-lang="ja-jp" @click="langCheck($event)"></div>
   		<div class="tts-lang" id="nl" data-lang="nl-nl" @click="langCheck($event)"></div>
+  		<div class="tts-lang" id="pl" data-lang="pl-pl" @click="langCheck($event)"></div>
   		<div class="tts-lang" id="ru" data-lang="ru-ru" @click="langCheck($event)"></div>
   		<div class="tts-lang" id="us" data-lang="en-us" @click="langCheck($event)"></div>
   	</div>
@@ -108,6 +109,10 @@
 </script>
 
 <style lang="scss">
+	#words h1 {
+		color: white;
+	}
+
 	#lang-container,
 	#list-select-container {
 		height: 100px;
@@ -186,6 +191,10 @@
 
 	#nl {
 		background-image: url("./../assets/flag-nl.png");		
+	}
+
+	#pl {
+		background-image: url("./../assets/flag-pl.png");		
 	}
 
 	#ru {

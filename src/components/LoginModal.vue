@@ -2,7 +2,7 @@
   <div id="login">
     <md-card class="md-layout-item">
       <md-card-header>
-        <div class="md-title">TTS Flashcards</div>
+        <div class="md-title"><span id="logo"></span>TTS Flashcards</div>
       </md-card-header>
       <md-card-content>
         <md-field>
@@ -67,6 +67,16 @@ export default {
     width: 600px;
     height: 400px;
   }
+}
+#logo {
+  background-image: url("./../assets/volume.png");
+  background-size: 25px;
+  background-repeat: no-repeat;
+  display: inline-block;
+  transform: rotate(-90deg);
+  opacity: 0.7;
+  height: 30px;
+  width: 30px;
 }
 h3 {
   margin: 40px 0 0;

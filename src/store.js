@@ -1158,6 +1158,50 @@ export default new Vuex.Store({
         }
       }
   	},
+     previousWord(state){
+          if (state.currentWord != 0) {
+               for (var i = 0; i < state.wordList.length; i++) {
+                    if (state.wordList[i].title == state.currentList){
+                         return state.wordList[i].words[state.currentWord - 1][0];
+                    }
+               }
+          } else {
+               return false;
+          }
+     },
+     previousMeaning(state){
+          if (state.currentWord != 0) {
+               for (var i = 0; i < state.wordList.length; i++) {
+                    if (state.wordList[i].title == state.currentList){
+                         return state.wordList[i].words[state.currentWord - 1][1];
+                    }
+               }
+          } else {
+               return false;
+          }
+     },
+     nextWord(state){
+          if (state.currentWord != state.wordList.length) {
+               for (var i = 0; i < state.wordList.length; i++) {
+                    if (state.wordList[i].title == state.currentList){
+                         return state.wordList[i].words[state.currentWord + 1][0];
+                    }
+               }
+          } else {
+               return false;
+          }
+     },
+     nextMeaning(state){
+          if (state.currentWord != state.wordList.length) {
+               for (var i = 0; i < state.wordList.length; i++) {
+                    if (state.wordList[i].title == state.currentList){
+                         return state.wordList[i].words[state.currentWord + 1][1];
+                    }
+               }
+          } else {
+               return false;
+          }
+     },
   	lastWord(state){
       for (var i = 0; i < state.wordList.length; i++) {
         if (state.wordList[i]["title"] == state.currentList){

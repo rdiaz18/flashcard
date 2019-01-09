@@ -15,9 +15,19 @@
 				<!-- <h1 id="correct">+ {{ $store.getters.correctCount }}</h1> -->
 			</div>
 		</div>
-		<div id="flashcard">
-			<h1>{{ $store.getters.currentWord }}</h1>
-			<h2>{{ cardAnswer }}</h2>
+		<div id="flashcardInnerContainer">
+			<div id="previous-flashcard" :class="{ hidden: $store.getters.previousWord == false }">
+				<h1>{{ $store.getters.previousWord }}</h1>
+				<h2>{{ $store.getters.previousMeaning }}</h2>
+			</div>
+			<div id="flashcard">
+				<h1>{{ $store.getters.currentWord }}</h1>
+				<h2>{{ cardAnswer }}</h2>
+			</div>
+			<div id="next-flashcard" :class="{ hidden: $store.getters.nextWord == false }">
+				<h1>{{ $store.getters.nextWord }}</h1>
+				<h2></h2>
+			</div>
 		</div>
 		<div id="flashcardControls">
 			<input type="text" name="meaningInput" placeholder="Enter Meaning" v-model="cardInput" @keyup.enter="checkSubmission">
@@ -164,14 +174,23 @@
 
 <style scoped lang="scss">
 
+	#flashcardInnerContainer {
+		width: 80%;
+		margin: auto;
+		display: flex;
+		height: 300px;
+	}
+
 	.flashcardContainer {
 		height: 300px;
-		width: 500px;
+		width: 100%;
 		margin: auto;
 
 		#info-wrap {
 			display: block;
 			color: white;
+			width: 500px;
+			margin: auto;
 			
 			div input {
 				margin-bottom: 0px;
@@ -189,11 +208,13 @@
 
 		}
 
-		#flashcard {
+		#flashcard,
+		#previous-flashcard,
+		#next-flashcard {
 			background-color: #fdfdfd;
 			padding: 20px;
 			height: 100%;
-			width: 100%;
+			width: calc(100% / 3);
 			margin: auto;
 			position: relative;
 			-webkit-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
@@ -248,8 +269,16 @@
 
 		}
 
+		#previous-flashcard,
+		#next-flashcard {
+			transform: scale(0.8);
+			opacity: 0.8;
+		}
+
 		#flashcardControls {
+			margin: auto;
 			margin-top: 50px;
+			width: 500px;
 
 			input {
 				width: 100%;
@@ -268,6 +297,10 @@
 				border: 1px solid white;
 			}
 		}
+	}
+
+	.hidden {
+		opacity: 0 !important;
 	}
 
 	#soundIcon {
