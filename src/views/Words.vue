@@ -2,16 +2,19 @@
   <div id="words">
   	<h1>Language Select for TTS Audio</h1>
   	<div id="lang-container">
-  		<md-field>
-	  		<md-select>
-	  			<option disabled selected>Select Language</option>
-	  			<optgroup v-for="(category, index) in $store.getters.languageCategories" :label="category">
-	  				<option v-for="(lang, i) in $store.state.languages[category]" :value="lang[1]" class="lang-flag" :style="{ backgroundImage: `url(./assets/flag-${lang[1]}.png)` }">
-	  					{{ lang[0] }}
-	  				</option>
-	  			</optgroup>
-	  		</md-select>
-	  	</md-field>
+  		<div id="lang-inner-container">
+  			<div id="flag-container" :style="{ backgroundImage: `url(${src})` }"></div>
+  			<md-field id="select-container">
+	  			<label>Select Language</label>
+		  		<select v-model="country">
+		  			<optgroup v-for="(category, index) in $store.getters.languageCategories" :label="category">
+		  				<option v-for="(lang, i) in $store.state.languages[category]" :value="lang[1]" class="lang-flag">
+		  					{{ lang[0] }}
+		  				</option>
+		  			</optgroup>
+		  		</select>
+		  	</md-field>
+	  	</div>
 
 <!--   		<div class="tts-lang" id="de" data-lang="de-de" @click="langCheck($event)"></div>
   		<div class="tts-lang" id="fi" data-lang="fi-fi" @click="langCheck($event)"></div>
@@ -74,6 +77,11 @@
 				this.$store.commit("addEmptyWord");
 			}
 		},
+		computed: {
+			src(){
+				return `./assets/flags/flag-${this.country}.png`;
+			}
+		},
 		methods: {
 			langCheck(e){
 				// Update on click
@@ -113,15 +121,59 @@
 			return {
 				currentList: this.$store.getters.currentListTitle,
 				newListName: '',
-				centerIt: this.$store.getters.ttsExpiry == "Not Purchased" ? true : false
+				centerIt: this.$store.getters.ttsExpiry == "Not Purchased" ? true : false,
+				country: this.$store.getters.language
 			}
 		}
 	}
 </script>
 
 <style lang="scss">
-	#words h1 {
-		color: white;
+	#words { 
+		h1 {
+			color: white;
+		}
+
+		.md-menu.md-select {
+			background-color: white;
+		}
+	}
+
+	#lang-container {
+		#lang-inner-container {
+			width: 100%;
+			display: flex;
+		}
+
+		#flag-container {
+			width: 100px;
+			height: 100%;
+			background-color: white;
+			border-right: 1px solid lightgray;
+			background-position: center;
+			background-repeat: no-repeat;
+			background-size: contain;
+			background-image: url("./../assets/flags/flag-us.png");
+		}
+
+		#select-container {
+			width: calc(100% - 100px);
+			height: 100%;
+			margin: 0px;
+			padding: 0px;
+
+			select {
+				height: 100%;
+				margin: auto;
+				width: 100%;
+				border: 0px;
+				cursor: pointer;
+			}
+
+			select, label {
+				padding: 0px 0px 0px 20px;
+			}
+		}
 	}
 
 	#lang-container,

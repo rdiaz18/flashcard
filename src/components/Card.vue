@@ -18,6 +18,7 @@
 			<div id="flashcard">
 				<h1>{{ $store.getters.currentWord }}</h1>
 				<h2>{{ cardAnswer }}</h2>
+				<h2 id="speechWord" :style="{ color: speechColor }">{{ speechWord }}</h2>
 			</div>
 			<div id="next-flashcard" :class="{ hidden: $store.getters.nextWord == false }">
 				<h1>{{ $store.getters.nextWord }}</h1>
@@ -30,7 +31,8 @@
 			<div id="control-wrap">
 				<div id="soundIcon" @click="playTTS"></div>
 				<md-button @click="checkSubmission">Check</md-button>
-				<div id="microphone" :class="{ green: speechMatch }" @click="recordAudio"></div>
+				<div id="microphone" @click="recordAudio" v-show="recording == false"></div>
+				<div id="microphone-stop" @click="stopRecord" v-show="recording == true"></div>
 			</div>
 		</div>
 	</div>
@@ -77,6 +79,11 @@
 			// 	this.$store.commit("setCurrentWord", parseInt(localStorage.getItem("currentWord")) )
 			// }
 		},
+		computed: {
+			speechColor(){
+  				return this.speechWord.toLowerCase() == this.$store.getters.currentWord ? "green" : "red" 
+  			}
+		},
 		methods: {
 			checkSubmission(){
 				var flashcard = document.getElementById("flashcard"),
@@ -98,6 +105,7 @@
 						flashcard.classList.remove("correct");
 						that.$store.commit("addCorrect");
 						that.cardAnswer = "";
+						that.speechWord = "";
 					}, 3000);
 				} else {
 					// localStorage.setItem("incorrect", this.$store.getters.incorrectCount + 1);
@@ -106,6 +114,7 @@
 						flashcard.classList.remove("incorrect");
 						that.$store.commit("addIncorrect");
 						that.cardAnswer = "";
+						that.speechWord = "";
 					}, 3000);
 				}
 
@@ -123,67 +132,44 @@
 				this.$store.commit("addSkip");
 			},
 			recordAudio(){
-
 				// Reset Match Status
+				this.recording = true;
 				this.speechMatch = null;
+				this.speechWord = "...";
 
 				window.SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition;
 
-				var that = this,
-					recognition = new SpeechRecognition();
-					// grammar = '#JSGF V1.0; grammar colors; public <color> = aqua | azure | beige | bisque | black | blue | brown | chocolate | coral | crimson | cyan | fuchsia | ghostwhite | gold | goldenrod | gray | green | indigo | ivory | khaki | lavender | lime | linen | magenta | maroon | moccasin | navy | olive | orange | orchid | peru | pink | plum | purple | red | salmon | sienna | silver | snow | tan | teal | thistle | tomato | turquoise | violet | white | yellow ;',
-					// speechRecognitionList = new SpeechGrammarList();
+				this.recognition = new SpeechRecognition();
+				this.recognition.lang = this.$store.getters.currentLang;
+				this.recognition.interimResults = false;
+				this.recognition.maxAlternatives = 1;
+				this.recognition.start();
 
-				// speechRecognitionList.addFromString(grammar, 1);
-				// recognition.grammars = speechRecognitionList;
-				//recognition.continuous = false;
-				recognition.lang = this.$store.getters.currentLang;
-				recognition.interimResults = false;
-				recognition.maxAlternatives = 1;
-				recognition.start();
+				var that = this;
 
-				recognition.onresult = function(event) {
-				  var word = event.results[0][0].transcript;
-				  console.log(event.results);
-				  if (word == that.getters.currentWord) {
-				  	that.speechMatch = true;
-				  } else {
-				  	that.speechMatch = false;
-				  }
+				console.log(that.recognition);
+
+				this.recognition.onresult = function(event) {
+					var word = event.results[0][0].transcript;
+					that.speechWord = word;
+					console.log(event);
+					console.log(word);
+					if (word == that.$store.getters.currentWord) {
+						that.speechMatch = true;
+					} else {
+						that.speechMatch = false;
+					}
 				}
 			},
+			stopRecord(){
+				this.recording = false;
+				this.recognition.stop();
+			},
 			playTTS(){
-
 				let utterance = new SpeechSynthesisUtterance(this.$store.getters.currentWord);
-				
 				utterance.lang = this.$store.getters.currentLang;
+				utterance.voice = speechSynthesis.getVoices()[18];
 				speechSynthesis.speak(utterance);
-
-				// var xhr = new XMLHttpRequest(),
-				// 	audioCtx = new (window.AudioContext || window.webkitAudioContext)(),
-				// 	source = audioCtx.createBufferSource();
-
-				// xhr.open('GET', `http://api.voicerss.org/?key=ad3a12d9c8d6452191ce16c63f9114cd&hl=${this.$store.getters.currentLang}&f=8khz_16bit_stereo&src=${this.$store.getters.currentWord}`, true);
-				// xhr.responseType = 'arraybuffer';
-
-				// xhr.onload = function(){
-				// 	var audioData = xhr.response;
-
-				// 	audioCtx.decodeAudioData(audioData, function(buffer) {
-				//         let myBuffer = buffer,
-				//         	songLength = buffer.duration,
-				//         	gainNode = audioCtx.createGain()
-
-				//         source.buffer = myBuffer;
-				// 		gainNode.gain.value = 2; // 10 %
-				// 		gainNode.connect(audioCtx.destination);
-				//         source.connect(gainNode);
-				//         source.loop = false;
-				//         source.start(0);	
-				//     })
-				// }
-
-				// xhr.send();
   			}
 
 		},
@@ -192,7 +178,10 @@
 				cardInput: "",
 				cardAnswer: "",
 				currentList: this.$store.getters.currentListTitle,
-				speechMatch: null
+				speechMatch: null,
+				speechWord: "",
+				recognition: null,
+				recording: false
 			}
 		}
 	}
@@ -329,6 +318,12 @@
 		}
 	}
 
+	#speechWord {
+		position: absolute;
+		width: calc(100% - 40px);
+		bottom: 20px;
+	}
+
 	.hidden {
 		opacity: 0 !important;
 	}
@@ -346,7 +341,7 @@
 		}
 	}
 
-	#soundIcon, #microphone {
+	#soundIcon, #microphone, #microphone-stop {
 		height: 60px;
 		width: 60px;
 		cursor: pointer;
@@ -357,7 +352,8 @@
 	}
 
 	#soundIcon:hover, 
-	#microphone:hover {
+	#microphone:hover,
+	#microphone-stop:hover {
 		opacity: 1;
 	}
 
@@ -367,6 +363,10 @@
 
 	#microphone {
 		background-image: url('./../assets/microphone-icon.png');
+	}
+
+	#microphone-stop {
+		background-image: url('./../assets/microphone-stop-icon.png');
 	}
 
 	#microphone.green {
