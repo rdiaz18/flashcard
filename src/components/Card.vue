@@ -9,11 +9,6 @@
 			  		</md-select>
 				</md-field>
 			</div>
-			<div id="control-wrap">
-				<!-- <h1 id="incorrect">- {{ $store.getters.incorrectCount }}</h1> -->
-				<div id="soundIcon" @click="playTTS"></div>
-				<!-- <h1 id="correct">+ {{ $store.getters.correctCount }}</h1> -->
-			</div>
 		</div>
 		<div id="flashcardInnerContainer">
 			<div id="previous-flashcard" :class="{ hidden: $store.getters.previousWord == false }">
@@ -31,8 +26,12 @@
 		</div>
 		<div id="flashcardControls">
 			<input type="text" name="meaningInput" placeholder="Enter Meaning" v-model="cardInput" @keyup.enter="checkSubmission">
-			<md-button @click="skipWord">Skip</md-button>
-			<md-button @click="checkSubmission">Check</md-button>
+	<!-- 		<md-button @click="skipWord">Skip</md-button> -->
+			<div id="control-wrap">
+				<div id="soundIcon" @click="playTTS"></div>
+				<md-button @click="checkSubmission">Check</md-button>
+				<div id="microphone" :class="{ green: speechMatch }" @click="recordAudio"></div>
+			</div>
 		</div>
 	</div>
 </template>
@@ -43,7 +42,7 @@
 		watch: {
 			'$store.state.currentWord': function (newVal) {
 				let that = this;
-	            setTimeout(function(){ that.playTTS() }, 3000);
+	            setTimeout(function(){ that.playTTS() }, 500);
 	        }
 		},
 		mounted(){
@@ -123,32 +122,68 @@
 			skipWord(){
 				this.$store.commit("addSkip");
 			},
-			playTTS(){
-				var xhr = new XMLHttpRequest(),
-					audioCtx = new (window.AudioContext || window.webkitAudioContext)(),
-					source = audioCtx.createBufferSource();
+			recordAudio(){
 
-				xhr.open('GET', `http://api.voicerss.org/?key=ad3a12d9c8d6452191ce16c63f9114cd&hl=${this.$store.getters.currentLang}&f=8khz_16bit_stereo&src=${this.$store.getters.currentWord}`, true);
-				xhr.responseType = 'arraybuffer';
+				// Reset Match Status
+				this.speechMatch = null;
 
-				xhr.onload = function(){
-					var audioData = xhr.response;
+				window.SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition;
 
-					audioCtx.decodeAudioData(audioData, function(buffer) {
-				        let myBuffer = buffer,
-				        	songLength = buffer.duration,
-				        	gainNode = audioCtx.createGain()
+				var that = this,
+					recognition = new SpeechRecognition();
+					// grammar = '#JSGF V1.0; grammar colors; public <color> = aqua | azure | beige | bisque | black | blue | brown | chocolate | coral | crimson | cyan | fuchsia | ghostwhite | gold | goldenrod | gray | green | indigo | ivory | khaki | lavender | lime | linen | magenta | maroon | moccasin | navy | olive | orange | orchid | peru | pink | plum | purple | red | salmon | sienna | silver | snow | tan | teal | thistle | tomato | turquoise | violet | white | yellow ;',
+					// speechRecognitionList = new SpeechGrammarList();
 
-				        source.buffer = myBuffer;
-						gainNode.gain.value = 2; // 10 %
-						gainNode.connect(audioCtx.destination);
-				        source.connect(gainNode);
-				        source.loop = false;
-				        source.start(0);	
-				    })
+				// speechRecognitionList.addFromString(grammar, 1);
+				// recognition.grammars = speechRecognitionList;
+				//recognition.continuous = false;
+				recognition.lang = this.$store.getters.currentLang;
+				recognition.interimResults = false;
+				recognition.maxAlternatives = 1;
+				recognition.start();
+
+				recognition.onresult = function(event) {
+				  var word = event.results[0][0].transcript;
+				  console.log(event.results);
+				  if (word == that.getters.currentWord) {
+				  	that.speechMatch = true;
+				  } else {
+				  	that.speechMatch = false;
+				  }
 				}
+			},
+			playTTS(){
 
-				xhr.send();
+				let utterance = new SpeechSynthesisUtterance(this.$store.getters.currentWord);
+				
+				utterance.lang = this.$store.getters.currentLang;
+				speechSynthesis.speak(utterance);
+
+				// var xhr = new XMLHttpRequest(),
+				// 	audioCtx = new (window.AudioContext || window.webkitAudioContext)(),
+				// 	source = audioCtx.createBufferSource();
+
+				// xhr.open('GET', `http://api.voicerss.org/?key=ad3a12d9c8d6452191ce16c63f9114cd&hl=${this.$store.getters.currentLang}&f=8khz_16bit_stereo&src=${this.$store.getters.currentWord}`, true);
+				// xhr.responseType = 'arraybuffer';
+
+				// xhr.onload = function(){
+				// 	var audioData = xhr.response;
+
+				// 	audioCtx.decodeAudioData(audioData, function(buffer) {
+				//         let myBuffer = buffer,
+				//         	songLength = buffer.duration,
+				//         	gainNode = audioCtx.createGain()
+
+				//         source.buffer = myBuffer;
+				// 		gainNode.gain.value = 2; // 10 %
+				// 		gainNode.connect(audioCtx.destination);
+				//         source.connect(gainNode);
+				//         source.loop = false;
+				//         source.start(0);	
+				//     })
+				// }
+
+				// xhr.send();
   			}
 
 		},
@@ -156,7 +191,8 @@
 			return {
 				cardInput: "",
 				cardAnswer: "",
-				currentList: this.$store.getters.currentListTitle
+				currentList: this.$store.getters.currentListTitle,
+				speechMatch: null
 			}
 		}
 	}
@@ -290,12 +326,6 @@
                 -moz-box-shadow: inset 0px 0px 10px 0px rgba(0,0,0,0.75);
 				box-shadow: inset 0px 0px 10px 0px rgba(0,0,0,0.75);
 			}
-
-			button {
-				margin: 30px;
-				color: white;
-				border: 1px solid white;
-			}
 		}
 	}
 
@@ -303,17 +333,43 @@
 		opacity: 0 !important;
 	}
 
-	#soundIcon {
-		background-image: url("./../assets/volume.png");
-		background-size: contain;
+	#control-wrap {
+		display: flex;
+		margin-top: 40px;
+		background-color: white;
+		justify-content: space-between;
+
+		.md-button {
+			color: black;
+			height: 48px;
+			border: 1px solid black;
+		}
+	}
+
+	#soundIcon, #microphone {
+		height: 60px;
+		width: 60px;
+		cursor: pointer;
+		background-size: 30px;
 		background-repeat: no-repeat;
 		background-position: center;
-		height: 30px;
-		width: 30px;
-		position: relative;
-		display: block;
-		margin: 50px auto;
-		opacity: 0.5;
-		cursor: pointer;
+		opacity: 0.75;			
+	}
+
+	#soundIcon:hover, 
+	#microphone:hover {
+		opacity: 1;
+	}
+
+	#soundIcon {
+		background-image: url("./../assets/volume.png");
+	}
+
+	#microphone {
+		background-image: url('./../assets/microphone-icon.png');
+	}
+
+	#microphone.green {
+		background-color: green;
 	}
 </style>

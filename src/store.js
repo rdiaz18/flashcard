@@ -14,6 +14,7 @@ export default new Vuex.Store({
      incorrect: 0,
      skipped: 0,
      currentList: "Top 1,000 Words",
+     language: "ru-RU",
      languages: {
        "Afrikaans": [
          ["South Africa", "af-ZA"]
@@ -1309,8 +1310,7 @@ export default new Vuex.Store({
           ["", ""]
         ]
       }
-    ],
-  	language: "ru-ru"
+    ]
   },
   getters: {
   	allWords(state){
