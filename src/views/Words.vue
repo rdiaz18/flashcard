@@ -6,7 +6,7 @@
   			<div id="flag-container" :style="{ backgroundImage: `url(${src})` }"></div>
   			<md-field id="select-container">
 	  			<label>Select Language</label>
-		  		<select v-model="country">
+		  		<select v-model="country" @change="changeLang">
 		  			<optgroup v-for="(category, index) in $store.getters.languageCategories" :label="category">
 		  				<option v-for="(lang, i) in $store.state.languages[category]" :value="lang[1]" class="lang-flag">
 		  					{{ lang[0] }}
@@ -115,6 +115,9 @@
 			},
 			deleteList(){
 				// this.$store.dispatch("deleteList");
+			},
+			changeLang(){
+				this.$store.commit("updateLang", this.country);
 			}
 		},
 		data() {

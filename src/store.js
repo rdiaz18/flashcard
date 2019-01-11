@@ -1360,7 +1360,8 @@ export default new Vuex.Store({
           }
      },
      nextWord(state){
-          if (state.currentWord != state.wordList.length) {
+          console.log(state.currentWord+" | "+state.wordList[0].words.length);
+          if (state.currentWord != state.wordList[0].words.length) {
                for (var i = 0; i < state.wordList.length; i++) {
                     if (state.wordList[i].title == state.currentList){
                          return state.wordList[i].words[state.currentWord + 1][0];
@@ -1398,14 +1399,14 @@ export default new Vuex.Store({
   			return false;
   		}
   	},
-     languageCategories(state){
-          let arr = [];
-          for (var category in state.languages){
-               arr.push(category);
-          }
-          console.log(arr);
-          return arr;
-     },
+    languageCategories(state){
+      let arr = [];
+      for (var category in state.languages){
+           arr.push(category);
+      }
+      console.log(arr);
+      return arr;
+    },
   	currentLang(state){
   		return state.language;
   	},
@@ -1415,21 +1416,21 @@ export default new Vuex.Store({
   	incorrectCount(state){
   		return state.incorrect;
   	},
-     wordLists(state){
-          return state.wordList;
-     },
-     currentListTitle(state){
-          return state.currentList;
-     },
-     email(state){
-          return state.email;
-     },
-     password(state){
-          return state.password;
-     },
-     ttsExpiry(state){
-          return state.ttsExpiry;
-     }
+    wordLists(state){
+        return state.wordList;
+    },
+    currentListTitle(state){
+        return state.currentList;
+    },
+    email(state){
+        return state.email;
+    },
+    password(state){
+        return state.password;
+    },
+    ttsExpiry(state){
+        return state.ttsExpiry;
+    }
   },
   mutations: {
   	login(state){

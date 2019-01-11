@@ -81,7 +81,9 @@
 		},
 		computed: {
 			speechColor(){
-  				return this.speechWord.toLowerCase() == this.$store.getters.currentWord ? "green" : "red" 
+				if (this.speechWord != "...") {
+					return this.speechWord.toLowerCase() == this.$store.getters.currentWord ? "green" : "red" 
+				}
   			}
 		},
 		methods: {
