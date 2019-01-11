@@ -4,10 +4,10 @@
 			{{ index + 1 }}
 		</md-table-cell>
 		<md-table-cell>
-			<input v-model="word" @keyup="inputChange" placeholder="Enter Word">
+			<input v-model="wordData" @keyup="inputChange" placeholder="Enter Word">
 		</md-table-cell>
 		<md-table-cell>
-			<input v-model="meaning" @keyup="inputChange" placeholder="Enter Meaning">
+			<input v-model="meaningData" @keyup="inputChange" placeholder="Enter Meaning">
 		</md-table-cell>
 	</md-table-row>
 </template>
@@ -20,9 +20,9 @@
 			inputChange(){
 				// Update Word in State
 				this.$store.commit("updateWord", {
-					"index": this.index,
-					"word": this.word,
-					"meaning": this.meaning
+					"index": this.indexData,
+					"word": this.wordData,
+					"meaning": this.meaningData
 				});
 				// Check if List Has Empty Row if Not Add 
 				let lastWord = this.$store.getters.lastWord;
@@ -38,9 +38,9 @@
 		},
 		data(){
 			return {
-				word: this.word,
-				meaning: this.meaning,
-				index: this.index
+				wordData: this.word,
+				meaningData: this.meaning,
+				indexData: this.index
 			}
 		}
 	}

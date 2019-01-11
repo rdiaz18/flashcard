@@ -67,9 +67,17 @@
 		components: {
 			WordRow
 		},
+		beforeMount(){
+			var that = this;
+			function importAll (r) {
+			  r.keys().forEach(key => that.imgCache[key] = r(key));
+			}
+
+			importAll(require.context('../assets/flags/', true, /\.png$/));
+		},
 		mounted(){
 			// Check for selected lang
-			this.langCheck();
+			// this.langCheck();
 
 			// Check if List Has Empty Row if Not Add 
 			let lastWord = this.$store.getters.lastWord;
@@ -79,25 +87,28 @@
 		},
 		computed: {
 			src(){
-				return `./assets/flags/flag-${this.country}.png`;
+				var key = `./flag-${this.country}.png`,
+					url = this.imgCache[key];
+
+				return url;
 			}
 		},
 		methods: {
-			langCheck(e){
-				// Update on click
-				if (e) {
-					let newLang = e.target.dataset["lang"];
-					this.$store.commit("updateLang", newLang);
-				}
-				// Update Language Icons with Selected Class
-				let lang = this.$store.getters.currentLang;
-				if (lang.length > 0) {
-					let icons = document.querySelectorAll(".tts-lang");
-					for (var i = 0; i < icons.length; i++) {
-						icons[i].dataset["lang"] == lang ? icons[i].classList.add("selectedLang") : icons[i].classList.remove("selectedLang");
-					}
-				}
-			},
+			// langCheck(e){
+			// 	// Update on click
+			// 	if (e) {
+			// 		let newLang = e.target.dataset["lang"];
+			// 		this.$store.commit("updateLang", newLang);
+			// 	}
+			// 	// Update Language Icons with Selected Class
+			// 	// let lang = this.$store.getters.currentLang;
+			// 	// if (lang.length > 0) {
+			// 	// 	let icons = document.querySelectorAll(".tts-lang");
+			// 	// 	for (var i = 0; i < icons.length; i++) {
+			// 	// 		icons[i].dataset["lang"] == lang ? icons[i].classList.add("selectedLang") : icons[i].classList.remove("selectedLang");
+			// 	// 	}
+			// 	// }
+			// },
 			newListCheck(){
 				// If Make New List Selected
 				return this.currentList == "newList" ? true : false;
@@ -117,6 +128,8 @@
 				// this.$store.dispatch("deleteList");
 			},
 			changeLang(){
+				var that = this;
+				console.log(that.country);
 				this.$store.commit("updateLang", this.country);
 			}
 		},
@@ -125,7 +138,8 @@
 				currentList: this.$store.getters.currentListTitle,
 				newListName: '',
 				centerIt: this.$store.getters.ttsExpiry == "Not Purchased" ? true : false,
-				country: this.$store.getters.language
+				country: this.$store.getters.language,
+				imgCache: {}
 			}
 		}
 	}
