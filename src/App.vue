@@ -1,11 +1,14 @@
 <template>
-  <div id="app">
-    <div id="nav" v-if="$store.state.login == true">
-      <router-link to="/account">Account</router-link> |
-      <router-link to="/cards">Cards</router-link> |
-      <router-link to="/words">Words</router-link>
+  <div id="app" :style="{ backgroundImage: `url(${src})` }">
+    <div id="bgFade"></div>
+    <div id="view">
+      <div id="nav" v-if="$store.state.login == true">
+        <router-link to="/account">Account</router-link> |
+        <router-link to="/cards">Cards</router-link> |
+        <router-link to="/words">Words</router-link>
+      </div>
+      <router-view/>
     </div>
-    <router-view/>
   </div>
 </template>
 
@@ -17,7 +20,36 @@
           this.$router.push({ name: "login" })
         }
       }
-    }  
+    },
+    beforeMount(){
+      var that = this;
+      function importAll (r) {
+        console.log(r);
+        r.keys().forEach(key => that.imgCache[key] = r(key));
+      }
+
+      importAll(require.context('./assets/backgrounds/', true, /\.jpg$/));
+    },
+    computed: {
+      src(){
+        var lang = this.$store.getters.currentLang,
+            key = `./bg-${lang}.jpg`,
+            url = this.imgCache[key],
+            that = this;
+
+        console.log(lang);
+        console.log(key);
+        console.log(that.imgCache);
+        console.log(url);
+
+        return url;
+      }
+    },
+    data(){ 
+      return {
+        imgCache: {}
+      }
+    }
   }
 </script>
 
@@ -37,11 +69,35 @@ html, body, #app {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
-  background-color: transparent;
+  color: #2c3e50; 
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  width: 100%;
+  min-height: 100%;
+  position: absolute;
+
+  #bgFade {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    opacity: 0.6;
+    z-index: 1;
+  }
+
+  #view {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+  }
 }
 #nav {
   padding: 30px;
+  z-index: 9;
   a {
     font-weight: bold;
     color: white;

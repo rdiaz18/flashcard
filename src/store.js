@@ -152,7 +152,7 @@ export default new Vuex.Store({
        ],
        "Slovenian": [
          ["Slovenia", "sl-SI"]
-       ],
+       ], // Need BG For Those Below
        "Spanish": [
          ["Argentina", "es-AR"],
          ["Bolivia", "es-BO"],

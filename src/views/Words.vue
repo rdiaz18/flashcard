@@ -8,22 +8,13 @@
 	  			<label>Select Language</label>
 		  		<select v-model="country" @change="changeLang">
 		  			<optgroup v-for="(category, index) in $store.getters.languageCategories" :label="category">
-		  				<option v-for="(lang, i) in $store.state.languages[category]" :value="lang[1]" class="lang-flag">
+		  				<option v-for="(lang, i) in $store.state.languages[category]" :value="lang[1]" :data-category="category" class="lang-flag">
 		  					{{ lang[0] }}
 		  				</option>
 		  			</optgroup>
 		  		</select>
 		  	</md-field>
 	  	</div>
-
-<!--   		<div class="tts-lang" id="de" data-lang="de-de" @click="langCheck($event)"></div>
-  		<div class="tts-lang" id="fi" data-lang="fi-fi" @click="langCheck($event)"></div>
-  		<div class="tts-lang" id="fr" data-lang="fr-fr" @click="langCheck($event)"></div>
-  		<div class="tts-lang" id="jp" data-lang="ja-jp" @click="langCheck($event)"></div>
-  		<div class="tts-lang" id="nl" data-lang="nl-nl" @click="langCheck($event)"></div>
-  		<div class="tts-lang" id="pl" data-lang="pl-pl" @click="langCheck($event)"></div>
-  		<div class="tts-lang" id="ru" data-lang="ru-ru" @click="langCheck($event)"></div>
-  		<div class="tts-lang" id="us" data-lang="en-us" @click="langCheck($event)"></div> -->
   	</div>
   	<h1>Word List Select</h1>
   	<div id="list-select-container">
@@ -138,7 +129,7 @@
 				currentList: this.$store.getters.currentListTitle,
 				newListName: '',
 				centerIt: this.$store.getters.ttsExpiry == "Not Purchased" ? true : false,
-				country: this.$store.getters.language,
+				country: this.$store.getters.currentLang,
 				imgCache: {}
 			}
 		}
@@ -170,7 +161,6 @@
 			background-position: center;
 			background-repeat: no-repeat;
 			background-size: contain;
-			background-image: url("./../assets/flags/flag-us.png");
 		}
 
 		#select-container {
