@@ -5,6 +5,10 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+     apiKeys: {
+      google: "",
+      yandex: "trnsl.1.1.20190114T000445Z.95291844b30dc809.79341b7169f080deb7cfa0ce4eb4a65e7897cf3a"
+     },
      email: "mpaccione1991@gmail.com",
      password: "rspaccio",
      ttsExpiry: "Not Purchased",

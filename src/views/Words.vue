@@ -1,23 +1,45 @@
 <template>
   <div id="words">
-  	<h1>Language Select for TTS Audio</h1>
   	<div id="lang-container">
   		<div id="lang-inner-container">
-  			<div id="flag-container" :style="{ backgroundImage: `url(${src})` }"></div>
-  			<md-field id="select-container">
-	  			<label>Select Language</label>
-		  		<select v-model="country" @change="changeLang">
-		  			<optgroup v-for="(category, index) in $store.getters.languageCategories" :label="category">
-		  				<option v-for="(lang, i) in $store.state.languages[category]" :value="lang[1]" :data-category="category" class="lang-flag">
-		  					{{ lang[0] }}
-		  				</option>
-		  			</optgroup>
-		  		</select>
-		  	</md-field>
+
+  			<div class="lang-select">
+				<h1>I Learn <span id="flag-container" :style="{ backgroundImage: `url(${src})` }"></span></h1>
+				<hr>
+	  			<md-field id="select-container">
+		  		<!-- 	<label>Select Language</label> -->
+			  		<select v-model="country" @change="changeLang">
+			  			<optgroup v-for="(category, index) in $store.getters.languageCategories" :label="category">
+			  				<option v-for="(lang, i) in $store.state.languages[category]" :value="lang[1]" :data-category="category" class="lang-flag">
+			  					{{ lang[0] }}
+			  				</option>
+			  			</optgroup>
+			  		</select>
+			  	</md-field>
+			</div>
+
+  			<div class="lang-select">
+  				<h1>I Know <span id="flag-container" :style="{ backgroundImage: `url(${src})` }"></span></h1>
+  				<hr>
+	  			<md-field id="select-container">
+		  		<!-- 	<label>Select Language</label> -->
+			  		<select v-model="country" @change="changeLang">
+			  			<optgroup v-for="(category, index) in $store.getters.languageCategories" :label="category">
+			  				<option v-for="(lang, i) in $store.state.languages[category]" :value="lang[1]" :data-category="category" class="lang-flag">
+			  					{{ lang[0] }}
+			  				</option>
+			  			</optgroup>
+			  		</select>
+			  	</md-field>
+			</div>
+
 	  	</div>
   	</div>
-  	<h1>Word List Select</h1>
+
   	<div id="list-select-container">
+  		<hr>
+  		<h1>Word List Select</h1>
+  		<hr>
   		<div v-show="$store.getters.ttsExpiry != 'Not Purchased'">
 	  		<md-field>
 	  			<label>New List Name</label>
@@ -139,24 +161,41 @@
 <style lang="scss">
 	#words { 
 		h1 {
-			color: white;
+			color: black;
 		}
 
 		.md-menu.md-select {
 			background-color: white;
 		}
+
+		.md-field {
+			min-height: 30px;
+		}
 	}
 
 	#lang-container {
+
+		background-color: lightgray;
+		display: block;
+
 		#lang-inner-container {
 			width: 100%;
 			display: flex;
 		}
 
+		.lang-select {
+			width: calc(100% / 2);
+
+			h1 {
+				padding-right: 25px;
+			}
+		}
+
 		#flag-container {
 			width: 100px;
-			height: 100%;
-			background-color: white;
+			height: 50px;
+			position: absolute;
+			top: calc(50% - 45px);
 			border-right: 1px solid lightgray;
 			background-position: center;
 			background-repeat: no-repeat;
@@ -164,40 +203,41 @@
 		}
 
 		#select-container {
-			width: calc(100% - 100px);
-			height: 100%;
+			width: 100%;
 			margin: 0px;
 			padding: 0px;
+			display: block;
 
 			select {
-				height: 100%;
 				margin: auto;
 				width: 100%;
 				border: 0px;
 				cursor: pointer;
+				height: 32px;
 			}
 
 			select, label {
 				padding: 0px 0px 0px 20px;
+			}
+
+			label {
+				position: relative;
+				left: initial;
+				top: initial;
 			}
 		}
 	}
 
 	#lang-container,
 	#list-select-container {
-		height: 100px;
-		display: flex;
 		max-width: 800px;
 		margin: auto;
+		position: relative;
 	}
 
 	#list-select-container {
 		background-color: lightgray;
 		border-bottom: 1px solid black;
-
-		h1 {
-			color: white;
-		}
 
 		& div {
 			width: 50%;
@@ -282,6 +322,12 @@
 
 	.center {
 		margin: auto;
-		display: block;
+		display: flex;
+		margin-bottom: 15px;
+		width: auto !important;
+
+		button {
+			top: 12px;
+		}
 	}
 </style>

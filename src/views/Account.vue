@@ -2,7 +2,9 @@
 	<div id="account">
 		<md-card>
 			<md-card-header>
+				<hr>
 				<div class="md-title">Login Settings</div>
+				<hr>
 			</md-card-header>
 			<md-field id="email-field" class="icon-field">
 				<label>Email</label>
@@ -23,9 +25,11 @@
 		<md-card>
 			<md-card-header>
 				<div class="md-title">
-					Purchase TTS Package<br>
+					<hr>
+					Purchase Learning Package
+					<hr>
 					<p id="package-info">
-						TTS Playback for Flashcards,
+						TTS Playback &amp; Speech Recognition for Flashcards,<br>
 						Saving of Multiple Word Lists,
 						Disables Ads
 					</p>

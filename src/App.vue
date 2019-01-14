@@ -64,8 +64,13 @@ html, body, #app {
   padding: 0px;
   margin: 0px;
 }
+h1,h2,h3,h4, optgroup, thead, .md-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700 !important;
+  font-style: bolder;
+}
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: 'Montserrat', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
