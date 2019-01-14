@@ -53,5 +53,6 @@
 	input {
 		width: 100%;
 		padding: 2.5px 0px 2.5px 5px;
+		font-size: 1.8em;
 	}
 </style>
