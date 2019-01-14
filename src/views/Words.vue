@@ -158,7 +158,7 @@
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	#words { 
 		h1 {
 			color: black;

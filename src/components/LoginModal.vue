@@ -2,7 +2,10 @@
   <div id="login">
     <md-card class="md-layout-item">
       <md-card-header>
-        <div class="md-title"><span id="logo"></span>TTS Flashcards</div>
+        <div class="md-title">
+          <span id="logo"></span>
+          <span id="logo-text">TTS Flashcards</span>
+        </div>
       </md-card-header>
       <md-card-content>
         <md-field>
@@ -61,6 +64,12 @@ export default {
   left: 50%;
   top: 50%;
   position: fixed;
+  border: 1px solid black;
+
+  .md-card-header {
+    background-color: lightskyblue;
+    border-bottom: 1px solid black;
+  }
 
   .md-card {
     background-color: #fdfdfd;
@@ -72,11 +81,26 @@ export default {
   background-image: url("./../assets/volume.png");
   background-size: 25px;
   background-repeat: no-repeat;
+  background-position: center;
+  background-color: white;
+  padding: 20px;
+  border-radius: 50% 50% 50% 0%;
   display: inline-block;
   transform: rotate(-90deg);
-  opacity: 0.7;
   height: 30px;
   width: 30px;
+  position: relative;
+  border: 1px solid black;
+}
+#logo-text {
+  top: -7px;
+  left: -3px;
+  background-color: white;
+  padding-right: 8px;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  border-right: 1px solid black;
+  position: relative;
 }
 h3 {
   margin: 40px 0 0;
