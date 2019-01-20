@@ -261,6 +261,12 @@
 		}	
 	}
 
+	@media (max-width: 640px) and (orientation: landscape){
+		#account {
+			max-width: 100% !important;
+		}
+	}
+
 	@media (max-width: 420px){
 		#password-field {
 			width: 65% !important;
