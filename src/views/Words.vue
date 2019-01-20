@@ -46,6 +46,7 @@
 	  			<md-input v-model="newListName"></md-input>
 	  		</md-field>
 	  		<md-button @click="createNewList">Create New List</md-button>
+	  		<md-button @click="showCSVModal = !showCSVModal">Create List from CSV</md-button>
 	  	</div>
 	  	<div :class="{ center: centerIt }">
 	  		<md-field>
@@ -70,6 +71,30 @@
     	</md-table-row>
     	<WordRow v-for="(word, index) in $store.getters.allWords" :index="index" :word="word[0]" :meaning="word[1]"></WordRow>
     </md-table>
+    <div id="CSVModalContainer" v-if="showCSVModal == true">
+	    <md-card id="CSVModal" md-with-hover>
+			<md-card-header>
+				<div class="md-title">
+					Upload List from CSV
+				</div>
+				<div class="md-subhead">
+					Please follow format for succesful uploading
+				</div>
+				</md-card-header>
+				<md-card-content>
+					<md-field>
+						<label>New List Name</label>
+						<md-input v-model="newListName"></md-input>
+					</md-field>
+					<textarea v-model="textCSV"></textarea>
+				</md-card-content>
+			<md-card-actions>
+				<md-button @click="showCSVModal = false">Cancel</md-button>
+				<md-button @click="uploadCSV">Upload</md-button>
+			</md-card-actions>
+		</md-card>
+		<div id="CSVFade"></div>
+	</div>
   </div>
 </template>
 
@@ -163,7 +188,16 @@
 				centerIt: this.$store.getters.ttsExpiry == "Not Purchased" ? true : false,
 				country: this.$store.getters.currentLang,
 				nativeCountry: this.$store.getters.currentNativeLang,
-				imgCache: {}
+				imgCache: {},
+				showCSVModal: false,
+				textCSV: `Example CSV Format Below
+Word, Meaning #1, Meaning #2...
+				
+и, and, though,
+в, in, at,
+не, not,
+он, he,
+на, on, in, at, to`
 			}
 		}
 	}
@@ -252,6 +286,7 @@
 
 		& div {
 			width: 50%;
+			display: inline-block;
 		}
 
 		& div:first-of-type {
@@ -262,8 +297,13 @@
 			border-left: 5px solid lightgray;
 		}
 
-		& div div {
+		& div div,
+		input {
 			width: 100%;
+		}
+
+		& div div.md-menu.md-select {
+			display: flex;
 		}
 	}
 
@@ -339,6 +379,40 @@
 
 		button {
 			top: 12px;
+		}
+	}
+
+	#CSVModalContainer {
+		position: fixed;
+		z-index: 999;
+		top: 0;
+		left: 0;
+		height: 100%;
+		width: 100%;
+		display: block;
+
+		#CSVModal {
+			top: 50%;
+			left: 50%;
+			height: 50%;
+			width: 50%;
+			transform: translateX(-50%) translateY(-50%);
+			background-color: lightgray;
+
+			textarea {
+				width: 100%;
+				min-height: 200px;
+				margin-top: 20px;
+			}
+		}
+
+		#CSVFade {
+			width: 100%;
+			height: 100%;
+			top: 0;
+			left: 0;
+			background-color: rgba(0,0,0,0.6);
+			position: absolute;
 		}
 	}
 

@@ -11,7 +11,7 @@ export default new Vuex.Store({
      },
      email: "mpaccione1991@gmail.com",
      password: "rspaccio",
-     ttsExpiry: "Not Purchased",
+     ttsExpiry: "Purchased",// "Not Purchased",
      login: true,
      currentWord: 0,
      correct: 0,
