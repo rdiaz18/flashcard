@@ -98,7 +98,7 @@
 					that = this,
 					submission = this.cardInput.toLowerCase(),
 					match = false,
-					meaningArr = this.$store.getters.currentMeaning.toLowerCase().split(",");
+					meaningArr = this.$store.getters.currentMeaning.toLowerCase().split(", ");
 
 				// Show Card Answer
 				this.cardAnswer = this.$store.getters.currentMeaning;
@@ -391,7 +391,36 @@
 		background-color: green;
 	}
 
-	@media (max-width: 1023px){
+	@media (max-width: 1023px) {
+
+		#flashcardInnerContainer {
+			width: 100% !important;
+			top: 50%;
+			transform: translateY(-50%);
+			position: fixed;
+			display: flex !important;
+			height: auto !important;
+		}
+
+		#flashcardControls {
+			width: 100% !important;
+			position: fixed;
+			bottom: 0;
+
+			#control-wrap {
+				margin-top: 0px !important;
+				padding: 25px;
+			}
+		}
+
+	}
+
+	@media (max-width: 1023px) and (orientation: portrait){
+
+		#flashcardInnerContainer {
+			display: block !important;
+		}
+
 		#previous-flashcard,
 		#flashcard,
 		#next-flashcard {
@@ -401,7 +430,7 @@
 
 		#previous-flashcard,
 		#next-flashcard {
-			opacity: 0.5 !important;
+			opacity: 0.5;
 		}
 
 		#flashcard {
@@ -416,24 +445,59 @@
 			width: 80% !important;
 		}
 
-		#flashcardInnerContainer {
-			width: 100% !important;
-			top: 50%;
-			transform: translateY(-50%);
-			position: fixed;
-			display: block !important;
-			height: auto !important;
+	}
+
+	@media (max-width: 850px) and (orientation: landscape){
+		#flashcardControls #control-wrap {
+			padding: 0px 30% !important;
 		}
 
-		#flashcardControls {
-			width: 100% !important;
-			position: fixed;
-			bottom: 0;
+		#previous-flashcard,
+		#flashcard,
+		#next-flashcard {
+			padding: 0px !important;
+			height: 170px !important;
+		}
 
-			#control-wrap {
-				margin-top: 0px !important;
-				padding: 25px;
-			}
+		#flashcard h1,
+		#flashcard h2 {
+			width: 100% !important;
+		}
+
+		input[name="meaningInput"]{
+			text-align: center;
+		}
+	}
+
+	@media (max-width: 640px) and (orientation: landscape){
+		#soundIcon,
+		#microphone,
+		#microphone-stop {
+			height: 47px !important;
+		}
+
+		#control-wrap .md-button {
+			height: 36px !important;
+		}
+
+		.flashcardContainer #info-wrap {
+			margin-top: -30px !important;
+		}
+
+		#flashcardInnerContainer {
+			top: 48% !important;
+		}
+
+		.flashcardContainer #flashcard h1, 
+		.flashcardContainer #previous-flashcard h1, 
+		.flashcardContainer #next-flashcard h1 {
+			font-size: 2.2em !important;
+		}
+
+		.flashcardContainer #flashcard h2, 
+		.flashcardContainer #previous-flashcard h2, 
+		.flashcardContainer #next-flashcard h2 {
+			font-size: 1.2em !important;
 		}
 	}
 

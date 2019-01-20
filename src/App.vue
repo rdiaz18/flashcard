@@ -114,6 +114,12 @@ nav {
   }
 }
 
+@media (max-width: 850px) and (orientation: landscape){
+  nav {
+    padding: 0px !important;
+  }
+}
+
 @media (max-width: 420px){
   nav {
     padding: 0px !important;

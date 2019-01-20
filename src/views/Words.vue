@@ -152,7 +152,8 @@
 				this.$store.commit("updateLang", this.country);
 			},
 			mobile(){
-				return window.innerWidth < 480 ? true: false 
+				console.log(window.innerWidth);
+				return window.innerWidth < 480 ? true : false 
 			}
 		},
 		data() {
