@@ -36,6 +36,14 @@
 				</div>
 			</md-card-header>
 			<div id="payment-container">
+				<div :class="{ selected: selectedCheck(0) }">
+					<div id="free" class="medal-icon"></div>
+					<!-- <h2>Two Weeks</h2> -->
+					<h2>BETA Testing</h2>
+					<h2>Free Trial</h2>
+					<h3>New Users</h3>
+					<input type="radio" name="tts-package" value="0.00" @click="selectedPackage = 0.00"></input>
+				</div>
 				<div :class="{ selected: selectedCheck(3.99) }">
 					<div id="bronze" class="medal-icon"></div>
 					<h2>One Month</h2>
@@ -58,7 +66,9 @@
 					<input type="radio" name="tts-package" value="23.88" @click="selectedPackage = 23.88"></input>
 				</div>
 			</div>
-			<button id="paypal-button">Purchase</button>
+			<div v-show="selectedPackage != 0">
+				<button id="paypal-button">Purchase</button>
+			</div>
 		</md-card>
 	</div>
 </template>
@@ -95,7 +105,7 @@
 
 					    // Set up a payment
 					    payment: function(data, actions) {
-					    	if (that.selectedPackage.length == 0) {
+					    	if (that.selectedPackage == 0) {
 					    		alert("Please Select TTS Package");
 					    	} else {
 								return actions.payment.create({
@@ -125,7 +135,7 @@
 		},
 		data(){
 			return {
-				selectedPackage: "",
+				selectedPackage: 0,
 				password: this.$store.getters.password
 			}
 		},
@@ -228,6 +238,11 @@
 		background-position: center;
 	}
 
+	#free {
+		background-image: url('./../assets/beg-icon.png');
+		opacity: 0.8;
+	}
+
 	#bronze {
 		background-image: url('./../assets/bronze-medal.png');
 	}
@@ -238,5 +253,31 @@
 
 	#gold {
 		background-image: url('./../assets/gold-medal.png');
+	}
+
+	@media (max-width: 1023px){
+		#account {
+			max-width: 85% !important;
+		}	
+	}
+
+	@media (max-width: 420px){
+		#password-field {
+			width: 65% !important;
+		}
+
+		#account .icon-field {
+			overflow: hidden;
+		}
+
+		#payment-container {
+			display: block !important;
+
+			div {
+				width: calc(100% - 30px) !important;
+				padding-top: 10px;
+				margin: 15px;
+			}
+		}
 	}
 </style>

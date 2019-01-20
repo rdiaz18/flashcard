@@ -1,6 +1,6 @@
 <template>
 	<md-table-row :id="index">
-		<md-table-cell id="index-cell">
+		<md-table-cell id="index-cell" v-if="!mobile">
 			{{ index + 1 }}
 		</md-table-cell>
 		<md-table-cell>
@@ -34,6 +34,9 @@
 				// 	this.$store.commit("removeLastWord");
 				// }
 				
+			},
+			mobile(){
+				return window.innerWidth < 480 ? true: false 
 			}	
 		},
 		data(){

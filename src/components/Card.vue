@@ -35,6 +35,12 @@
 				<div id="microphone-stop" @click="stopRecord" v-show="recording == true"></div>
 			</div>
 		</div>
+		<audio id="correctSound" nocontrols hidden>
+			<source src="../assets/sounds/correct-beep.wav" type="audio/wav">
+		</audio>
+		<audio id="incorrectSound" nocontrols hidden>
+			<source src="../assets/sounds/incorrect-beep.wav" type="audio/wav">
+		</audio>
 	</div>
 </template>
 
@@ -103,6 +109,7 @@
 				if (match) {
 					// localStorage.setItem("correct", this.$store.getters.correctCount + 1);
 					flashcard.classList.add("correct");
+					that.playCorrectBeep();
 					setTimeout(function(){
 						flashcard.classList.remove("correct");
 						that.$store.commit("addCorrect");
@@ -112,6 +119,7 @@
 				} else {
 					// localStorage.setItem("incorrect", this.$store.getters.incorrectCount + 1);
 					flashcard.classList.add("incorrect");
+					that.playIncorrectBeep();
 					setTimeout(function(){					
 						flashcard.classList.remove("incorrect");
 						that.$store.commit("addIncorrect");
@@ -154,12 +162,13 @@
 				this.recognition.onresult = function(event) {
 					var word = event.results[0][0].transcript;
 					that.speechWord = word;
-					console.log(event);
-					console.log(word);
+					that.recording = false;
 					if (word == that.$store.getters.currentWord) {
 						that.speechMatch = true;
+						that.playCorrectBeep();
 					} else {
 						that.speechMatch = false;
+						that.playIncorrectBeep();
 					}
 				}
 			},
@@ -172,6 +181,12 @@
 				utterance.lang = this.$store.getters.currentLang;
 				utterance.voice = speechSynthesis.getVoices()[18];
 				speechSynthesis.speak(utterance);
+  			},
+  			playCorrectBeep(){
+				document.querySelector("#correctSound").play();
+  			},
+  			playIncorrectBeep(){
+  				document.querySelector("#incorrectSound").play();
   			}
 
 		},
@@ -183,7 +198,8 @@
 				speechMatch: null,
 				speechWord: "",
 				recognition: null,
-				recording: false
+				recording: false,
+				audioSrc: ""
 			}
 		}
 	}
@@ -373,5 +389,77 @@
 
 	#microphone.green {
 		background-color: green;
+	}
+
+	@media (max-width: 1023px){
+		#previous-flashcard,
+		#flashcard,
+		#next-flashcard {
+			width: 100% !important;
+			height: 200px !important;
+		}
+
+		#previous-flashcard,
+		#next-flashcard {
+			opacity: 0.5 !important;
+		}
+
+		#flashcard {
+			transform: scale(0.8);
+
+			h2 {
+				font-size: 2em;
+			}
+		}
+
+		.flashcardContainer #info-wrap {
+			width: 80% !important;
+		}
+
+		#flashcardInnerContainer {
+			width: 100% !important;
+			top: 50%;
+			transform: translateY(-50%);
+			position: fixed;
+			display: block !important;
+			height: auto !important;
+		}
+
+		#flashcardControls {
+			width: 100% !important;
+			position: fixed;
+			bottom: 0;
+
+			#control-wrap {
+				margin-top: 0px !important;
+				padding: 25px;
+			}
+		}
+	}
+
+	@media (max-width: 420px){
+		#flashcardInnerContainer {
+			top: 47% !important;
+		}
+
+		#previous-flashcard,
+		#flashcard,
+		#next-flashcard {
+			padding: 0px !important;
+			width: 80% !important;
+			transform: none !important;
+			height: 165px !important;
+			margin-bottom: 10px !important;
+		}
+	}
+
+	@media (max-width: 380px){
+		#control-wrap {
+			padding: 10px !important;
+		}
+
+		#next-flashcard {
+			display: none !important;
+		}
 	}
 </style>

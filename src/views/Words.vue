@@ -4,10 +4,10 @@
   		<div id="lang-inner-container">
 
   			<div class="lang-select">
-				<h1>I Learn <span id="flag-container" :style="{ backgroundImage: `url(${src})` }"></span></h1>
+				<h1>I Learn <span id="flag-container" :style="{ backgroundImage: `url(${langSrc})` }"></span></h1>
 				<hr>
 	  			<md-field id="select-container">
-		  		<!-- 	<label>Select Language</label> -->
+		  		<!-- <label>Select Language</label> -->
 			  		<select v-model="country" @change="changeLang">
 			  			<optgroup v-for="(category, index) in $store.getters.languageCategories" :label="category">
 			  				<option v-for="(lang, i) in $store.state.languages[category]" :value="lang[1]" :data-category="category" class="lang-flag">
@@ -19,11 +19,11 @@
 			</div>
 
   			<div class="lang-select">
-  				<h1>I Know <span id="flag-container" :style="{ backgroundImage: `url(${src})` }"></span></h1>
+  				<h1>I Know <span id="flag-container" :style="{ backgroundImage: `url(${nativeLangSrc})` }"></span></h1>
   				<hr>
 	  			<md-field id="select-container">
-		  		<!-- 	<label>Select Language</label> -->
-			  		<select v-model="country" @change="changeLang">
+		  		<!-- <label>Select Language</label> -->
+			  		<select v-model="nativeCountry" @change="changeLang">
 			  			<optgroup v-for="(category, index) in $store.getters.languageCategories" :label="category">
 			  				<option v-for="(lang, i) in $store.state.languages[category]" :value="lang[1]" :data-category="category" class="lang-flag">
 			  					{{ lang[0] }}
@@ -64,7 +64,7 @@
   	</div>
     <md-table>
     	<md-table-row>
-    		<md-table-head>Index</md-table-head>
+    		<md-table-head v-show="!mobile">Index</md-table-head>
     		<md-table-head>Word</md-table-head>
     		<md-table-head>Meaning</md-table-head>
     	</md-table-row>
@@ -99,12 +99,18 @@
 			}
 		},
 		computed: {
-			src(){
+			langSrc(){
 				var key = `./flag-${this.country}.png`,
 					url = this.imgCache[key];
 
 				return url;
-			}
+			},
+			nativeLangSrc(){
+				var key = `./flag-${this.nativeCountry}.png`,
+					url = this.imgCache[key];
+
+				return url;				
+			},
 		},
 		methods: {
 			// langCheck(e){
@@ -144,6 +150,9 @@
 				var that = this;
 				console.log(that.country);
 				this.$store.commit("updateLang", this.country);
+			},
+			mobile(){
+				return window.innerWidth < 480 ? true: false 
 			}
 		},
 		data() {
@@ -152,6 +161,7 @@
 				newListName: '',
 				centerIt: this.$store.getters.ttsExpiry == "Not Purchased" ? true : false,
 				country: this.$store.getters.currentLang,
+				nativeCountry: this.$store.getters.currentNativeLang,
 				imgCache: {}
 			}
 		}
@@ -328,6 +338,31 @@
 
 		button {
 			top: 12px;
+		}
+	}
+
+	@media (max-width: 1023px){
+		.md-table {
+			max-height: inherit !important;
+		}
+	}
+
+	@media (max-width: 420px){
+		h1 {
+			font-size: 1.6em !important;
+		}
+
+		#lang-container .lang-select h1 {
+			padding-left: 10px;
+			text-align: left;
+		}
+	}
+</style>
+
+<style>
+	@media (max-width: 420px){
+		.md-table-cell-container {
+			padding: 0px !important;
 		}
 	}
 </style>

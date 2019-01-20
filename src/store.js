@@ -19,6 +19,7 @@ export default new Vuex.Store({
      skipped: 0,
      currentList: "Top 1,000 Words",
      language: "ru-RU",
+     nativeLanguage: "en-US",
      languages: {
        "Afrikaans": [
          ["South Africa", "af-ZA"]
@@ -1341,7 +1342,7 @@ export default new Vuex.Store({
         }
       }
   	},
-     previousWord(state){
+    previousWord(state){
           if (state.currentWord != 0) {
                for (var i = 0; i < state.wordList.length; i++) {
                     if (state.wordList[i].title == state.currentList){
@@ -1414,6 +1415,9 @@ export default new Vuex.Store({
   	currentLang(state){
   		return state.language;
   	},
+    currentNativeLang(state){
+      return state.nativeLanguage;
+    },
   	correctCount(state){
   		return state.correct;
   	},
@@ -1483,6 +1487,9 @@ export default new Vuex.Store({
   	updateLang(state, payload){
   		state.language = payload;
   	},
+    updateNativeLang(state, payload){
+      state.nativeLanguage = payload;
+    },
     addList(state, payload){
       state.wordList.push({
         "title": payload,

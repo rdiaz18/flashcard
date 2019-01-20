@@ -2,11 +2,11 @@
   <div id="app" :style="{ backgroundImage: `url(${src})` }">
     <div id="bgFade"></div>
     <div id="view">
-      <div id="nav" v-if="$store.state.login == true">
+      <nav v-if="$store.state.login == true">
         <router-link to="/account">Account</router-link> |
         <router-link to="/cards">Cards</router-link> |
         <router-link to="/words">Words</router-link>
-      </div>
+      </nav>
       <router-view/>
     </div>
   </div>
@@ -100,7 +100,7 @@ h1,h2,h3,h4, optgroup, thead, .md-title {
     z-index: 2;
   }
 }
-#nav {
+nav {
   padding: 30px;
   z-index: 9;
   a {
@@ -113,4 +113,11 @@ h1,h2,h3,h4, optgroup, thead, .md-title {
     }
   }
 }
+
+@media (max-width: 420px){
+  nav {
+    padding: 0px !important;
+  }
+}
+
 </style>
