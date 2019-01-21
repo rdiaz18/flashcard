@@ -24,7 +24,7 @@ export default new Vuex.Store({
        "Afrikaans": [
          ["South Africa", "af-ZA"]
        ],
-       "Arabic" : [
+       "Arabic" : [ // 1000 to EN DONE
          ["Algeria","ar-DZ"],
          ["Bahrain","ar-BH"],
          ["Egypt","ar-EG"],
@@ -44,7 +44,7 @@ export default new Vuex.Store({
        "Basque": [
          ["Spain", "eu-ES"]
        ],
-       "Bulgarian": [
+       "Bulgarian": [ // 1000 to EN DONE
          ["Bulgaria", "bg-BG"]
        ],
        "Catalan": [
@@ -58,13 +58,13 @@ export default new Vuex.Store({
        "Chinese Cantonese": [
          ["Hong Kong", "yue-Hant-HK"]
        ],
-       "Croatian": [
+       "Croatian": [ // 1000 to EN DONE
          ["Croatia", "hr_HR"]
        ],
-       "Czech": [
+       "Czech": [ // 1000 to EN DONE
          ["Czech Republic", "cs-CZ"]
        ],
-       "Danish": [
+       "Danish": [ // 1000 to EN DONE
          ["Denmark", "da-DK"]
        ],
        "English": [
@@ -81,40 +81,40 @@ export default new Vuex.Store({
        "Farsi": [
          ["Iran", "fa-IR"]
        ],
-       "French": [
+       "French": [ // 1000 to EN DONE
          ["France", "fr-FR"]
        ],
        "Filipino": [
          ["Philippines", "fil-PH"]
        ],
-       "Galician": [
-         ["Spain", "gl-ES"]
-       ],
-       "German": [
-         ["Germany", "de-DE"]
-       ],
-       "Greek": [
-         ["Greece", "el-GR"]
-       ],
        "Finnish": [
          ["Finland", "fi-FI"]
        ],
-       "Hebrew" :[
+       "Galician": [
+         ["Spain", "gl-ES"]
+       ],
+       "German": [ // 1000 to EN DONE
+         ["Germany", "de-DE"]
+       ],
+       "Greek": [ // 1000 to EN DONE
+         ["Greece", "el-GR"]
+       ],
+       "Hebrew" :[ // 1000 to EN DONE
          ["Israel", "he-IL"]
        ],
        "Hindi": [
          ["India", "hi-IN"]
        ],
-       "Hungarian": [
+       "Hungarian": [ // 1000 to EN DONE
          ["Hungary", "hu-HU"]
        ],
-       "Indonesian": [
-         ["Indonesia", "id-ID"]
-       ],
-       "Icelandic": [
+       "Icelandic": [ // 1000 to EN DONE
          ["Iceland", "is-IS"]
        ],
-       "Italian": [
+       "Indonesian": [ // 1000 to EN DONE
+         ["Indonesia", "id-ID"]
+       ],
+       "Italian": [ // 1000 to EN DONE
          ["Italy", "it-IT"],
          ["Switzerland", "it-CH"]
        ],
@@ -127,38 +127,38 @@ export default new Vuex.Store({
        "Lithuanian": [
          ["Lithuania", "lt-LT"]
        ],
-       "Malaysian": [
+       "Malaysian": [ // 1000 to EN DONE
          ["Malaysia", "ms-MY"]
        ],
-       "Dutch": [
+       "Dutch": [ // 1000 to EN DONE
          ["Netherlands", "nl-NL"]
        ],
-       "Norwegian": [
+       "Norwegian": [ // 1000 to EN DONE
          ["Norway", "nb-NO"]
        ],
-       "Polish": [
+       "Polish": [ // 1000 to EN DONE
          ["Poland", "pl-PL"]
        ],
-       "Portuguese": [
+       "Portuguese": [ // 1000 to EN DONE
          ["Brazil", "pt-BR"],
          ["Portugal", "pt-PT"]
        ],
-       "Romanian": [
+       "Romanian": [ // 1000 to EN DONE
          ["Romania", "ro-RO"]
        ],
-       "Russian": [
+       "Russian": [ // 1000 to EN DONE
          ["Russia", "ru-RU"]
        ],
-       "Serbian": [
+       "Serbian": [ // 1000 to EN DONE
          ["Serbia", "sr-RS"]
        ],
-       "Slovak": [
+       "Slovak": [ // 1000 to EN DONE
          ["Slovakia", "sk-SK"]
        ],
-       "Slovenian": [
+       "Slovenian": [ // 1000 to EN DONE
          ["Slovenia", "sl-SI"]
-       ], // Need BG For Those Below
-       "Spanish": [
+       ],
+       "Spanish": [ // 1000 to EN DONE
          ["Argentina", "es-AR"],
          ["Bolivia", "es-BO"],
          ["Chile", "es-CL"],
@@ -180,13 +180,13 @@ export default new Vuex.Store({
          ["United States", "es-US"],
          ["Venezuela", "es-VE"]
        ],
-       "Swedish": [
+       "Swedish": [ // 1000 to EN DONE
          ["Sweden", "sv-SE"]
        ],
        "Thai": [
          ["Thailand", "th-TH"]
        ],
-       "Turkish": [
+       "Turkish": [ // 1000 to EN DONE
          ["Turkey", "tr-TR"]
        ],
        "Ukrainian": [

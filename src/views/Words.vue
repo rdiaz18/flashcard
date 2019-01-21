@@ -192,12 +192,12 @@
 				showCSVModal: false,
 				textCSV: `Example CSV Format Below
 Word, Meaning #1, Meaning #2...
-				
-и, and, though,
-в, in, at,
-не, not,
-он, he,
-на, on, in, at, to`
+
+и, "and, though",
+в, "in, at",
+не, "not",
+он, "he",
+на, "on, in, at, to"`
 			}
 		}
 	}
