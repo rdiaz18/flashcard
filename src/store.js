@@ -21,7 +21,7 @@ export default new Vuex.Store({
      language: "ru-RU",
      nativeLanguage: "en-US",
      languages: {
-       "Afrikaans": [
+       "Afrikaans": [ // 1000 to EN DONE
          ["South Africa", "af-ZA"]
        ],
        "Arabic" : [ // 1000 to EN DONE
@@ -41,13 +41,13 @@ export default new Vuex.Store({
          ["Tunisia","ar-TN"],
          ["UAE","ar-AE"]
        ],
-       "Basque": [
+       "Basque": [ // 1000 to EN DONE
          ["Spain", "eu-ES"]
        ],
        "Bulgarian": [ // 1000 to EN DONE
          ["Bulgaria", "bg-BG"]
        ],
-       "Catalan": [
+       "Catalan": [ // 1000 to EN DONE
          ["Spain", "ca-ES"]
        ],
        "Chinese Mandarin": [
@@ -78,19 +78,19 @@ export default new Vuex.Store({
          ["United Kingdom", "en-GB"],
          ["United States", "en-US"]
        ],
-       "Farsi": [
+       "Farsi": [ // 1000 to EN DONE
          ["Iran", "fa-IR"]
        ],
        "French": [ // 1000 to EN DONE
          ["France", "fr-FR"]
        ],
-       "Filipino": [
+       "Filipino": [ // 1000 to EN DONE
          ["Philippines", "fil-PH"]
        ],
-       "Finnish": [
+       "Finnish": [ // 1000 to EN DONE
          ["Finland", "fi-FI"]
        ],
-       "Galician": [
+       "Galician": [ // 1000 to EN DONE
          ["Spain", "gl-ES"]
        ],
        "German": [ // 1000 to EN DONE
@@ -102,7 +102,7 @@ export default new Vuex.Store({
        "Hebrew" :[ // 1000 to EN DONE
          ["Israel", "he-IL"]
        ],
-       "Hindi": [
+       "Hindi": [ // 1000 to EN DONE
          ["India", "hi-IN"]
        ],
        "Hungarian": [ // 1000 to EN DONE
@@ -118,13 +118,13 @@ export default new Vuex.Store({
          ["Italy", "it-IT"],
          ["Switzerland", "it-CH"]
        ],
-       "Japanese": [
+       "Japanese": [ // 1000 to EN DONE
          ["Japan", "ja-JP"]
        ],
-       "Korean": [
+       "Korean": [ // 1000 to EN DONE
          ["Korea", "ko-KR"]
        ],
-       "Lithuanian": [
+       "Lithuanian": [ // 1000 to EN DONE
          ["Lithuania", "lt-LT"]
        ],
        "Malaysian": [ // 1000 to EN DONE
@@ -183,19 +183,19 @@ export default new Vuex.Store({
        "Swedish": [ // 1000 to EN DONE
          ["Sweden", "sv-SE"]
        ],
-       "Thai": [
+       "Thai": [ // 1000 to EN DONE
          ["Thailand", "th-TH"]
        ],
        "Turkish": [ // 1000 to EN DONE
          ["Turkey", "tr-TR"]
        ],
-       "Ukrainian": [
+       "Ukrainian": [ // 1000 to EN DONE
          ["Ukraine", "uk-UA"]
        ],
-       "Vietnamese": [
+       "Vietnamese": [ // 1000 to EN DONE
          ["Viet Nam", "vi-VN"]
        ],
-       "Zulu": [
+       "Zulu": [ // 1000 to EN DONE
          ["South Africa", "zu-ZA"]
        ]
      },
