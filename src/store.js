@@ -50,7 +50,7 @@ export default new Vuex.Store({
        "Catalan": [ // 1000 to EN DONE
          ["Spain", "ca-ES"]
        ],
-       "Chinese Mandarin": [
+       "Chinese Mandarin": [ // 1000 to EN DONE
          ["China (Simp.)", "cmn-Hans-CN"],
          ["Hong Kong SAR (Trad.)", "cmn-Hans-HK"],
          ["Taiwan (Trad.)", "cmn-Hant-TW"]
