@@ -23,5 +23,5 @@ sequelize
 
 sequelize.sync()
 	.then(() => {
-		app.listen(8081, () => console.log('TrackShopify API listening on port 8081!'))
+		app.listen(8081, () => console.log('FlashLang API listening on port 8081!'))
 	})  
