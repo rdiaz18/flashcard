@@ -2,7 +2,7 @@
 
 var xhttp = new XMLHttpRequest(),
 	url = 'http://18.188.201.66:8081/readFile',
-	fUrl = JSON.stringify({ 'file': 'RU-EN-1000.csv' });
+	fUrl = JSON.stringify({ 'file': 'AF-EN-1000.csv' });
 
 xhttp.onreadystatechange = function() {
 	if (this.readyState == 4 && this.status == 200) {
@@ -16,20 +16,71 @@ xhttp.send(fUrl);
 
 // Split Into Array for API Send
 function processRes(res){
-	console.log(res);
+	// console.log(res);
 	let tempArr,
-		langArr = [];
+		langArr = [],
+		str = "";
 
 	tempArr = res.toString().split(",");
-	console.log(resArr.length);
 	tempArr.filter(function(v, i) {
 	  // check the index is odd
-	  if (i % 2 == 0) { langArr.push(v); }
+	  if (i % 2 == 0) { 
+	  	langArr.push(v); 
+	  	str += v+", ";
+	  }
 	});
 	console.log(langArr);
+	// console.log(str);
+	yandexTranslate(str, langArr);
 }
 
-var yandexUrl = 'https://translate.yandex.net/api/v1.5/tr.json/getLangs?ui=en&key=trnsl.1.1.20190114T000445Z.95291844b30dc809.79341b7169f080deb7cfa0ce4eb4a65e7897cf3a';
+// Send To Yandex For Translation
+function yandexTranslate(yandexText, langArr){
+	// console.log("yandexText");
+	// console.log(yandexText);
+	console.log("--------------");
+	var fromLang = 'af',
+		toLang = 'es',
+		yandexUrl = `https://translate.yandex.net/api/v1.5/tr.json/translate?key=trnsl.1.1.20190114T000445Z.95291844b30dc809.79341b7169f080deb7cfa0ce4eb4a65e7897cf3a&text=${yandexText}&lang=${fromLang}-${toLang}`,
+		xhr = new XMLHttpRequest();
+
+	xhr.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+			var resArr = JSON.parse(xhr.responseText),
+				resArr = resArr['text'];
+
+			translatedRes(resArr, langArr);
+		}
+	};
+
+	xhr.open("GET", yandexUrl, true);
+	xhr.send();
+
+}
+
+// Join translated result into JSON
+function translatedRes(toArr, fromArr){
+	let translatedObj = {
+		words: []
+	};
+
+	let toArrFixed = toArr.toString().split(", ");
+
+	if (toArrFixed.length < 1000 || fromArr.length < 1000) {
+		console.log("ERROR: RESPONSE LENGTH MISMATCH");
+		console.log("From Language Length: "+fromArr.length);
+		console.log("To Language Length: "+toArrFixed.length);
+	} else {
+
+		for (var i = 0; i < fromArr.length; i++) {
+			translatedObj.words.push([fromArr[i], toArrFixed[i]]);
+		}
+
+		console.log(translatedObj);
+
+	}
+}
+
 
 
 // https://www.101languages.net/
