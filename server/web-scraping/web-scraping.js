@@ -149,6 +149,10 @@ function sendDB(json){
 }
 
 
+
+
+
+
 // https://www.101languages.net/
 
 var wordArr = [],
@@ -171,6 +175,9 @@ for (var i = 0; i < wordArr.length; i++) {
 }
 
 console.log(combinedArr.toString());
+
+
+
 
 
 
