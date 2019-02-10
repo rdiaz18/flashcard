@@ -1,17 +1,36 @@
 // Access Text Files
 
 var xhttp = new XMLHttpRequest(),
-	url = 'readText',
-	fUrl = 'web_scraping/RU-EN-1000.csv';
+	url = 'http://18.188.201.66:8081/readFile',
+	fUrl = JSON.stringify({ 'file': 'RU-EN-1000.csv' });
 
-xhttp.onreadystatechange = function(data) {
+xhttp.onreadystatechange = function() {
 	if (this.readyState == 4 && this.status == 200) {
-	  console.log(data);
+	  processRes(xhttp.responseText);
 	}
 };
 
 xhttp.open("POST", url, true);
+xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 xhttp.send(fUrl);
+
+// Split Into Array for API Send
+function processRes(res){
+	console.log(res);
+	let tempArr,
+		langArr = [];
+
+	tempArr = res.toString().split(",");
+	console.log(resArr.length);
+	tempArr.filter(function(v, i) {
+	  // check the index is odd
+	  if (i % 2 == 0) { langArr.push(v); }
+	});
+	console.log(langArr);
+}
+
+var yandexUrl = 'https://translate.yandex.net/api/v1.5/tr.json/getLangs?ui=en&key=trnsl.1.1.20190114T000445Z.95291844b30dc809.79341b7169f080deb7cfa0ce4eb4a65e7897cf3a';
+
 
 // https://www.101languages.net/
 
@@ -74,20 +93,3 @@ console.log(combinedArr.toString());
 
 // Yandex Translation Request
 // https://translate.yandex.net/api/v1.5/tr/translate?key=<API key>&text=<text to translate>&lang=<translation direction>&[format=<text format>]&[options=<translation options>]
-
-
-
-function readTextFile(file){
-    var rawFile = new XMLHttpRequest();
-    rawFile.open("GET", file, false);
-    rawFile.onreadystatechange = function(){
-        if(rawFile.readyState === 4){
-            if(rawFile.status === 200 || rawFile.status == 0)
-            {
-                var allText = rawFile.responseText;
-                alert(allText);
-            }
-        }
-    }
-    rawFile.send(null);
-}
