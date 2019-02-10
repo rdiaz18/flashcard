@@ -1,10 +1,12 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const List = sequelize.define('List', {
-    words: DataTypes.STRING
+    words: DataTypes.JSON,
+    language: DataTypes.STRING,
+    nativeLanguage: DataTypes.STRING
   }, {});
   List.associate = function(models) {
-    // associations can be defined here
+    List.belongsTo(models.users)
   };
   return List;
 };

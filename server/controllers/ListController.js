@@ -1,3 +1,4 @@
+const {list} = require('../models')
 var fs = require('fs');
 
 module.exports = {
@@ -12,5 +13,5 @@ module.exports = {
 		fs.readFile(file , 'utf8', function(err, contents){
 			res.send(contents)
 		});
-	}
+	},
 }
