@@ -9,10 +9,11 @@ export default new Vuex.Store({
       google: "",
       yandex: "trnsl.1.1.20190114T000445Z.95291844b30dc809.79341b7169f080deb7cfa0ce4eb4a65e7897cf3a"
      },
+     jwt: '',
+     showPreloader: false,
      email: "mpaccione1991@gmail.com",
      password: "rspaccio",
      ttsExpiry: "Purchased",// "Not Purchased",
-     login: true,
      currentWord: 0,
      correct: 0,
      incorrect: 0,
@@ -1444,6 +1445,12 @@ export default new Vuex.Store({
   	login(state){
   		state.login = true;
   	},
+    setPreloader(state, payload){
+      state.showPreloader = payload;
+    },
+    setJWT(state, payload){
+      state.jwt = payload;
+    },
   	addEmptyWord(state){
       for (var i = 0; i < state.wordLists.length; i++) {
         if (state.wordLists[i]["title"] == state.currentListTitle){
@@ -1506,6 +1513,30 @@ export default new Vuex.Store({
   	// }
   },
   actions: {
-  	
+  	login (state, payload){
+      fetch('http://18.188.201.66:8081/login', {
+        method: "POST",
+        body: JSON.stringify(payload),
+        headers: {
+          'Content-Type': 'application/json'
+          // 'x-access-token': this.$store.state.jwt
+        }
+      }).then(res => {
+          if (!res.ok){
+            res.json().then(function(err){
+              // this.commit("setLoginError", err["error"]);
+            setTimeout(function(){ // UX
+              this.commit("setPreloader", false);
+            }, 500);
+              throw new Error();
+            });
+          }
+          return res.json();
+      }).then(response => {
+        console.log('Success:', response);
+        // this.commit('setLoginError', '');
+        this.commit("setJWT", response.token);
+      })
+    }
   }
 })

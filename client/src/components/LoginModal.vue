@@ -29,6 +29,13 @@ export default {
   props: {
     msg: String
   },
+  watch: {
+    '$store.state.jwt'(val, oldVal){
+      if (val != '' && oldVal == '') {
+        this.$router.push({ name: "words" })
+      }
+    }
+  },
   methods: {
     login(){
       this.$store.dispatch("login",

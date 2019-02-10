@@ -2,7 +2,8 @@
   <div id="app" :style="{ backgroundImage: `url(${src})` }">
     <div id="bgFade"></div>
     <div id="view">
-      <nav v-if="$store.state.login == true">
+      <!-- <nav> -->
+      <nav v-if="$store.state.jwt != ''">  
         <router-link to="/account">Account</router-link> |
         <router-link to="/cards">Cards</router-link> |
         <router-link to="/words">Words</router-link>
@@ -16,7 +17,7 @@
   export default {
     watch: {
       $route (to, from){
-        if (this.$store.state.login == false) {
+        if (this.$store.state.jwt == '') {
           this.$router.push({ name: "login" })
         }
       }
