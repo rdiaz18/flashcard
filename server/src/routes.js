@@ -22,8 +22,12 @@ module.exports = (app) => {
 		//Read file for langs
 		app.post('/readFile',
 			ListController.readFile)
+		//Admin only add list
 		app.post('/addAdminList',
 			AuthenticationController.isAdmin,
 			ListController.addAdminList)
+		//get list by list ID
+		app.post('/getListByID',
+			ListController.getListByID)
 
 }
