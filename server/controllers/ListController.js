@@ -31,5 +31,25 @@ module.exports = {
 
 		}
 
+	},
+	async getListByID(req, res){
+		try{
+			const {id} = req.body
+			const list = await List.findOne({
+				where:{
+					id: id
+				}
+			})
+			if(!list){
+				res.status(404).send({
+					error: "list not found"
+				})
+			}else{
+				res.send({list})
+			}
+		}catch(err){
+			console.log(err);
+			res.status(500).send("error fetching list")
+		}
 	}
 }
