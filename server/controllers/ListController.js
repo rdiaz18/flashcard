@@ -1,4 +1,4 @@
-const {list} = require('../models')
+const {List} = require('../models')
 var fs = require('fs');
 
 module.exports = {
@@ -14,4 +14,22 @@ module.exports = {
 			res.send(contents)
 		});
 	},
+	async addAdminList(req, res){
+		try{
+			const {words, language, nativeLanguage, editable} = req.body
+			const list = await List.create({
+				words,
+				language,
+				nativeLanguage,
+				editable: 0,
+				userID: 1
+			})
+			res.send({list})
+		}catch(err){
+			console.log(err);
+			res.status(500).send("Error creating list")
+
+		}
+
+	}
 }
