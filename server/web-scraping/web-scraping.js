@@ -47,6 +47,28 @@ for (var prop in languageObj){
 	readFile(prop, languageObj[prop]);
 }
 
+
+
+
+// Login to get admin access
+(function login(){
+	let xhttp2 = new XMLHttpRequest(),
+		url = 'http://18.188.201.66:8081/login',
+		credentials = JSON.stringify({ "email":"admin@acc.one", "password":"password" });
+
+	xhttp2.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+			// console.log(JSON.parse(xhttp2.responseText)["token"]);
+			window.jwt = console.log(JSON.parse(xhttp2.responseText)["token"]);
+			readFile("AF", "en");
+		}
+	};
+
+	xhttp2.open("POST", url, true);
+	xhttp2.setRequestHeader("Content-Type", "application/json");
+	xhttp2.send(credentials);
+})();
+
 	
 
 // Access Text Files
@@ -57,7 +79,8 @@ function readFile(prop, key){
 
 	xhttp.onreadystatechange = function() {
 		if (this.readyState == 4 && this.status == 200) {
-		  processRes(xhttp.responseText, prop, key);
+			// console.log(xhttp.responseText);
+			processRes(xhttp.responseText, prop, key);
 		}
 	};
 
@@ -81,6 +104,8 @@ function processRes(res, fromLang, toLang){
 	  	str += v+", ";
 	  }
 	});
+
+	// console.log("langArr PRE YANDEX");
 	// console.log(langArr);
 	// console.log(str);
 	yandexTranslate(str, langArr, fromLang, toLang);
@@ -88,16 +113,23 @@ function processRes(res, fromLang, toLang){
 
 // Send To Yandex For Translation
 function yandexTranslate(yandexText, langArr, fromLang, toLang){
+	// console.log("langArr");
+	// console.log(langArr);
 	// console.log("yandexText");
 	// console.log(yandexText);
 	console.log("--------------");
-	var yandexUrl = `https://translate.yandex.net/api/v1.5/tr.json/translate?key=trnsl.1.1.20190114T000445Z.95291844b30dc809.79341b7169f080deb7cfa0ce4eb4a65e7897cf3a&text=${yandexText}&lang=${fromLang}-${toLang}`,
+	var yandexUrl = `https://translate.yandex.net/api/v1.5/tr.json/translate?key=trnsl.1.1.20190114T000445Z.95291844b30dc809.79341b7169f080deb7cfa0ce4eb4a65e7897cf3a&text=${yandexText}&lang=${fromLang.toLowerCase()}-${toLang.toLowerCase()}`,
 		xhr = new XMLHttpRequest();
 
 	xhr.onreadystatechange = function() {
 		if (this.readyState == 4 && this.status == 200) {
 			var resArr = JSON.parse(xhr.responseText),
 				resArr = resArr['text'];
+
+			// console.log("resArr");
+			// console.log(xhr.responseText);
+			// console.log(resArr);
+			// console.log(resArr.toString().split(", "));
 
 			translatedRes(langArr, resArr, fromLang, toLang);
 		}
@@ -118,34 +150,41 @@ function translatedRes(fromArr, toArr, fromLang, toLang){
 
 	let toArrFixed = toArr.toString().split(", ");
 
+	console.log(fromArr);
+	console.log(toArr);
+
 	if (toArrFixed.length < 1000 || fromArr.length < 1000) {
 		console.log("ERROR: RESPONSE LENGTH MISMATCH");
 		console.log("From Language Length: "+fromArr.length);
 		console.log("To Language Length: "+toArrFixed.length);
-	} else {
-
-		for (var i = 0; i < fromArr.length; i++) {
-			translatedObj.words.push([fromArr[i], toArrFixed[i]]);
-		}
-
-		console.log(translatedObj);
-		// sendDB(translatedObj);
+		console.log(fromArr);
+		console.log(toArr);
+		console.log(toArrFixed);
 	}
+
+	for (var i = 0; i < fromArr.length; i++) {
+		translatedObj.words.push([fromArr[i], toArrFixed[i]]);
+	}
+
+	console.log(translatedObj);
+	sendDB(translatedObj);
 }
 
 // Send translated result to DB
 function sendDB(json){
 	var xhr2 = new XMLHttpRequest(),
-		dbURL = '18.188.201.66:8081/addAdminList';
+		dbURL = 'http://18.188.201.66:8081/addAdminList';
 
-	xhr.onreadystatechange = function() {
+	xhr2.onreadystatechange = function() {
 		if (this.readyState == 4 && this.status == 200) {
 			console.log(xhr.responseText);
 		}
 	};
 
-	xhr.open("POST", dbURL, true);
-	xhr.send(json);
+	xhr2.open("POST", dbURL, true);
+	xhr2.setRequestHeader("Content-Type", "application/json");
+	xhr2.setRequestHeader("x-access-token", window.jwt);
+	xhr2.send(json);
 }
 
 
