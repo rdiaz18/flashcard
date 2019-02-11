@@ -1439,6 +1439,9 @@ export default new Vuex.Store({
     },
     ttsExpiry(state){
         return state.ttsExpiry;
+    },
+    getJWT(state){
+      return state.jwt;
     }
   },
   mutations: {

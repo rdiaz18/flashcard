@@ -143,6 +143,8 @@ function yandexTranslate(yandexText, langArr, fromLang, toLang){
 // Join translated result into JSON
 function translatedRes(fromArr, toArr, fromLang, toLang){
 	let translatedObj = {
+		name: "1,000 Most Common Words",
+		description: `${fromLang}-${toLang}-1000`,
 		nativeLanguage: fromLang,
 		language: toLang,
 		words: []
@@ -177,7 +179,7 @@ function sendDB(json){
 
 	xhr2.onreadystatechange = function() {
 		if (this.readyState == 4 && this.status == 200) {
-			console.log(xhr.responseText);
+			console.log(xhr2.responseText);
 		}
 	};
 
