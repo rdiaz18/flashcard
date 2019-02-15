@@ -60,7 +60,7 @@ for (var prop in languageObj){
 		if (this.readyState == 4 && this.status == 200) {
 			// console.log(JSON.parse(xhttp2.responseText)["token"]);
 			window.jwt = console.log(JSON.parse(xhttp2.responseText)["token"]);
-			readFile("AF", "en");
+			readFile("AF", "ru");
 		}
 	};
 
@@ -105,9 +105,9 @@ function processRes(res, fromLang, toLang){
 	  }
 	});
 
-	// console.log("langArr PRE YANDEX");
+	console.log("langArr PRE YANDEX");
 	// console.log(langArr);
-	// console.log(str);
+	console.log(str);
 	yandexTranslate(str, langArr, fromLang, toLang);
 }
 
@@ -118,7 +118,8 @@ function yandexTranslate(yandexText, langArr, fromLang, toLang){
 	// console.log("yandexText");
 	// console.log(yandexText);
 	console.log("--------------");
-	var yandexUrl = `https://translate.yandex.net/api/v1.5/tr.json/translate?key=trnsl.1.1.20190114T000445Z.95291844b30dc809.79341b7169f080deb7cfa0ce4eb4a65e7897cf3a&text=${yandexText}&lang=${fromLang.toLowerCase()}-${toLang.toLowerCase()}`,
+	var yandexTextFixed = yandexText.replace(/,/g,'.'),
+		yandexUrl = `https://translate.yandex.net/api/v1.5/tr.json/translate?key=trnsl.1.1.20190114T000445Z.95291844b30dc809.79341b7169f080deb7cfa0ce4eb4a65e7897cf3a&text=${yandexTextFixed}&lang=${fromLang.toLowerCase()}-${toLang.toLowerCase()}`,
 		xhr = new XMLHttpRequest();
 
 	xhr.onreadystatechange = function() {
@@ -144,13 +145,13 @@ function yandexTranslate(yandexText, langArr, fromLang, toLang){
 function translatedRes(fromArr, toArr, fromLang, toLang){
 	let translatedObj = {
 		name: "1,000 Most Common Words",
-		description: `${fromLang}-${toLang}-1000`,
+		description: `${fromLang.toUpperCase()}-${toLang.toUpperCase()}-1000`,
 		nativeLanguage: fromLang,
 		language: toLang,
 		words: []
 	};
 
-	let toArrFixed = toArr.toString().split(", ");
+	let toArrFixed = toArr.toString().split(". ");
 
 	console.log(fromArr);
 	console.log(toArr);
@@ -169,7 +170,7 @@ function translatedRes(fromArr, toArr, fromLang, toLang){
 	}
 
 	console.log(translatedObj);
-	sendDB(translatedObj);
+	// sendDB(translatedObj);
 }
 
 // Send translated result to DB
