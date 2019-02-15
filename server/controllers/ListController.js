@@ -16,13 +16,16 @@ module.exports = {
 	},
 	async addAdminList(req, res){
 		try{
-			const {words, language, nativeLanguage, editable} = req.body
+			const {name, description, words, language, nativeLanguage, editable, share} = req.body
 			const list = await List.create({
+				name,
+				description,
 				words,
 				language,
 				nativeLanguage,
 				editable: 0,
-				userID: 1
+				userId: 1,
+				share: 1
 			})
 			res.send({list})
 		}catch(err){
