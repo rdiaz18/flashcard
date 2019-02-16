@@ -4,7 +4,6 @@
       <md-card-header>
         <div class="md-title">
           <span id="logo"></span>
-          <span id="logo-text">TTS Flashcards</span>
         </div>
       </md-card-header>
       <md-card-content>
@@ -74,8 +73,7 @@ export default {
   border: 1px solid black;
 
   .md-card-header {
-    background-color: lightskyblue;
-    border-bottom: 1px solid black;
+    background-color: #2799f9;
   }
 
   .md-card {
@@ -83,30 +81,21 @@ export default {
     width: 600px;
     height: 400px;
   }
+
+  .md-button {
+    background-color: white;
+  }
 }
 #logo {
-  background-image: url("./../assets/volume.png");
-  background-size: 25px;
+  background-image: url("./../assets/logo/logo-color.jpg");
+  background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
   background-color: white;
   padding: 20px;
-  border-radius: 50% 50% 50% 0%;
   display: inline-block;
-  transform: rotate(-90deg);
-  height: 30px;
-  width: 30px;
-  position: relative;
-  border: 1px solid black;
-}
-#logo-text {
-  top: -7px;
-  left: -3px;
-  background-color: white;
-  padding-right: 8px;
-  border-top: 1px solid black;
-  border-bottom: 1px solid black;
-  border-right: 1px solid black;
+  height: 211.5px;
+  width: 396px;
   position: relative;
 }
 h3 {
