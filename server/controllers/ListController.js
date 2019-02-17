@@ -1,7 +1,8 @@
 const {List} = require('../models')
 var fs = require('fs');
+var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
-function yandexTranslate(yandexText, langArr, fromLang, toLang){
+async function yandexTranslate(yandexText, langArr, fromLang, toLang){
 
 	console.log("--------------");
 	var yandexTextFixed = yandexText.replace(/,/g,'.'),
@@ -18,7 +19,8 @@ function yandexTranslate(yandexText, langArr, fromLang, toLang){
 			// console.log(resArr);
 			// console.log(resArr.toString().split(", "));
 
-			translatedRes(langArr, resArr, fromLang, toLang);
+			const translation = translatedRes(langArr, resArr, fromLang, toLang);
+			console.log("translation: " + translation)
 		}
 	};
 
@@ -56,6 +58,7 @@ function translatedRes(fromArr, toArr, fromLang, toLang){
 
 	console.log(translatedObj);
 	// sendDB(translatedObj);
+	return (translatedObj);
 }
 
 module.exports = {
@@ -136,9 +139,9 @@ module.exports = {
 
 			console.log("langArr PRE YANDEX");
 			console.log(str);
-			yandexTranslate(str, langArr, language, nativeLanguage);
+			const translated = await yandexTranslate(str, langArr, language, nativeLanguage);
 
-			res.send("complete")
+			res.send({translated})
 
 		}catch(err){
 			console.log(err)
