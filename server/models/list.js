@@ -3,7 +3,7 @@ module.exports = (sequelize, DataTypes) => {
   const List = sequelize.define('List', {
     name: DataTypes.STRING,
     description: DataTypes.STRING,
-    words: DataTypes.TEXT,
+    words: DataTypes.TEXT + ' CHARSET utf8 COLLATE utf8_unicode_ci',
     language: DataTypes.STRING,
     nativeLanguage: DataTypes.STRING,
     editable: DataTypes.BOOLEAN,
