@@ -29,5 +29,7 @@ module.exports = (app) => {
 		//get list by list ID
 		app.post('/getListByID',
 			ListController.getListByID)
+		app.post('/insertList',
+			ListController.insertList)
 
 }

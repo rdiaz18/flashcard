@@ -7,7 +7,7 @@ const {sequelize} = require('../models')
 const app = express()
 app.use(morgan('combined'))
 app.use(bodyParser.json())
-//app.use(cors())
+app.use(cors())
 
 require('./routes')(app)
 app.get('/', (req, res) => res.send('Hello World!'))
