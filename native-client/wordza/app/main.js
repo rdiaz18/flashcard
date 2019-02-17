@@ -1,6 +1,7 @@
 import Vue from 'nativescript-vue'
-import App from './components/App'
-import Login from './components/Login'
+import Vuex from 'vuex'
+import router from './router'
+import store from './store'
 // import VueDevtools from 'nativescript-vue-devtools'
 
 if(TNS_ENV !== 'production') {
@@ -9,7 +10,21 @@ if(TNS_ENV !== 'production') {
 // Prints Vue logs when --env.production is *NOT* set while building
 Vue.config.silent = (TNS_ENV === 'production')
 
+Vue.prototype.$router = router
+Vue.prototype.$goto = function (to, options){
+	var options = options || { 
+        clearHistory: false, 
+        backstackVisible: true, 
+        transition: { 
+            name: "slide",
+            duration: 380,
+            curve: "easeIn"
+        }
+    }
+	this.$navigateTo(this.$router[to], options)
+}
 
 new Vue({
-  render: h => h('frame', [h(Login)])
+	store,
+	render: h => h('frame', [h(router['login'])])
 }).$start()

@@ -17,9 +17,9 @@
           <ActivityIndicator rowSpan="3" :busy="processing" />
         </GridLayout>  
 
-        <FlexboxLayout>
+        <FlexboxLayout justifyContent="center">
           <Button text="Register" @tap="register" dock="bottom" />
-          <Button text="Login" @tap="Login" dock="bottom" />   
+          <Button text="Login" @tap="login" dock="bottom" />   
         </FlexboxLayout>
 
       </StackLayout>
@@ -36,7 +36,10 @@ export default {
   watch: {
     '$store.state.jwt'(val, oldVal){
       if (val != '' && oldVal == '') {
-        this.$router.push({ name: "words" })
+        // if no wordlist go to words
+        this.$goto('account');
+        // else go to cards
+        // this.$goto('cards');
       }
     }
   },
