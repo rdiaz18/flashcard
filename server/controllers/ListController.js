@@ -126,11 +126,37 @@ module.exports = {
 			  }
 			});
 
-			//console.log("langArr PRE YANDEX");
-			//console.log(str);
-			const translated = await yandexTranslate(str, langArr, language, nativeLanguage);
-			console.log(translated)
-			res.send(translated.data.text)
+			var translated = await yandexTranslate(str, langArr, language, nativeLanguage);
+			translated = translated.data.text;
+			let translatedObj = {
+				name: "1,000 Most Common Words",
+				description: `${language.toUpperCase()}-${nativeLanguage.toUpperCase()}-1000`,
+				nativeLanguage: language,
+				language: nativeLanguage,
+				words: []
+			};
+
+			let toArrFixed = translated.toString().split(". ");
+
+			console.log(langArr);
+			console.log(translated);
+
+			if (toArrFixed.length < 1000 || langArr.length < 1000) {
+				console.log("ERROR: RESPONSE LENGTH MISMATCH");
+				console.log("From Language Length: "+langArr.length);
+				console.log("To Language Length: "+toArrFixed.length);
+				console.log(langArr);
+				console.log(translated);
+				console.log(toArrFixed);
+			}
+
+			for (var i = 0; i < langArr.length; i++) {
+				translatedObj.words.push([langArr[i], toArrFixed[i]]);
+			}
+
+			console.log(translatedObj);
+
+			res.send({translatedObj})
 
 		}catch(err){
 			console.log(err)
