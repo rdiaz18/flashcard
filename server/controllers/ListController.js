@@ -1,5 +1,33 @@
 const {List} = require('../models')
 var fs = require('fs');
+var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+
+async function yandexTranslate(yandexText, langArr, fromLang, toLang){
+
+	console.log("--------------");
+	var yandexTextFixed = yandexText.replace(/,/g,'.'),
+		yandexUrl = `https://translate.yandex.net/api/v1.5/tr.json/translate?key=trnsl.1.1.20190114T000445Z.95291844b30dc809.79341b7169f080deb7cfa0ce4eb4a65e7897cf3a&text=${yandexTextFixed}&lang=${fromLang.toLowerCase()}-${toLang.toLowerCase()}`,
+		xhr = new XMLHttpRequest();
+
+	xhr.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+			var resArr = JSON.parse(xhr.responseText),
+				resArr = resArr['text'];
+
+			console.log("resArr");
+			console.log(xhr.responseText);
+			console.log(resArr);
+			console.log(resArr.toString().split(", "));
+			
+			const translation = translatedRes(langArr, resArr, fromLang, toLang);
+			console.log("translation: " + translation)
+		}
+	};
+
+	xhr.open("GET", yandexUrl, true);
+	xhr.send();
+
+}
 
 function translatedRes(fromArr, toArr, fromLang, toLang){
 	let translatedObj = {
@@ -30,6 +58,7 @@ function translatedRes(fromArr, toArr, fromLang, toLang){
 
 	console.log(translatedObj);
 	// sendDB(translatedObj);
+	return (translatedObj);
 }
 
 module.exports = {
@@ -88,7 +117,7 @@ module.exports = {
 	},
 	async insertList(req, res){
 		try{
-			const {name, description, words, language, nativeLanguage, editable, share, file} = req.body
+			var {name, description, words, language, nativeLanguage, editable, share, file} = req.body
 					file = ("/home/ubuntu/tts-flashcards/server/web-scraping/" + file)
 			console.log(file)
 			if(!fs.existsSync(file)) {
@@ -110,13 +139,13 @@ module.exports = {
 
 			console.log("langArr PRE YANDEX");
 			console.log(str);
-			yandexTranslate(str, langArr, language, nativeLanguage);
+			const translated = await yandexTranslate(str, langArr, language, nativeLanguage);
 
-			res.send("complete")
+			res.send({translated})
 
 		}catch(err){
 			console.log(err)
-			res.status(500).send({error: error inserting list})
+			res.status(500).send({error: 'error inserting list'})
 		}
 
 	}
