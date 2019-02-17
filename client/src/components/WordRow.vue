@@ -58,4 +58,9 @@
 		padding: 2.5px 0px 2.5px 5px;
 		font-size: 1.8em;
 	}
+	table input {
+		background-color: transparent;
+		border: 0px;
+		color: white;
+	}
 </style>

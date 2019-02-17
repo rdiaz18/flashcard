@@ -216,6 +216,19 @@ Word, Meaning #1, Meaning #2...
 		.md-field {
 			min-height: 30px;
 		}
+
+		.md-table {
+			background-color: transparent;
+			color: white;
+		}
+
+		.md-table-row {
+			background-color: rgba(0,0,0,0.50);
+		}
+	}
+
+	.md-table .md-table-content {
+		overflow: initial !important;
 	}
 
 	#lang-container {
