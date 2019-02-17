@@ -88,7 +88,7 @@ module.exports = {
 	},
 	async insertList(req, res){
 		try{
-			const {name, description, words, language, nativeLanguage, editable, share, file} = req.body
+			var {name, description, words, language, nativeLanguage, editable, share, file} = req.body
 					file = ("/home/ubuntu/tts-flashcards/server/web-scraping/" + file)
 			console.log(file)
 			if(!fs.existsSync(file)) {
@@ -116,7 +116,7 @@ module.exports = {
 
 		}catch(err){
 			console.log(err)
-			res.status(500).send({error: error inserting list})
+			res.status(500).send({error: 'error inserting list'})
 		}
 
 	}
