@@ -14,11 +14,11 @@ async function yandexTranslate(yandexText, langArr, fromLang, toLang){
 			var resArr = JSON.parse(xhr.responseText),
 				resArr = resArr['text'];
 
-			// console.log("resArr");
-			// console.log(xhr.responseText);
-			// console.log(resArr);
-			// console.log(resArr.toString().split(", "));
-
+			console.log("resArr");
+			console.log(xhr.responseText);
+			console.log(resArr);
+			console.log(resArr.toString().split(", "));
+			
 			const translation = translatedRes(langArr, resArr, fromLang, toLang);
 			console.log("translation: " + translation)
 		}
