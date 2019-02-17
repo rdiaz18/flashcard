@@ -155,7 +155,17 @@ module.exports = {
 			}
 
 			console.log(translatedObj);
-
+			const list = await List.create({
+				name: translatedObj.name,
+				description: translatedObj.description,
+				words: JSON.stringify(translatedObj.words),
+				language: translatedObj.language,
+				nativeLanguage: translatedObj.nativeLanguage,
+				editable: 0,
+				userId: 1,
+				share: 1
+			})
+			res.send({list})
 			res.send({translatedObj})
 
 		}catch(err){
