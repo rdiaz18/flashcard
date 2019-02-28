@@ -1,6 +1,7 @@
 const {List} = require('../models')
 var fs = require('fs');
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+const axios = require('axios')
 
 async function yandexTranslate(yandexText, langArr, fromLang, toLang){
 
@@ -8,28 +9,16 @@ async function yandexTranslate(yandexText, langArr, fromLang, toLang){
 	var yandexTextFixed = yandexText.replace(/,/g,'.'),
 		yandexUrl = `https://translate.yandex.net/api/v1.5/tr.json/translate?key=trnsl.1.1.20190114T000445Z.95291844b30dc809.79341b7169f080deb7cfa0ce4eb4a65e7897cf3a&text=${yandexTextFixed}&lang=${fromLang.toLowerCase()}-${toLang.toLowerCase()}`,
 		xhr = new XMLHttpRequest();
-
-	xhr.onreadystatechange = function() {
-		if (this.readyState == 4 && this.status == 200) {
-			var resArr = JSON.parse(xhr.responseText),
-				resArr = resArr['text'];
-
-			console.log("resArr");
-			console.log(xhr.responseText);
-			console.log(resArr);
-			console.log(resArr.toString().split(", "));
-			
-			const translation = translatedRes(langArr, resArr, fromLang, toLang);
-			console.log("translation: " + translation)
+		try{
+			return await axios.get(yandexUrl)
+		}catch (err){
+			console.log(err)
 		}
-	};
-
-	xhr.open("GET", yandexUrl, true);
-	xhr.send();
 
 }
 
-function translatedRes(fromArr, toArr, fromLang, toLang){
+function translatedRes(fromArr, toArr, fromLang, toLang){i
+	console.log("in translated res")
 	let translatedObj = {
 		name: "1,000 Most Common Words",
 		description: `${fromLang.toUpperCase()}-${toLang.toUpperCase()}-1000`,
@@ -137,11 +126,47 @@ module.exports = {
 			  }
 			});
 
-			console.log("langArr PRE YANDEX");
-			console.log(str);
-			const translated = await yandexTranslate(str, langArr, language, nativeLanguage);
+			var translated = await yandexTranslate(str, langArr, language, nativeLanguage);
+			translated = translated.data.text;
+			let translatedObj = {
+				name: "1,000 Most Common Words",
+				description: `${language.toUpperCase()}-${nativeLanguage.toUpperCase()}-1000`,
+				nativeLanguage: language,
+				language: nativeLanguage,
+				words: []
+			};
 
-			res.send({translated})
+			let toArrFixed = translated.toString().split(". ");
+
+			console.log(langArr);
+			console.log(translated);
+
+			if (toArrFixed.length < 1000 || langArr.length < 1000) {
+				console.log("ERROR: RESPONSE LENGTH MISMATCH");
+				console.log("From Language Length: "+langArr.length);
+				console.log("To Language Length: "+toArrFixed.length);
+				console.log(langArr);
+				console.log(translated);
+				console.log(toArrFixed);
+			}
+
+			for (var i = 0; i < langArr.length; i++) {
+				translatedObj.words.push([langArr[i], toArrFixed[i]]);
+			}
+
+			console.log(translatedObj);
+			const list = await List.create({
+				name: translatedObj.name,
+				description: translatedObj.description,
+				words: JSON.stringify(translatedObj.words),
+				language: translatedObj.language,
+				nativeLanguage: translatedObj.nativeLanguage,
+				editable: 0,
+				userId: 1,
+				share: 1
+			})
+			res.send({list})
+			res.send({translatedObj})
 
 		}catch(err){
 			console.log(err)
