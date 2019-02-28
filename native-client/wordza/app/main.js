@@ -26,5 +26,5 @@ Vue.prototype.$goto = function (to, options){
 
 new Vue({
 	store,
-	render: h => h('frame', [h(router['login'])])
+	render: h => h('frame', [h(router['words'])])
 }).$start()

@@ -37,7 +37,7 @@ export default {
     '$store.state.jwt'(val, oldVal){
       if (val != '' && oldVal == '') {
         // if no wordlist go to words
-        this.$goto('account');
+        this.$goto('words');
         // else go to cards
         // this.$goto('cards');
       }
