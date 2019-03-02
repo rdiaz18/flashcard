@@ -41,5 +41,7 @@ module.exports = (app) => {
 		//Insert list from fname
 		app.post('/insertList',
 			ListController.insertList)
+		app.post('/deleteList',
+			ListController.deleteList)
 
 }
