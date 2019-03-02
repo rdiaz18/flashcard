@@ -168,9 +168,15 @@ module.exports = {
 
 			var translated = await yandexTranslate(str, langArr, language, nativeLanguage);
 			translated = translated.data.text;
+			if(!name){
+				name = "1,000 Most Common Words"
+			}
+			if(!description){
+				description = `${language.toUpperCase()}-${nativeLanguage.toUpperCase()}-1000`
+			}
 			let translatedObj = {
-				name: "1,000 Most Common Words",
-				description: `${language.toUpperCase()}-${nativeLanguage.toUpperCase()}-1000`,
+				name: name,
+				description: description,
 				nativeLanguage: language,
 				language: nativeLanguage,
 				words: []
