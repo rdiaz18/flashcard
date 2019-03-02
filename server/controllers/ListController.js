@@ -219,5 +219,23 @@ module.exports = {
 			res.status(500).send({error: 'error inserting list'})
 		}
 
+	},
+	async deleteList(req, res){
+		try{
+			const {id} = req.body
+			const list = await List.findOne({
+				where:{
+					id: id
+				}
+			})
+			list.destroy()
+				.then(function(){
+					res.send({message: 'List deleted'})
+				})
+		}catch(err){
+			res.status(500).send({
+				error: "Failed to delete List"
+			})
+		}
 	}
 }
