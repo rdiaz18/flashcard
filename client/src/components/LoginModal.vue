@@ -31,8 +31,12 @@ export default {
   watch: {
     '$store.state.jwt'(val, oldVal){
       if (val != '' && oldVal == '') {
-        this.$router.push({ name: "words" })
+        // Get Lists
+        this.$store.dispatch("getStockWordList");
       }
+    },
+    '$store.state.wordList'(val, oldVal){
+      this.$router.push({ name: "words" })
     }
   },
   methods: {

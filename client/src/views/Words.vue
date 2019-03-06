@@ -107,6 +107,7 @@
 		},
 		beforeMount(){
 			var that = this;
+			// Map Asset Flags
 			function importAll (r) {
 			  r.keys().forEach(key => that.imgCache[key] = r(key));
 			}
@@ -118,10 +119,10 @@
 			// this.langCheck();
 
 			// Check if List Has Empty Row if Not Add 
-			let lastWord = this.$store.getters.lastWord;
-			if (lastWord[0].length > 0 || lastWord[1].length > 0) {
-				this.$store.commit("addEmptyWord");
-			}
+			// let lastWord = this.$store.getters.lastWord;
+			// if (lastWord[0].length > 0 || lastWord[1].length > 0) {
+			// 	this.$store.commit("addEmptyWord");
+			// }
 		},
 		computed: {
 			langSrc(){
