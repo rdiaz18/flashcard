@@ -84,6 +84,15 @@ module.exports = {
 		}
 
 	},
+	async userCreateList(req, res){
+		try{
+			const list = await List.create(req.body)
+			res.send({list})
+		}catch(err){
+			console.log(err)
+			res.status(500).send("Error Creating List")
+		}
+	},
 	async getListByID(req, res){
 		try{
 			const {id} = req.body
@@ -102,6 +111,37 @@ module.exports = {
 		}catch(err){
 			console.log(err);
 			res.status(500).send("error fetching list")
+		}
+	},
+	async getListByUser(req, res){
+		try{
+			const{userId} = req.body
+			const listArr = await List.findAll({
+				where:{
+					userId: userId
+				}
+			})
+			res.send({listArr})
+		}catch(err){
+			console.log(err)
+			res.status(500).send("Error Fetching List")
+		}
+	},
+	async getListByLanguage(req, res){
+		try{
+			const{toLang, fromLang} = req.body
+			let query = {where: {}}
+			if (toLang) {
+				query.where.nativeLanguage = toLang
+			}
+			if (fromLang) {
+				query.where.language = fromLang
+			}
+			const listArr = await List.findAll(query)
+			res.send({listArr})
+		}catch(err){
+			console.log(err)
+			res.status(500).send("Error Fetching List")
 		}
 	},
 	async insertList(req, res){
@@ -128,9 +168,15 @@ module.exports = {
 
 			var translated = await yandexTranslate(str, langArr, language, nativeLanguage);
 			translated = translated.data.text;
+			if(!name){
+				name = "1,000 Most Common Words"
+			}
+			if(!description){
+				description = `${language.toUpperCase()}-${nativeLanguage.toUpperCase()}-1000`
+			}
 			let translatedObj = {
-				name: "1,000 Most Common Words",
-				description: `${language.toUpperCase()}-${nativeLanguage.toUpperCase()}-1000`,
+				name: name,
+				description: description,
 				nativeLanguage: language,
 				language: nativeLanguage,
 				words: []
@@ -173,5 +219,23 @@ module.exports = {
 			res.status(500).send({error: 'error inserting list'})
 		}
 
+	},
+	async deleteList(req, res){
+		try{
+			const {id} = req.body
+			const list = await List.findOne({
+				where:{
+					id: id
+				}
+			})
+			list.destroy()
+				.then(function(){
+					res.send({message: 'List deleted'})
+				})
+		}catch(err){
+			res.status(500).send({
+				error: "Failed to delete List"
+			})
+		}
 	}
 }

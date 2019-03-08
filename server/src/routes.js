@@ -26,10 +26,22 @@ module.exports = (app) => {
 		app.post('/addAdminList',
 			AuthenticationController.isAdmin,
 			ListController.addAdminList)
+		//User Create List
+		app.post('/userCreateList',
+			ListController.userCreateList)
 		//get list by list ID
 		app.post('/getListByID',
 			ListController.getListByID)
+		//Get list by user ID
+		app.post('/getListByUser',
+			ListController.getListByUser)
+		//Get lists by language
+		app.post('/getListByLanguage',
+			ListController.getListByLanguage)
+		//Insert list from fname
 		app.post('/insertList',
 			ListController.insertList)
+		app.post('/deleteList',
+			ListController.deleteList)
 
 }
