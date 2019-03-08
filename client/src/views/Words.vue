@@ -51,8 +51,8 @@
 	  	<div :class="{ center: centerIt }">
 	  		<md-field>
 	  			<label style="margin-left: 5px">Word List</label>
-	  			<md-select id="list-select" v-model="currentList">
-		  			<md-option v-for="(list, index) in $store.getters.wordLists" :value="list.title">{{ list.title }}</md-option>
+	  			<md-select id="list-select" v-model="currentList" @change="setCurrentList()">
+		  			<md-option v-for="(list, index) in $store.getters.wordLists" :value="list">{{ list.name }}</md-option>
 		  		</md-select>
 	  		</md-field>
 	  		<md-field v-show="newListCheck == true && $store.getters.ttsExpiry != 'Not Purchased'">
@@ -69,7 +69,7 @@
     		<md-table-head>Word</md-table-head>
     		<md-table-head>Meaning</md-table-head>
     	</md-table-row>
-    	<WordRow v-for="(word, index) in $store.getters.allWords" :index="index" :word="word[0]" :meaning="word[1]"></WordRow>
+    	<WordRow v-for="(word, index) in currentList['words']" :index="index" :word="word[0]" :meaning="word[1]"></WordRow>
     </md-table>
     <div id="CSVModalContainer" v-if="showCSVModal == true">
 	    <md-card id="CSVModal" md-with-hover>
@@ -154,6 +154,9 @@
 			// 	// 	}
 			// 	// }
 			// },
+			setCurrentList(){
+				this.$store.commit("setCurrentList", this.currentList);
+			},
 			newListCheck(){
 				// If Make New List Selected
 				return this.currentList == "newList" ? true : false;
@@ -184,7 +187,8 @@
 		},
 		data() {
 			return {
-				currentList: this.$store.getters.currentListTitle,
+				allWordLists: this.$store.getters.wordLists,
+				currentList: this.$store.getters.currentList || "Select Word List",
 				newListName: '',
 				centerIt: this.$store.getters.ttsExpiry == "Not Purchased" ? true : false,
 				country: this.$store.getters.currentLang,
@@ -230,6 +234,10 @@ Word, Meaning #1, Meaning #2...
 
 	.md-table .md-table-content {
 		overflow: initial !important;
+	}
+
+	.md-menu-content-container {
+		background-color: white !important;
 	}
 
 	#lang-container {

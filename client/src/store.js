@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 const store = new Vuex.Store({
   state: {
@@ -18,7 +18,7 @@ const store = new Vuex.Store({
      correct: 0,
      incorrect: 0,
      skipped: 0,
-     currentList: "Top 1,000 Words",
+     currentList: [],
      language: "ru-RU",
      nativeLanguage: "en-US",
      languages: {
@@ -203,92 +203,92 @@ const store = new Vuex.Store({
      wordList: []
   },
   getters: {
-    allWords(state){
-      for (var i = 0; i < state.wordList.length; i++) {
-        if (state.wordList[i].title == state.currentList){
-          return state.wordList[i].words;
-        }
-      }
-    },
-    currentWordCount(state){
-      return state.currentWord;
-    },
-    currentWord(state){
-      for (var i = 0; i < state.wordList.length; i++) {
-        if (state.wordList[i].title == state.currentList){
-          return state.wordList[i].words[state.currentWord][0];
-        }
-      }
-    },
-    currentMeaning(state){
-      for (var i = 0; i < state.wordList.length; i++) {
-        if (state.wordList[i].title == state.currentList){
-          return state.wordList[i].words[state.currentWord][1];
-        }
-      }
-    },
-    previousWord(state){
-          if (state.currentWord != 0) {
-               for (var i = 0; i < state.wordList.length; i++) {
-                    if (state.wordList[i].title == state.currentList){
-                         return state.wordList[i].words[state.currentWord - 1][0];
-                    }
-               }
-          } else {
-               return false;
-          }
-     },
-     previousMeaning(state){
-          if (state.currentWord != 0) {
-               for (var i = 0; i < state.wordList.length; i++) {
-                    if (state.wordList[i].title == state.currentList){
-                         return state.wordList[i].words[state.currentWord - 1][1];
-                    }
-               }
-          } else {
-               return false;
-          }
-     },
-     nextWord(state){
-          console.log(state.currentWord+" | "+state.wordList[0].words.length);
-          if (state.currentWord != state.wordList[0].words.length) {
-               for (var i = 0; i < state.wordList.length; i++) {
-                    if (state.wordList[i].title == state.currentList){
-                         return state.wordList[i].words[state.currentWord + 1][0];
-                    }
-               }
-          } else {
-               return false;
-          }
-     },
-     nextMeaning(state){
-          if (state.currentWord != state.wordList.length) {
-               for (var i = 0; i < state.wordList.length; i++) {
-                    if (state.wordList[i].title == state.currentList){
-                         return state.wordList[i].words[state.currentWord + 1][1];
-                    }
-               }
-          } else {
-               return false;
-          }
-     },
-    lastWord(state){
-      for (var i = 0; i < state.wordList.length; i++) {
-        if (state.wordList[i]["title"] == state.currentList){
-          return state.wordList[i]["words"][state.wordList[i]["words"].length-1];
-        }
-      }
-    },
-    duplicateEmptyCheck(state){
-      if (state.words.length >= 2) {
-        if (state.words[state.words.length-2][0] == 0 
-          || state.words[state.words.length-2][1] == 0) {
-        return true;
-      }
-      } else {
-        return false;
-      }
-    },
+    // allWords(state){
+    //   for (var i = 0; i < state.currentList.length; i++) {
+    //     if (state.currentList[i].title == state.currentList){
+    //       return state.currentList[i].words;
+    //     }
+    //   }
+    // },
+    // currentWordCount(state){
+    //   return state.currentWord;
+    // },
+    // currentWord(state){
+    //   for (var i = 0; i < state.wordList.length; i++) {
+    //     if (state.wordList[i].title == state.currentList){
+    //       return state.wordList[i].words[state.currentWord][0];
+    //     }
+    //   }
+    // },
+    // currentMeaning(state){
+    //   for (var i = 0; i < state.wordList.length; i++) {
+    //     if (state.wordList[i].title == state.currentList){
+    //       return state.wordList[i].words[state.currentWord][1];
+    //     }
+    //   }
+    // },
+    // previousWord(state){
+    //       if (state.currentWord != 0) {
+    //            for (var i = 0; i < state.wordList.length; i++) {
+    //                 if (state.wordList[i].title == state.currentList){
+    //                      return state.wordList[i].words[state.currentWord - 1][0];
+    //                 }
+    //            }
+    //       } else {
+    //            return false;
+    //       }
+    //  },
+    //  previousMeaning(state){
+    //       if (state.currentWord != 0) {
+    //            for (var i = 0; i < state.wordList.length; i++) {
+    //                 if (state.wordList[i].title == state.currentList){
+    //                      return state.wordList[i].words[state.currentWord - 1][1];
+    //                 }
+    //            }
+    //       } else {
+    //            return false;
+    //       }
+    //  },
+    //  nextWord(state){
+    //       console.log(state.currentWord+" | "+state.wordList[0].words.length);
+    //       if (state.currentWord != state.wordList[0].words.length) {
+    //            for (var i = 0; i < state.wordList.length; i++) {
+    //                 if (state.wordList[i].title == state.currentList){
+    //                      return state.wordList[i].words[state.currentWord + 1][0];
+    //                 }
+    //            }
+    //       } else {
+    //            return false;
+    //       }
+    //  },
+    //  nextMeaning(state){
+    //       if (state.currentWord != state.wordList.length) {
+    //            for (var i = 0; i < state.wordList.length; i++) {
+    //                 if (state.wordList[i].title == state.currentList){
+    //                      return state.wordList[i].words[state.currentWord + 1][1];
+    //                 }
+    //            }
+    //       } else {
+    //            return false;
+    //       }
+    //  },
+    // lastWord(state){
+    //   for (var i = 0; i < state.wordList.length; i++) {
+    //     if (state.wordList[i]["title"] == state.currentList){
+    //       return state.wordList[i]["words"][state.wordList[i]["words"].length-1];
+    //     }
+    //   }
+    // },
+    // duplicateEmptyCheck(state){
+    //   if (state.words.length >= 2) {
+    //     if (state.words[state.words.length-2][0] == 0 
+    //       || state.words[state.words.length-2][1] == 0) {
+    //     return true;
+    //   }
+    //   } else {
+    //     return false;
+    //   }
+    // },
     languageCategories(state){
       let arr = [];
       for (var category in state.languages){
@@ -303,16 +303,16 @@ const store = new Vuex.Store({
     currentNativeLang(state){
       return state.nativeLanguage;
     },
-    correctCount(state){
-      return state.correct;
-    },
-    incorrectCount(state){
-      return state.incorrect;
-    },
+    // correctCount(state){
+    //   return state.correct;
+    // },
+    // incorrectCount(state){
+    //   return state.incorrect;
+    // },
     wordLists(state){
         return state.wordList;
     },
-    currentListTitle(state){
+    currentList(state){
         return state.currentList;
     },
     email(state){
@@ -321,9 +321,9 @@ const store = new Vuex.Store({
     password(state){
         return state.password;
     },
-    ttsExpiry(state){
-        return state.ttsExpiry;
-    },
+    // ttsExpiry(state){
+    //     return state.ttsExpiry;
+    // },
     getJWT(state){
       return state.jwt;
     }
@@ -372,7 +372,8 @@ const store = new Vuex.Store({
       state.currentWord = payload;
     },
     setCurrentList(state, payload){
-      state.currentList = payload;
+      state.currentList = [];
+      state.currentList.push(payload);
     },
     addSkip(state){
       state.skipped++;
@@ -385,18 +386,12 @@ const store = new Vuex.Store({
       state.nativeLanguage = payload;
     },
     addList(state, payload){
-      state.wordList.push({
-        "title": payload,
-        "id": state.wordList.length, // id = index for now
-        "words": [
-          ["", ""]
-        ]
-      });
-      state.currentList = payload;
+      state.wordList.push(payload[0]);
       console.log(state.wordList);
     },
     setWordList(state, payload){
-      state.wordList.push(payload);
+      state.currentList = [];
+      state.currentList.push(payload);
     }
     // removeLastWord(state){
     //  state.words.pop();
@@ -458,7 +453,8 @@ const store = new Vuex.Store({
       }).then(response => {
         console.log('Success');
         // this.commit('setLoginError', '');
-        var res = response["listArr"];
+        var res = response["listArr"],
+            filteredRes = [];
 
         for (var i = 0; i < res.length; i++) {
 
@@ -472,14 +468,15 @@ const store = new Vuex.Store({
             }
 
             res[i]["words"] = newWordsArr;
+            filteredRes.push(res[i]);
           }
           
         }
-        this.commit("setWordList", res);
+        this.commit("addList", filteredRes);
       })
 
     }
   }
 })
 
-export default store
+export default store;

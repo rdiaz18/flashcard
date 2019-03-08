@@ -115,6 +115,10 @@ nav {
   }
 }
 
+.md-menu-content-container {
+  background-color: white !important;
+}
+
 @media (max-width: 850px) and (orientation: landscape){
   nav {
     padding: 0px !important;
