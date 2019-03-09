@@ -18,15 +18,13 @@
 		    <span></span>
 		    <span></span>
 		</div>
-		<h1>Loading</h1>
-		<!-- <h1>{{ text }}</h1> -->
+		<h1>{{ $store.state.preloaderMsg }}</h1>
 	</div>
 </template>
 
 <script>
 	export default {
-		name: "Preloader",
-		props: ["text"] 
+		name: "Preloader"
 	}
 </script>
 
@@ -49,14 +47,14 @@ $accentColor: #2799f9;
 }
 
 h1 {
-  position: absolute;
+  position: fixed;
   font-family: 'Open Sans';
   font-weight: 600;
   font-size: 12px;
   text-transform: uppercase;
   left: 50%;
+  transform: translateX(-50%);
   top: 58%;
-  margin-left: -20px;
   color: $bodyColor;
   background-color: transparent;
   padding: 5px;

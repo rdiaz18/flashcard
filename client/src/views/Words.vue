@@ -1,54 +1,10 @@
 <template>
   <div id="words">
-  	<div id="lang-container">
-  		<div id="lang-inner-container">
 
-<!--   			<div class="lang-select">
-				<h1>I Learn <span id="flag-container" :style="{ backgroundImage: `url(${langSrc})` }"></span></h1>
-				<hr>
-	  			<md-field id="select-container"> -->
-		  		<!-- <label>Select Language</label> -->
-<!-- 			  		<select v-model="country" @change="changeLang">
-			  			<optgroup v-for="(category, index) in $store.getters.languageCategories" :label="category">
-			  				<option v-for="(lang, i) in $store.state.languages[category]" :value="lang[1]" :data-category="category" class="lang-flag">
-			  					{{ lang[0] }}
-			  				</option>
-			  			</optgroup>
-			  		</select>
-			  	</md-field>
-			</div> -->
-
-<!--   			<div class="lang-select">
-  				<h1>I Know <span id="flag-container" :style="{ backgroundImage: `url(${nativeLangSrc})` }"></span></h1>
-  				<hr>
-	  			<md-field id="select-container"> -->
-		  		<!-- <label>Select Language</label> -->
-<!-- 			  		<select v-model="nativeCountry" @change="changeLang">
-			  			<optgroup v-for="(category, index) in $store.getters.languageCategories" :label="category">
-			  				<option v-for="(lang, i) in $store.state.languages[category]" :value="lang[1]" :data-category="category" class="lang-flag">
-			  					{{ lang[0] }}
-			  				</option>
-			  			</optgroup>
-			  		</select>
-			  	</md-field>
-			</div> -->
-
-	  	</div>
-  	</div>
-
-  	<div id="list-select-container">
-  		<h1>Word List Select</h1>
-
-  		<!-- Left Col Word List Select -->
-
-  		<!-- <div> -->
-	  		<!-- <md-field>
-	  			<label>New List Name</label>
-	  			<md-input v-model="newListName"></md-input>
-	  		</md-field> -->
-	  	<!-- </div> -->
-
-	  	<!-- Right Col Word List Select -->
+	<md-card id="list-select-container">
+		<md-card-header>
+			<div class="md-title">Word List Select</div>
+		</md-card-header>
 
 	  	<div id="listController">
 	  		<md-field>
@@ -61,43 +17,25 @@
 	  			<label>New List Name</label>
 	  			<md-input></md-input>
 	  		</md-field>
-	  		<md-button @click="!newListModal">Create New List</md-button>
-	  		<md-button @click="!CSVModal">Create List from CSV</md-button>
-	  		<md-button @click="!deleteListModal" v-show="$store.getters.ttsExpiry != 'Not Purchased'">Delete List</md-button>
-	  		<md-button @click="!saveListModal">Save List</md-button>
+	  		<md-button @click="newListModal = true">Create New List</md-button>
+	  		<md-button @click="CSVModal = true">Create List from CSV</md-button>
+	  		<md-button @click="deleteListModal = true" v-show="$store.getters.ttsExpiry != 'Not Purchased'">Delete List</md-button>
+	  		<md-button @click="saveListModal = true">Save List</md-button>
 	  	</div>
 
 	  	<!-- Left Col Flag Img -->
 
   		<div class="lang-select" v-if="$store.getters.currentList.length != 0">
 			<h1>I Learn <span id="flag-container" :style="{ backgroundImage: `url(${langSrc})` }"></span></h1>
-<!--   			<md-field id="select-container">
-		  		<select v-model="country" @change="changeLang">
-		  			<optgroup v-for="(category, index) in $store.getters.languageCategories" :label="category">
-		  				<option v-for="(lang, i) in $store.state.languages[category]" :value="lang[1]" :data-category="category" class="lang-flag">
-		  					{{ lang[0] }}
-		  				</option>
-		  			</optgroup>
-		  		</select>
-		  	</md-field> -->
 		</div>
 
 		<!-- Right Col Flag Img -->
 
 	  	<div class="lang-select" v-if="$store.getters.currentList.length != 0">
-				<h1>I Know <span id="flag-container" :style="{ backgroundImage: `url(${nativeLangSrc})` }"></span></h1>
-  			<!-- <md-field id="select-container">
-		  		<select v-model="nativeCountry" @change="changeLang">
-		  			<optgroup v-for="(category, index) in $store.getters.languageCategories" :label="category">
-		  				<option v-for="(lang, i) in $store.state.languages[category]" :value="lang[1]" :data-category="category" class="lang-flag">
-		  					{{ lang[0] }}
-		  				</option>
-		  			</optgroup>
-		  		</select>
-		  	</md-field> -->
+			<h1>I Know <span id="flag-container" :style="{ backgroundImage: `url(${nativeLangSrc})` }"></span></h1>
 		</div>
 
-  	</div>
+  	</md-card>
     <md-table>
     	<md-table-row>
     		<md-table-head v-show="!mobile">Index</md-table-head>
@@ -106,8 +44,8 @@
     	</md-table-row>
     	<WordRow v-for="(word, index) in currentList['words']" :index="index" :word="word[0]" :meaning="word[1]"></WordRow>
     </md-table>
-    
-   <!--  <ModalController :CSVModal="CSVModal" :NewListModal="newListModal" :DeleteListModal="deleteListModal" :SaveListModal="saveListModal" /> -->
+
+    <ModalController :CSVModal="CSVModal" :NewListModal="newListModal" :DeleteListModal="deleteListModal" :SaveListModal="saveListModal" v-if="CSVModal == true || newListModal == true || deleteListModal == true || saveListModal == true" />
 
   </div>
 </template>
@@ -157,21 +95,6 @@
 			},
 		},
 		methods: {
-			// langCheck(e){
-			// 	// Update on click
-			// 	if (e) {
-			// 		let newLang = e.target.dataset["lang"];
-			// 		this.$store.commit("updateLang", newLang);
-			// 	}
-			// 	// Update Language Icons with Selected Class
-			// 	// let lang = this.$store.getters.currentLang;
-			// 	// if (lang.length > 0) {
-			// 	// 	let icons = document.querySelectorAll(".tts-lang");
-			// 	// 	for (var i = 0; i < icons.length; i++) {
-			// 	// 		icons[i].dataset["lang"] == lang ? icons[i].classList.add("selectedLang") : icons[i].classList.remove("selectedLang");
-			// 	// 	}
-			// 	// }
-			// },
 			setCurrentList(){
 				this.$store.commit("setCurrentList", this.currentList);
 			},
@@ -189,14 +112,6 @@
 			},
 			saveList(){
 				// this.$store.dispatch("saveList");
-			},
-			deleteList(){
-				// this.$store.dispatch("deleteList");
-			},
-			changeLang(){
-				var that = this;
-				console.log(that.country);
-				this.$store.commit("updateLang", this.country);
 			},
 			mobile(){
 				console.log(window.innerWidth);
@@ -228,6 +143,7 @@
 
 <style lang="scss" scoped>
 	#words { 
+		.md-card-header,
 		h1 {
 			background-color: #2799f9;
 			color: white;
@@ -265,7 +181,7 @@
 
 		h1 {
 			padding-right: 25px;
-			margin-left: -55px;
+			margin-left: -50px !important;
 		}
 	}
 

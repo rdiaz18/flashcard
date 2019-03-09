@@ -23,6 +23,49 @@
 			</md-card-actions>
 		</md-card>
 
+		<md-card class="modal" md-with-hover v-if="NewListModal == true">
+			<md-card-header>
+				<div class="md-title">
+					Create List
+				</div>
+				<div class="md-subhead">
+					Subhead Here
+				</div>
+				</md-card-header>
+				<md-card-content>
+					<md-field>
+						<label>List Name</label>
+						<md-input v-model="listName"></md-input>
+					</md-field>
+					<md-field>
+						<label>List Description</label>
+						<md-input v-model="listDescription"></md-input>
+					</md-field>
+				  	<md-field class="select-container">
+				  		<select v-model="nativeLanguage">
+				  			<optgroup v-for="(category, index) in $store.getters.languageCategories" :label="category">
+				  				<option v-for="(lang, i) in $store.state.languages[category]" :value="lang[1]" :data-category="category" class="lang-flag">
+				  					{{ lang[0] }}
+				  				</option>
+				  			</optgroup>
+				  		</select>
+				  	</md-field>
+				  	<md-field class="select-container">
+				  		<select v-model="language">
+				  			<optgroup v-for="(category, index) in $store.getters.languageCategories" :label="category">
+				  				<option v-for="(lang, i) in $store.state.languages[category]" :value="lang[1]" :data-category="category" class="lang-flag">
+				  					{{ lang[0] }}
+				  				</option>
+				  			</optgroup>
+				  		</select>
+				  	</md-field>
+				</md-card-content>
+			<md-card-actions>
+				<md-button @click="NewListModal = false">Cancel</md-button>
+				<md-button @click="createNewList">Create</md-button>
+			</md-card-actions>
+		</md-card>
+
 		<div id="modalFade"></div>
 	</div>
 </template>
@@ -31,8 +74,25 @@
 	export default {
 		name: "ModalController",
 		props: ["CSVModal", "NewListModal", "DeleteListModal", "SaveListModal"],
+		methods: {
+			createNewList(){
+				this.$store.commit("showPreloader", true);
+				this.$store.dispatch("userCreateList", {
+					"name": this.listName,
+					"description": this.listDescription,
+					"words": "",
+					"language": this.language,
+					"nativeLanguage": this.nativeLanguage,
+					"userId": this.$store.state.user.id
+				});
+			}
+		},
 		data(){
 			return {
+				listName: "",
+				listDescription: "",
+				language: "",
+				nativeLanguage: "",
 				textCSV: 
 				`Example CSV Format Below
 				Word, Meaning #1, Meaning #2...
@@ -48,7 +108,7 @@
 	}
 </script>
 
-<style scoped type="scss">
+<style scoped lang="scss">
 	
 	#modalContainer {
 		position: fixed;

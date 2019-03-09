@@ -54,7 +54,13 @@ export default {
         this.$store.commit("setPreloader", true);
 
         let obj = { "email": this.email, "password": this.password };
-        loginType == "login" ? this.$store.dispatch("login", obj) : this.$store.dispatch("register", obj);
+        if (loginType == "login") {
+          this.$store.commit("setPreloaderMsg", "Verifying Credentials");
+          this.$store.dispatch("login", obj); 
+        } else { 
+          this.$store.commit("setPreloaderMsg", "Registering Credentials");
+          this.$store.dispatch("register", obj);
+        }
       }
     },
     forgotPassword(){
@@ -88,6 +94,11 @@ export default {
     background-color: #fdfdfd;
     width: 600px;
     height: 400px;
+  }
+
+  .md-card-content {
+    padding: 30px;
+    margin-top: -50px !important;
   }
 
   .md-button {

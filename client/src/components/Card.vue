@@ -247,6 +247,7 @@
 
 			#control-wrap {
 				display: flex;
+				background-color: #2799f9;
 			}
 
 		}
@@ -355,7 +356,6 @@
 		.md-button {
 			color: black;
 			height: 48px;
-			border: 1px solid black;
 		}
 	}
 

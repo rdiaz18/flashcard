@@ -10,11 +10,13 @@ const store = new Vuex.Store({
       yandex: "trnsl.1.1.20190114T000445Z.95291844b30dc809.79341b7169f080deb7cfa0ce4eb4a65e7897cf3a"
      },
      jwt: '',
+     userId: null,
      showPreloader: false,
      // showPreloader: true,
+     preloaderMsg: "Loading",
      email: "mpaccione1991@gmail.com",
      password: "rspaccio",
-     ttsExpiry: "Purchased",// "Not Purchased",
+     // ttsExpiry: "Purchased",// "Not Purchased",
      currentWord: 0,
      correct: 0,
      incorrect: 0,
@@ -204,98 +206,60 @@ const store = new Vuex.Store({
      wordList: []
   },
   getters: {
-    // allWords(state){
-    //   for (var i = 0; i < state.currentList.length; i++) {
-    //     if (state.currentList[i].title == state.currentList){
-    //       return state.currentList[i].words;
-    //     }
-    //   }
-    // },
-    // currentWordCount(state){
-    //   return state.currentWord;
-    // },
-    // currentWord(state){
-    //   for (var i = 0; i < state.wordList.length; i++) {
-    //     if (state.wordList[i].title == state.currentList){
-    //       return state.wordList[i].words[state.currentWord][0];
-    //     }
-    //   }
-    // },
-    // currentMeaning(state){
-    //   for (var i = 0; i < state.wordList.length; i++) {
-    //     if (state.wordList[i].title == state.currentList){
-    //       return state.wordList[i].words[state.currentWord][1];
-    //     }
-    //   }
-    // },
-    // previousWord(state){
-    //       if (state.currentWord != 0) {
-    //            for (var i = 0; i < state.wordList.length; i++) {
-    //                 if (state.wordList[i].title == state.currentList){
-    //                      return state.wordList[i].words[state.currentWord - 1][0];
-    //                 }
-    //            }
-    //       } else {
-    //            return false;
-    //       }
-    //  },
-    //  previousMeaning(state){
-    //       if (state.currentWord != 0) {
-    //            for (var i = 0; i < state.wordList.length; i++) {
-    //                 if (state.wordList[i].title == state.currentList){
-    //                      return state.wordList[i].words[state.currentWord - 1][1];
-    //                 }
-    //            }
-    //       } else {
-    //            return false;
-    //       }
-    //  },
-    //  nextWord(state){
-    //       console.log(state.currentWord+" | "+state.wordList[0].words.length);
-    //       if (state.currentWord != state.wordList[0].words.length) {
-    //            for (var i = 0; i < state.wordList.length; i++) {
-    //                 if (state.wordList[i].title == state.currentList){
-    //                      return state.wordList[i].words[state.currentWord + 1][0];
-    //                 }
-    //            }
-    //       } else {
-    //            return false;
-    //       }
-    //  },
-    //  nextMeaning(state){
-    //       if (state.currentWord != state.wordList.length) {
-    //            for (var i = 0; i < state.wordList.length; i++) {
-    //                 if (state.wordList[i].title == state.currentList){
-    //                      return state.wordList[i].words[state.currentWord + 1][1];
-    //                 }
-    //            }
-    //       } else {
-    //            return false;
-    //       }
-    //  },
-    // lastWord(state){
-    //   for (var i = 0; i < state.wordList.length; i++) {
-    //     if (state.wordList[i]["title"] == state.currentList){
-    //       return state.wordList[i]["words"][state.wordList[i]["words"].length-1];
-    //     }
-    //   }
-    // },
-    // duplicateEmptyCheck(state){
-    //   if (state.words.length >= 2) {
-    //     if (state.words[state.words.length-2][0] == 0 
-    //       || state.words[state.words.length-2][1] == 0) {
-    //     return true;
-    //   }
-    //   } else {
-    //     return false;
-    //   }
-    // },
+    allWords(state){
+      return state.currentList.words;
+    },
+    currentWordCount(state){
+      return state.currentWord;
+    },
+    currentWord(state){
+      return state.currentList.words[state.currentWord][0];
+    },
+    currentMeaning(state){
+      return state.currentList.words[state.currentWord][1];
+    },
+    previousWord(state){
+        if (state.currentWord != 0) {
+          return state.currentList.words[state.currentWord - 1][0];
+        } else {
+             return false;
+        }
+     },
+     previousMeaning(state){
+        if (state.currentWord != 0) {
+          return state.currentList.words[state.currentWord - 1][1];
+        } else {
+          return false;
+        }
+     },
+     nextWord(state){
+        if (state.currentWord != state.currentList.words.length) {
+          return state.currentList.words[state.currentWord + 1][0];
+        } else {
+          return false;
+        }
+     },
+     nextMeaning(state){
+        if (state.currentWord != state.currentList.words.length) {
+          return state.currentList.words[state.currentWord + 1][1];
+        } else {
+          return false;
+        }
+     },
+    duplicateEmptyCheck(state){
+      if (state.currentList.length >= 2) {
+        if (state.currentList[state.currentList.length-2][0] == 0 || state.currentList[state.currentList.length-2][1] == 0) {
+          return true;
+        }
+      } else {
+        return false;
+      }
+    },
     languageCategories(state){
       let arr = [];
       for (var category in state.languages){
            arr.push(category);
       }
-      console.log(arr);
       return arr;
     },
     currentLang(state){
@@ -304,12 +268,12 @@ const store = new Vuex.Store({
     currentNativeLang(state){
       return state.nativeLanguage;
     },
-    // correctCount(state){
-    //   return state.correct;
-    // },
-    // incorrectCount(state){
-    //   return state.incorrect;
-    // },
+    correctCount(state){
+      return state.correct;
+    },
+    incorrectCount(state){
+      return state.incorrect;
+    },
     wordLists(state){
         return state.wordList;
     },
@@ -336,8 +300,14 @@ const store = new Vuex.Store({
     login(state){
       state.login = true;
     },
+    setUser(state, payload){
+      state.user = payload;
+    },
     setPreloader(state, payload){
       state.showPreloader = payload;
+    },
+    setPreloaderMsg(state, payload){
+      state.preloaderMsg = payload;
     },
     setJWT(state, payload){
       state.jwt = payload;
@@ -423,10 +393,11 @@ const store = new Vuex.Store({
           return res.json();
       }).then(response => {
         console.log('Success:', response);
-        // this.commit('setLoginError', '');
+        this.commit('setUser', response.user);
         this.commit("setJWT", response.token);
       })
     },
+
     register (state, payload){
       var that = this;
       fetch('http://18.188.201.66:8081/register', {
@@ -452,7 +423,37 @@ const store = new Vuex.Store({
         this.commit("setJWT", response.token);
       })
     },
+
+    savePassword (state, payload){
+      var that = this;
+      this.commit("setPreloaderMsg","Creating New Password");
+      fetch('http://18.188.201.66:8081/createNewPassword', {
+        method: "POST",
+        body: JSON.stringify(payload),
+        headers: {
+          'Content-Type': 'application/json',
+          'x-access-token': state.jwt
+        }
+      }).then(res => {
+          if (!res.ok){
+            res.json().then(function(err){
+            this.commit("setPreloaderMsg", err["error"]);
+            setTimeout(function(){ // UX
+              that.commit("setPreloader", false);
+            }, 500);
+              throw new Error();
+            });
+          }
+          return res.json();
+      }).then(response => {
+        console.log('Success:', response);
+        that.commit("showPreloader", true);
+      })
+    },
+
     getStockWordList (state){
+      this.commit("setPreloaderMsg", "Downloading WordLists");
+
       var language = state.state.language.split("-")[1],
           nativeLanguage = state.state.nativeLanguage.split("-")[1];
 
@@ -472,7 +473,7 @@ const store = new Vuex.Store({
       }).then(res => {
         if (!res.ok){
           res.json().then(function(err){
-            // this.commit("setLoginError", err["error"]);
+          this.commit("setPreloaderMsg", err["error"]);
           setTimeout(function(){ // UX
             this.commit("setPreloader", false);
           }, 500);
@@ -482,7 +483,7 @@ const store = new Vuex.Store({
         return res.json();
       }).then(response => {
         console.log('Success');
-        // this.commit('setLoginError', '');
+        this.commit("setPreloaderMsg", "Parsing WordLists");
         var res = response["listArr"],
             filteredRes = [];
 
@@ -503,6 +504,54 @@ const store = new Vuex.Store({
           
         }
         this.commit("addList", filteredRes);
+      })
+    },
+
+    userCreateList (state){
+      this.commit("setPreloaderMsg", "Uploading WordList");
+
+      fetch('http://18.188.201.66:8081/userCreateList', {
+        method: "POST",
+        body: JSON.stringify(payload),
+        headers: {
+          'Content-Type': 'application/json',
+          'x-access-token': state.jwt
+        }
+      }).then(res => {
+        if (!res.ok){
+          res.json().then(function(err){
+          this.commit("setPreloaderMsg", err["error"]);
+          setTimeout(function(){ // UX
+            this.commit("setPreloader", false);
+          }, 500);
+            throw new Error();
+          });
+        }
+        return res.json();
+      }).then(response => {
+        console.log('Success');
+        console.log(response);
+        this.commit("setPreloaderMsg", "Created WordList");
+        // var res = response["listArr"],
+        //     filteredRes = [];
+
+        // for (var i = 0; i < res.length; i++) {
+
+        //   if (res[i]["words"] != null) {
+        //     let newWordsArr = [],
+        //         splitArr = res[i]["words"].toString().split(",");
+
+        //     for (var n = 0; n < splitArr.length; n = n+2) {
+        //       let arr = [splitArr[n], splitArr[n+1]];
+        //       newWordsArr.push(arr);
+        //     }
+
+        //     res[i]["words"] = newWordsArr;
+        //     filteredRes.push(res[i]);
+        //   }
+          
+        // }
+        // this.commit("addList", filteredRes);
       })
 
     }

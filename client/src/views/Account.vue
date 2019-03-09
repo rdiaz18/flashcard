@@ -2,9 +2,7 @@
 	<div id="account">
 		<md-card>
 			<md-card-header>
-				<hr>
 				<div class="md-title">Login Settings</div>
-				<hr>
 			</md-card-header>
 			<md-field id="email-field" class="icon-field">
 				<label>Email</label>
@@ -17,12 +15,13 @@
 				</md-field>
 				<md-button @click="savePassword" id="save-password-btn">Save Password</md-button>
 			</div>
-			<md-field id="expiry-field" class="icon-field">
+			<md-field id="expiry-field" class="icon-field" style="display: none">
 				<label>TTS Expiry</label>
 				<md-input name="tts-expiry" :value="$store.getters.ttsExpiry" disabled></md-input>
 			</md-field>
 		</md-card>
-		<md-card>
+
+		<md-card style="display: none">
 			<md-card-header>
 				<div class="md-title">
 					<hr>
@@ -147,21 +146,33 @@
 				return parseFloat(val).toFixed(2) == parseFloat(this.selectedPackage).toFixed(2);
 			},
 			savePassword(){
-				// this.$store.dispatch("savePassword", this.password);
+				this.$store.commit("showPreloader", true);
+				this.$store.dispatch("savePassword", {
+					"token": this.$store.getters.getJWT,
+					"password": this.password
+				});
 			}
 		}
 	}
 </script>
 
 <style scoped lang="scss">
+	$accentColor: #2799f9;
+
 	#account {
 		max-width: 800px;
 		margin: auto;
 		display: block;
 		position: relative;
 
+		.md-title,
+		.md-card-header {
+			color: white;
+			background-color: $accentColor;
+		}
+
 		.md-card {
-			background-color: #dfdfdf;
+			background-color: white;
 		}
 
 		.md-input, input, label, .md-label {
@@ -228,7 +239,7 @@
 
 	#save-password-btn {
 		background-color: white;
-		height: 58px;
+		height: 65px;
 		margin: 4px 0px 0px 5px;	
 	}
 
