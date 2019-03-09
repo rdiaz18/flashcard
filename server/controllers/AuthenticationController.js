@@ -20,7 +20,8 @@ module.exports = {
 	async register(req, res) {
 		try{
 			const user = await users.create(req.body)
-			const userJson = user.toJSON()
+			let userJson = user.toJSON()
+			delete userJson.resetToken
 			res.send({
 				user: userJson,
 				token: jwtSignUser(userJson)
@@ -51,6 +52,7 @@ module.exports = {
 				})
 			}
 			const userJson = user.toJSON()
+			delete userJson.resetToken
 			res.send({
 				user: userJson,
 				token: jwtSignUser(userJson)
@@ -179,7 +181,9 @@ module.exports = {
 			if(!user){
 				res.status(400).send({"message": "user not found"})
 			}
-			const resetToken = jwtSignReset(user.toJSON())
+			let userJson = user.toJSON()
+			delete userJson.resetToken
+			const resetToken = jwtSignReset(userJson)
 			user.update({
 				resetToken: resetToken
 			}).then(() => {
@@ -214,15 +218,15 @@ module.exports = {
 		}
 	}, async createNewPassword(req, res){
 		try{
-			const {token, password} = req.body
-			jwt.verify(token, config.authentication.jwtSecret, async function(err, token){
+			const {resetToken, password} = req.body
+			jwt.verify(resetToken, config.authentication.jwtSecret, async function(err, token){
 				if(err){
 					return res.status(500).send({message: 'Invalid Account'})
 				}else{
 					const tmpuser = await users.findById(token.id)
-					console.log({tmpuser})
-					console.log(token)
-					if(tmpuser.resetToken != token){
+					console.log({usr: tmpuser.resetToken})
+					console.log({sent: resetToken})
+					if(tmpuser.resetToken != resetToken){
 						return res.status(403).send({message: 'Token has expired'})
 					}
 					tmpuser.update({
