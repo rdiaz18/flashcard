@@ -16,8 +16,9 @@
           <md-input name="password" v-model="password"></md-input>
         </md-field>
       </md-card-content>
-      <md-button type="submit" class="md-primary" :disabled="sending" @click="register">Register</md-button>
-      <md-button type="submit" class="md-primary" :disabled="sending" @click="login">Login</md-button>
+      <md-button type="submit" class="md-primary" @click="register">Register</md-button>
+      <md-button type="submit" class="md-primary" @click="login">Login</md-button>
+      <p id="forgotPassword" @click="forgotPassword">Forgot Password?</p>
     </md-card>
   </div>
 </template>
@@ -41,24 +42,29 @@ export default {
   },
   methods: {
     login(){
+      this.emptyCheck();
       this.$store.dispatch("login",
         { "email": this.email, "password": this.password }
       );
     },
     register(){
+      console.log("register Click");
+      this.emptyCheck();
       this.$store.dispatch("register",
         { "email": this.email, "password": this.password }
       );      
     },
-    alertEmpty(){
+    emptyCheck(){
       if (this.email == "" || this.password == "") {
         alert("Please Complete Email and Password Fields");
       }
+    },
+    forgotPassword(){
+
     }
   },
   data(){
     return {
-      register: false,
       email: "",
       password: ""
     }
@@ -74,10 +80,10 @@ export default {
   left: 50%;
   top: 50%;
   position: fixed;
-  border: 1px solid black;
+  border: 0px solid #2799f9;
 
   .md-card-header {
-    background-color: #2799f9;
+    background-color: white;
   }
 
   .md-card {
@@ -91,16 +97,17 @@ export default {
   }
 }
 #logo {
-  background-image: url("./../assets/logo/logo-color.jpg");
-  background-size: cover;
+  background-image: url("./../assets/logo/logo-color.png");
+  background-size: contain;
   background-repeat: no-repeat;
-  background-position: center;
+  background-position: top;
   background-color: white;
   padding: 20px;
   display: inline-block;
   height: 211.5px;
-  width: 396px;
+  width: 100%;
   position: relative;
+  border-bottom: 0px solid #2799f9;
 }
 h3 {
   margin: 40px 0 0;
@@ -115,5 +122,13 @@ li {
 }
 a {
   color: #42b983;
+}
+#forgotPassword {
+  color: white;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
 }
 </style>

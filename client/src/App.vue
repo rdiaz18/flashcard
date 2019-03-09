@@ -119,6 +119,14 @@ nav {
   background-color: white !important;
 }
 
+@media (max-width: 1023px){
+  #app {
+    background-repeat: repeat-y;
+    background-size: contain;
+    background-position: top center;
+  }
+}
+
 @media (max-width: 850px) and (orientation: landscape){
   nav {
     padding: 0px !important;

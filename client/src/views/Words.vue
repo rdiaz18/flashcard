@@ -3,12 +3,12 @@
   	<div id="lang-container">
   		<div id="lang-inner-container">
 
-  			<div class="lang-select">
+<!--   			<div class="lang-select">
 				<h1>I Learn <span id="flag-container" :style="{ backgroundImage: `url(${langSrc})` }"></span></h1>
 				<hr>
-	  			<md-field id="select-container">
+	  			<md-field id="select-container"> -->
 		  		<!-- <label>Select Language</label> -->
-			  		<select v-model="country" @change="changeLang">
+<!-- 			  		<select v-model="country" @change="changeLang">
 			  			<optgroup v-for="(category, index) in $store.getters.languageCategories" :label="category">
 			  				<option v-for="(lang, i) in $store.state.languages[category]" :value="lang[1]" :data-category="category" class="lang-flag">
 			  					{{ lang[0] }}
@@ -16,14 +16,14 @@
 			  			</optgroup>
 			  		</select>
 			  	</md-field>
-			</div>
+			</div> -->
 
-  			<div class="lang-select">
+<!--   			<div class="lang-select">
   				<h1>I Know <span id="flag-container" :style="{ backgroundImage: `url(${nativeLangSrc})` }"></span></h1>
   				<hr>
-	  			<md-field id="select-container">
+	  			<md-field id="select-container"> -->
 		  		<!-- <label>Select Language</label> -->
-			  		<select v-model="nativeCountry" @change="changeLang">
+<!-- 			  		<select v-model="nativeCountry" @change="changeLang">
 			  			<optgroup v-for="(category, index) in $store.getters.languageCategories" :label="category">
 			  				<option v-for="(lang, i) in $store.state.languages[category]" :value="lang[1]" :data-category="category" class="lang-flag">
 			  					{{ lang[0] }}
@@ -31,24 +31,26 @@
 			  			</optgroup>
 			  		</select>
 			  	</md-field>
-			</div>
+			</div> -->
 
 	  	</div>
   	</div>
 
   	<div id="list-select-container">
-  		<hr>
   		<h1>Word List Select</h1>
-  		<hr>
-  		<div v-show="$store.getters.ttsExpiry != 'Not Purchased'">
-	  		<md-field>
+
+  		<!-- Left Col Word List Select -->
+
+  		<!-- <div> -->
+	  		<!-- <md-field>
 	  			<label>New List Name</label>
 	  			<md-input v-model="newListName"></md-input>
-	  		</md-field>
-	  		<md-button @click="createNewList">Create New List</md-button>
-	  		<md-button @click="showCSVModal = !showCSVModal">Create List from CSV</md-button>
-	  	</div>
-	  	<div :class="{ center: centerIt }">
+	  		</md-field> -->
+	  	<!-- </div> -->
+
+	  	<!-- Right Col Word List Select -->
+
+	  	<div id="listController">
 	  		<md-field>
 	  			<label style="margin-left: 5px">Word List</label>
 	  			<md-select id="list-select" v-model="currentList" @change="setCurrentList()">
@@ -59,9 +61,42 @@
 	  			<label>New List Name</label>
 	  			<md-input></md-input>
 	  		</md-field>
+	  		<md-button @click="createNewList">Create New List</md-button>
+	  		<md-button @click="showCSVModal = !showCSVModal">Create List from CSV</md-button>
 	  		<md-button @click="deleteList" v-show="$store.getters.ttsExpiry != 'Not Purchased'">Delete List</md-button>
 	  		<md-button @click="saveList">Save List</md-button>
 	  	</div>
+
+	  	<!-- Left Col Flag Img -->
+
+  		<div class="lang-select" v-if="$store.getters.currentList.length != 0">
+			<h1>I Learn <span id="flag-container" :style="{ backgroundImage: `url(${langSrc})` }"></span></h1>
+<!--   			<md-field id="select-container">
+		  		<select v-model="country" @change="changeLang">
+		  			<optgroup v-for="(category, index) in $store.getters.languageCategories" :label="category">
+		  				<option v-for="(lang, i) in $store.state.languages[category]" :value="lang[1]" :data-category="category" class="lang-flag">
+		  					{{ lang[0] }}
+		  				</option>
+		  			</optgroup>
+		  		</select>
+		  	</md-field> -->
+		</div>
+
+		<!-- Right Col Flag Img -->
+
+	  	<div class="lang-select" v-if="$store.getters.currentList.length != 0">
+				<h1>I Know <span id="flag-container" :style="{ backgroundImage: `url(${nativeLangSrc})` }"></span></h1>
+  			<!-- <md-field id="select-container">
+		  		<select v-model="nativeCountry" @change="changeLang">
+		  			<optgroup v-for="(category, index) in $store.getters.languageCategories" :label="category">
+		  				<option v-for="(lang, i) in $store.state.languages[category]" :value="lang[1]" :data-category="category" class="lang-flag">
+		  					{{ lang[0] }}
+		  				</option>
+		  			</optgroup>
+		  		</select>
+		  	</md-field> -->
+		</div>
+
   	</div>
     <md-table>
     	<md-table-row>
@@ -185,6 +220,11 @@
 				return window.innerWidth < 480 ? true : false 
 			}
 		},
+		watch: {
+			currentList(){
+				this.$store.commit("setCurrentList", this.currentList);
+			}
+		},
 		data() {
 			return {
 				allWordLists: this.$store.getters.wordLists,
@@ -211,7 +251,10 @@ Word, Meaning #1, Meaning #2...
 <style lang="scss" scoped>
 	#words { 
 		h1 {
-			color: black;
+			background-color: #2799f9;
+			color: white;
+			margin: auto;
+			padding: 20px 0px;
 		}
 
 		.md-menu.md-select {
@@ -236,62 +279,49 @@ Word, Meaning #1, Meaning #2...
 		overflow: initial !important;
 	}
 
-	.md-menu-content-container {
-		background-color: white !important;
+
+	.lang-select {
+		width: calc(100% / 2) !important;
+		display: flex;
+
+		h1 {
+			padding-right: 25px;
+			margin-left: -55px;
+		}
 	}
 
-	#lang-container {
+	#flag-container {
+		width: 100px;
+		height: 50px;
+		position: absolute;
+		top: calc(100% - 55px);
+		background-position: center;
+		background-repeat: no-repeat;
+		background-size: contain;
+	}
 
-		background-color: lightgray;
+	#select-container {
+		width: 100%;
+		margin: 0px;
+		padding: 0px;
 		display: block;
 
-		#lang-inner-container {
+		select {
+			margin: auto;
 			width: 100%;
-			display: flex;
+			border: 0px;
+			cursor: pointer;
+			height: 32px;
 		}
 
-		.lang-select {
-			width: calc(100% / 2);
-
-			h1 {
-				padding-right: 25px;
-			}
+		select, label {
+			padding: 0px 0px 0px 20px;
 		}
 
-		#flag-container {
-			width: 100px;
-			height: 50px;
-			position: absolute;
-			top: calc(50% - 45px);
-			border-right: 1px solid lightgray;
-			background-position: center;
-			background-repeat: no-repeat;
-			background-size: contain;
-		}
-
-		#select-container {
-			width: 100%;
-			margin: 0px;
-			padding: 0px;
-			display: block;
-
-			select {
-				margin: auto;
-				width: 100%;
-				border: 0px;
-				cursor: pointer;
-				height: 32px;
-			}
-
-			select, label {
-				padding: 0px 0px 0px 20px;
-			}
-
-			label {
-				position: relative;
-				left: initial;
-				top: initial;
-			}
+		label {
+			position: relative;
+			left: initial;
+			top: initial;
 		}
 	}
 
@@ -303,20 +333,12 @@ Word, Meaning #1, Meaning #2...
 	}
 
 	#list-select-container {
-		background-color: lightgray;
-		border-bottom: 1px solid black;
+		background-color: white;
+		overflow: hidden;
 
 		& div {
-			width: 50%;
+			width: 100%;
 			display: inline-block;
-		}
-
-		& div:first-of-type {
-			border-right: 5px solid lightgray;
-		}
-
-		& div:last-of-type {
-			border-left: 5px solid lightgray;
 		}
 
 		& div div,
@@ -327,6 +349,10 @@ Word, Meaning #1, Meaning #2...
 		& div div.md-menu.md-select {
 			display: flex;
 		}
+	}
+
+	#listController {
+		padding: 15px;
 	}
 
 	#list-select {

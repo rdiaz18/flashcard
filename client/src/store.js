@@ -422,6 +422,30 @@ const store = new Vuex.Store({
         this.commit("setJWT", response.token);
       })
     },
+    register (state, payload){
+      fetch('http://18.188.201.66:8081/register', {
+        method: "POST",
+        body: JSON.stringify(payload),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(res => {
+          if (!res.ok){
+            res.json().then(function(err){
+              // this.commit("setLoginError", err["error"]);
+            setTimeout(function(){ // UX
+              this.commit("setPreloader", false);
+            }, 500);
+              throw new Error();
+            });
+          }
+          return res.json();
+      }).then(response => {
+        console.log('Success:', response);
+        // this.commit('setLoginError', '');
+        this.commit("setJWT", response.token);
+      })
+    },
     getStockWordList (state){
       var language = state.state.language.split("-")[1],
           nativeLanguage = state.state.nativeLanguage.split("-")[1];
