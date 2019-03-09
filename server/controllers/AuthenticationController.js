@@ -179,10 +179,13 @@ module.exports = {
 				res.status(400).send({"message": "user not found"})
 			}
 			const resetToken = jwtSignReset(user.toJSON())
-
-			res.send({
-				user,
-				resetToken
+			user.update({
+				resetToken: resetToken
+			}).then(() => {
+				res.send({
+					user,
+					resetToken
+				})
 			})
 		}catch(err){
 			console.log(err)
