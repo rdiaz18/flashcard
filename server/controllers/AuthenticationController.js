@@ -8,6 +8,13 @@ function jwtSignUser (user) {
 		expiresIn: ONE_WEEK
 	})
 }
+
+function jwtSignReset(user){
+	const ONE_HOUR = 60 * 60
+	return jwt.sign(user, config.authentication.jwtSecret, {
+		expiresIn: ONE_HOUR
+	})
+}
 module.exports = {
 	async register(req, res) {
 		try{
@@ -159,6 +166,28 @@ module.exports = {
 				next()
 			}
 		})
+	},
+	async resetPassword(req, res){
+		try{
+			const {email} = req.body
+			const user = users.findOne({
+				where: {
+					email: email
+				}
+			})
+			if(!user){
+				res.status(400).send({"message": "user not found"})
+			}
+			const resetToken = jwtSignReset(user)
+
+			res.send({
+				user,
+				resetToken
+			})
+		}catch(err){
+			console.log(err)
+			res.status(500).send({"error" : "Server Error"})
+		}
 	}
 
 }
