@@ -170,7 +170,7 @@ module.exports = {
 	async resetPassword(req, res){
 		try{
 			const {email} = req.body
-			const user = users.findOne({
+			const user = await users.findOne({
 				where: {
 					email: email
 				}
