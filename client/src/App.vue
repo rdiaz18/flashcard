@@ -10,11 +10,16 @@
       </nav>
       <router-view/>
     </div>
+    <Preloader v-if="$store.getters.showPreloader == true" :text="Loading" />
   </div>
 </template>
 
 <script>
+  import Preloader from "./components/Preloader.vue";
   export default {
+    components: {
+      Preloader
+    },
     watch: {
       $route (to, from){
         if (this.$store.state.jwt == '') {
@@ -57,9 +62,6 @@
 <style lang="scss">
 html {
   background-color: #337EFF;
-  background-image: url("assets/foggy-birds.png");  
-  background-repeat: repeat;
-  background-position: center;
 }
 html, body, #app {
   padding: 0px;

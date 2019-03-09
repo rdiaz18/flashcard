@@ -61,10 +61,10 @@
 	  			<label>New List Name</label>
 	  			<md-input></md-input>
 	  		</md-field>
-	  		<md-button @click="createNewList">Create New List</md-button>
-	  		<md-button @click="showCSVModal = !showCSVModal">Create List from CSV</md-button>
-	  		<md-button @click="deleteList" v-show="$store.getters.ttsExpiry != 'Not Purchased'">Delete List</md-button>
-	  		<md-button @click="saveList">Save List</md-button>
+	  		<md-button @click="!newListModal">Create New List</md-button>
+	  		<md-button @click="!CSVModal">Create List from CSV</md-button>
+	  		<md-button @click="!deleteListModal" v-show="$store.getters.ttsExpiry != 'Not Purchased'">Delete List</md-button>
+	  		<md-button @click="!saveListModal">Save List</md-button>
 	  	</div>
 
 	  	<!-- Left Col Flag Img -->
@@ -106,39 +106,20 @@
     	</md-table-row>
     	<WordRow v-for="(word, index) in currentList['words']" :index="index" :word="word[0]" :meaning="word[1]"></WordRow>
     </md-table>
-    <div id="CSVModalContainer" v-if="showCSVModal == true">
-	    <md-card id="CSVModal" md-with-hover>
-			<md-card-header>
-				<div class="md-title">
-					Upload List from CSV
-				</div>
-				<div class="md-subhead">
-					Please follow format for succesful uploading
-				</div>
-				</md-card-header>
-				<md-card-content>
-					<md-field>
-						<label>New List Name</label>
-						<md-input v-model="newListName"></md-input>
-					</md-field>
-					<textarea v-model="textCSV"></textarea>
-				</md-card-content>
-			<md-card-actions>
-				<md-button @click="showCSVModal = false">Cancel</md-button>
-				<md-button @click="uploadCSV">Upload</md-button>
-			</md-card-actions>
-		</md-card>
-		<div id="CSVFade"></div>
-	</div>
+    
+   <!--  <ModalController :CSVModal="CSVModal" :NewListModal="newListModal" :DeleteListModal="deleteListModal" :SaveListModal="saveListModal" /> -->
+
   </div>
 </template>
 
 <script>
 	import WordRow from "../components/WordRow.vue";
+	import ModalController from "../components/ModalController.vue";
 	export default {
 		name: "Words",
 		components: {
-			WordRow
+			WordRow,
+			ModalController
 		},
 		beforeMount(){
 			var that = this;
@@ -150,6 +131,8 @@
 			importAll(require.context('../assets/flags/', true, /\.png$/));
 		},
 		mounted(){
+			// Remove Preloader
+			this.$store.commit("setPreloader", false);
 			// Check for selected lang
 			// this.langCheck();
 
@@ -234,15 +217,10 @@
 				country: this.$store.getters.currentLang,
 				nativeCountry: this.$store.getters.currentNativeLang,
 				imgCache: {},
-				showCSVModal: false,
-				textCSV: `Example CSV Format Below
-Word, Meaning #1, Meaning #2...
-
-и, "and, though",
-в, "in, at",
-не, "not",
-он, "he",
-на, "on, in, at, to"`
+				CSVModal: false, 
+				newListModal: false, 
+				deleteListModal: false, 
+				saveListModal: false
 			}
 		}
 	}
@@ -266,12 +244,13 @@ Word, Meaning #1, Meaning #2...
 		}
 
 		.md-table {
-			background-color: transparent;
+			background-color: rgba(0,0,0,0.50);
+			padding: 0px 5px 0px 10px;
 			color: white;
 		}
 
 		.md-table-row {
-			background-color: rgba(0,0,0,0.50);
+			background-color: transparent;
 		}
 	}
 
@@ -427,40 +406,6 @@ Word, Meaning #1, Meaning #2...
 
 		button {
 			top: 12px;
-		}
-	}
-
-	#CSVModalContainer {
-		position: fixed;
-		z-index: 999;
-		top: 0;
-		left: 0;
-		height: 100%;
-		width: 100%;
-		display: block;
-
-		#CSVModal {
-			top: 50%;
-			left: 50%;
-			height: 50%;
-			width: 50%;
-			transform: translateX(-50%) translateY(-50%);
-			background-color: lightgray;
-
-			textarea {
-				width: 100%;
-				min-height: 200px;
-				margin-top: 20px;
-			}
-		}
-
-		#CSVFade {
-			width: 100%;
-			height: 100%;
-			top: 0;
-			left: 0;
-			background-color: rgba(0,0,0,0.6);
-			position: absolute;
 		}
 	}
 

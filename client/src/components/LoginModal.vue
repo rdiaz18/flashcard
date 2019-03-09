@@ -42,21 +42,19 @@ export default {
   },
   methods: {
     login(){
-      this.emptyCheck();
-      this.$store.dispatch("login",
-        { "email": this.email, "password": this.password }
-      );
+      this.emptyCheck("login");
     },
     register(){
-      console.log("register Click");
-      this.emptyCheck();
-      this.$store.dispatch("register",
-        { "email": this.email, "password": this.password }
-      );      
+      this.emptyCheck("register");  
     },
-    emptyCheck(){
+    emptyCheck(loginType){
       if (this.email == "" || this.password == "") {
         alert("Please Complete Email and Password Fields");
+      } else {
+        this.$store.commit("setPreloader", true);
+
+        let obj = { "email": this.email, "password": this.password };
+        loginType == "login" ? this.$store.dispatch("login", obj) : this.$store.dispatch("register", obj);
       }
     },
     forgotPassword(){

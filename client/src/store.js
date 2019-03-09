@@ -11,6 +11,7 @@ const store = new Vuex.Store({
      },
      jwt: '',
      showPreloader: false,
+     // showPreloader: true,
      email: "mpaccione1991@gmail.com",
      password: "rspaccio",
      ttsExpiry: "Purchased",// "Not Purchased",
@@ -326,6 +327,9 @@ const store = new Vuex.Store({
     // },
     getJWT(state){
       return state.jwt;
+    },
+    showPreloader(state){
+      return state.showPreloader;
     }
   },
   mutations: {
@@ -399,6 +403,7 @@ const store = new Vuex.Store({
   },
   actions: {
     login (state, payload){
+      var that = this;
       fetch('http://18.188.201.66:8081/login', {
         method: "POST",
         body: JSON.stringify(payload),
@@ -410,7 +415,7 @@ const store = new Vuex.Store({
             res.json().then(function(err){
               // this.commit("setLoginError", err["error"]);
             setTimeout(function(){ // UX
-              this.commit("setPreloader", false);
+              that.commit("setPreloader", false);
             }, 500);
               throw new Error();
             });
@@ -423,6 +428,7 @@ const store = new Vuex.Store({
       })
     },
     register (state, payload){
+      var that = this;
       fetch('http://18.188.201.66:8081/register', {
         method: "POST",
         body: JSON.stringify(payload),
@@ -434,7 +440,7 @@ const store = new Vuex.Store({
             res.json().then(function(err){
               // this.commit("setLoginError", err["error"]);
             setTimeout(function(){ // UX
-              this.commit("setPreloader", false);
+              that.commit("setPreloader", false);
             }, 500);
               throw new Error();
             });

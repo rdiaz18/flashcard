@@ -16,6 +16,10 @@ export default {
   name: 'Cards',
   components: {
     Card
+  },
+  mounted(){
+	// Remove Preloader
+	this.$store.commit("setPreloader", false);
   }
 }
 </script>

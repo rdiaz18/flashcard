@@ -81,56 +81,59 @@
 	export default {
 		name: "Account",
 		mounted(){
-			var that = this;
-			return new Promise((resolve, reject) => {
-				let script = document.createElement('script')
-				script.onload = () => {
-					paypal.Button.render({
-					    // Configure environment
-					    env: 'sandbox',
-					    client: {
-					      sandbox: 'demo_sandbox_client_id',
-					      production: 'demo_production_client_id'
-					    },
-					    // Customize button (optional)
-					    locale: 'en_US',
-					    style: {
-					      size: 'small',
-					      color: 'gold',
-					      shape: 'pill',
-					    },
+			// Remove Preloader
+			this.$store.commit("setPreloader", false);
+			
+			// var that = this;
+			// return new Promise((resolve, reject) => {
+			// 	let script = document.createElement('script')
+			// 	script.onload = () => {
+			// 		paypal.Button.render({
+			// 		    // Configure environment
+			// 		    env: 'sandbox',
+			// 		    client: {
+			// 		      sandbox: 'demo_sandbox_client_id',
+			// 		      production: 'demo_production_client_id'
+			// 		    },
+			// 		    // Customize button (optional)
+			// 		    locale: 'en_US',
+			// 		    style: {
+			// 		      size: 'small',
+			// 		      color: 'gold',
+			// 		      shape: 'pill',
+			// 		    },
 
-					    // Enable Pay Now checkout flow (optional)
-					    commit: true,
+			// 		    // Enable Pay Now checkout flow (optional)
+			// 		    commit: true,
 
-					    // Set up a payment
-					    payment: function(data, actions) {
-					    	if (that.selectedPackage == 0) {
-					    		alert("Please Select TTS Package");
-					    	} else {
-								return actions.payment.create({
-									transactions: [{
-										amount: {
-											total: parseFloat(that.selectedPackage).toFixed(2),
-											currency: 'USD'
-										}
-									}]
-								});
-							}
-					    },
-					    // Execute the payment
-					    onAuthorize: function(data, actions) {
-					      return actions.payment.execute().then(function() {
-					        // Show a confirmation message to the buyer
-					        window.alert('Thank you for your purchase!');
-					      });
-					    }
-					  }, '#paypal-button');
-				}
-				script.async = true
-				script.src = `https://www.paypalobjects.com/api/checkout.js`
-				document.head.appendChild(script)
-			})
+			// 		    // Set up a payment
+			// 		    payment: function(data, actions) {
+			// 		    	if (that.selectedPackage == 0) {
+			// 		    		alert("Please Select TTS Package");
+			// 		    	} else {
+			// 					return actions.payment.create({
+			// 						transactions: [{
+			// 							amount: {
+			// 								total: parseFloat(that.selectedPackage).toFixed(2),
+			// 								currency: 'USD'
+			// 							}
+			// 						}]
+			// 					});
+			// 				}
+			// 		    },
+			// 		    // Execute the payment
+			// 		    onAuthorize: function(data, actions) {
+			// 		      return actions.payment.execute().then(function() {
+			// 		        // Show a confirmation message to the buyer
+			// 		        window.alert('Thank you for your purchase!');
+			// 		      });
+			// 		    }
+			// 		  }, '#paypal-button');
+			// 	}
+			// 	script.async = true
+			// 	script.src = `https://www.paypalobjects.com/api/checkout.js`
+			// 	document.head.appendChild(script)
+			// })
 
 		},
 		data(){
