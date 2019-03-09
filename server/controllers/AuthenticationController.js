@@ -220,6 +220,8 @@ module.exports = {
 					return res.status(500).send({message: 'Invalid Account'})
 				}else{
 					const tmpuser = await users.findById(token.id)
+					console.log({tmpuser})
+					console.log(token)
 					if(tmpuser.resetToken != token){
 						return res.status(403).send({message: 'Token has expired'})
 					}
