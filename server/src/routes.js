@@ -19,6 +19,8 @@ module.exports = (app) => {
 			AuthenticationController.updateUser)
 		app.post('/resetPassword',
 			AuthenticationController.resetPassword)
+		app.post('/createNewPassword',
+			AuthenticationController.createNewPassword)
 
 	//List Endpoints
 		//Read file for langs

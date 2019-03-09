@@ -1,6 +1,7 @@
 const {users} = require('../models')
 const jwt = require('jsonwebtoken')
 const config = require('../config/authConfig')
+const nodemailer = require('nodemailer')
 
 function jwtSignUser (user) {
 	const ONE_WEEK = 60 * 60 * 24 * 7
@@ -182,6 +183,26 @@ module.exports = {
 			user.update({
 				resetToken: resetToken
 			}).then(() => {
+				// var smtpTransport = nodemailer.createTransport('SMTP', {
+			 //        service: 'SendGrid',
+			 //        auth: {
+			 //          user: '!!! YOUR SENDGRID USERNAME !!!',
+			 //          pass: '!!! YOUR SENDGRID PASSWORD !!!'
+			 //        }
+			 //    });
+			 //    var mailOptions = {
+			 //        to: user.email,
+			 //        from: 'passwordreset@demo.com',
+			 //        subject: 'Node.js Password Reset',
+			 //        text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
+			 //          'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
+			 //          'http://' + req.headers.host + '/reset/' + token + '\n\n' +
+			 //          'If you did not request this, please ignore this email and your password will remain unchanged.\n'
+			 //    };
+			 //    smtpTransport.sendMail(mailOptions, function(err) {
+			 //        req.flash('info', 'An e-mail has been sent to ' + user.email + ' with further instructions.');
+			 //        done(err, 'done');
+			 //    });
 				res.send({
 					user,
 					resetToken
@@ -190,6 +211,29 @@ module.exports = {
 		}catch(err){
 			console.log(err)
 			res.status(500).send({"error" : "Server Error"})
+		}
+	}, async createNewPassword(req, res){
+		try{
+			const {token, password} = req.body
+			jwt.verify(token, config.authentication.jwtSecret, async function(err, token){
+				if(err){
+					return res.status(500).send({message: 'Invalid Account'})
+				}else{
+					const tmpuser = await users.findById(token.id)
+					if(tmpuser.resetToken != token){
+						return res.status(403).send({message: 'Token has expired'})
+					}
+					tmpuser.update({
+						password: password
+					}).then(() => {
+						res.send({tmpuser})
+					})
+					
+				}
+			})			
+		}catch(err){
+			console.log(err)
+			res.status(500).send({"error": "Server error setting new password"})
 		}
 	}
 
