@@ -62,7 +62,7 @@
 		computed: {
 			speechColor(){
 				if (this.speechWord != "...") {
-					return this.speechWord.toLowerCase() == this.$store.getters.currentWord.trim() ? "green" : "red" 
+					return this.speechWord.toLowerCase() == this.$store.getters.currentWord ? "green" : "red" 
 				}
   			}
 		},
@@ -137,7 +137,7 @@
 					that.speechWord = word;
 					that.recording = false;
 
-					if (word == that.$store.getters.currentWord.trim()) {
+					if (word == that.$store.getters.currentWord) {
 						that.speechMatch = true;
 						that.playCorrectBeep();
 					} else {

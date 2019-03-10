@@ -109,7 +109,7 @@
 			},
 			resetPassword(){
 				this.PasswordResetModal = false;
-				this.$store.commit("showPreloader", true);
+				this.$store.commit("setPreloader", true);
 				this.$store.dispatch("resetPassword", { "email": this.email });
 			}
 		},

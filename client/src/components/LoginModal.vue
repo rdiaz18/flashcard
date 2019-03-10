@@ -20,7 +20,7 @@
       <md-button type="submit" class="md-primary" @click="login">Login</md-button>
       <p id="forgotPassword" @click="forgotPassword">Forgot Password?</p>
     </md-card>
-    <ModalController :PasswordResetModal="passwordResetModal" v-if="passwordResetModal == true" />
+    <ModalController :PasswordResetModal="passwordResetModal" v-if="$store.state.showModal == true" />
   </div>
 </template>
 
@@ -67,6 +67,7 @@ export default {
     },
     forgotPassword(){
       this.passwordResetModal = true;
+      this.$store.commit("setModal", true);
     }
   },
   data(){

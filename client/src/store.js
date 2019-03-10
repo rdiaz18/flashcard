@@ -12,6 +12,7 @@ const store = new Vuex.Store({
      jwt: '',
      user: null,
      showPreloader: false,
+     showModal: false,
      // showPreloader: true,
      preloaderMsg: "Loading",
      email: "mpaccione1991@gmail.com",
@@ -214,14 +215,7 @@ const store = new Vuex.Store({
     },
     currentWord(state){
       if (state.currentList[0] != undefined) {
-        // console.log(state.currentList.words);
-        // console.log("state.currentWord");
-        // console.log(state.currentWord);
-        // console.log("state.currentList.words[state.currentWord]");
-        // console.log(state.currentList.words[state.currentWord]);
-        // console.log("state.currentList.words[state.currentWord][0]");
-        // console.log(state.currentList.words[state.currentWord][0]);
-        return state.currentList[0].words[state.currentWord][0];
+        return state.currentList[0].words[state.currentWord][0].trim();
       }
     },
     currentMeaning(state){
@@ -317,6 +311,9 @@ const store = new Vuex.Store({
     setPreloader(state, payload){
       state.showPreloader = payload;
     },
+    setModal(state, payload){
+      state.showModal = payload;
+    },
     setPreloaderMsg(state, payload){
       state.preloaderMsg = payload;
     },
@@ -396,7 +393,7 @@ const store = new Vuex.Store({
       }).then(res => {
           if (!res.ok){
             res.json().then(function(err){
-              // this.commit("setLoginError", err["error"]);
+              this.commit("setPreloaderMsg", err["message"]);
             setTimeout(function(){ // UX
               that.commit("setPreloader", false);
             }, 500);
@@ -422,7 +419,7 @@ const store = new Vuex.Store({
       }).then(res => {
           if (!res.ok){
             res.json().then(function(err){
-              // this.commit("setLoginError", err["error"]);
+              this.commit("setPreloaderMsg", err["message"]);
             setTimeout(function(){ // UX
               that.commit("setPreloader", false);
             }, 500);
@@ -450,7 +447,7 @@ const store = new Vuex.Store({
       }).then(res => {
           if (!res.ok){
             res.json().then(function(err){
-            this.commit("setPreloaderMsg", err["error"]);
+            this.commit("setPreloaderMsg", err["message"]);
             setTimeout(function(){ // UX
               that.commit("setPreloader", false);
             }, 500);
@@ -477,9 +474,11 @@ const store = new Vuex.Store({
       }).then(res => {
           if (!res.ok){
             res.json().then(function(err){
-            that.commit("setPreloaderMsg", err["error"]);
+            console.log(err);
+            that.commit("setPreloaderMsg", err["message"]);
             setTimeout(function(){ // UX
               that.commit("setPreloader", false);
+              that.commit("setModal", false);
             }, 500);
               throw new Error();
             });
@@ -514,7 +513,7 @@ const store = new Vuex.Store({
       }).then(res => {
         if (!res.ok){
           res.json().then(function(err){
-          this.commit("setPreloaderMsg", err["error"]);
+          this.commit("setPreloaderMsg", err["message"]);
           setTimeout(function(){ // UX
             this.commit("setPreloader", false);
           }, 500);
@@ -561,7 +560,7 @@ const store = new Vuex.Store({
       }).then(res => {
         if (!res.ok){
           res.json().then(function(err){
-          this.commit("setPreloaderMsg", err["error"]);
+          this.commit("setPreloaderMsg", err["message"]);
           setTimeout(function(){ // UX
             this.commit("setPreloader", false);
           }, 500);

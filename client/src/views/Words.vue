@@ -17,10 +17,10 @@
 	  			<label>New List Name</label>
 	  			<md-input></md-input>
 	  		</md-field>
-	  		<md-button @click="newListModal = true">Create New List</md-button>
-	  		<md-button @click="CSVModal = true">Create List from CSV</md-button>
-	  		<md-button @click="deleteListModal = true" v-show="$store.getters.ttsExpiry != 'Not Purchased'">Delete List</md-button>
-	  		<md-button @click="saveListModal = true">Save List</md-button>
+	  		<md-button @click="showModal('newListModal')">Create New List</md-button>
+	  		<md-button @click="showModal('CSVModal')">Create List from CSV</md-button>
+	  		<md-button @click="showModal('deleteListModal')" v-show="$store.getters.ttsExpiry != 'Not Purchased'">Delete List</md-button>
+	  		<md-button @click="showModal('saveListModal')">Save List</md-button>
 	  	</div>
 
 	  	<!-- Left Col Flag Img -->
@@ -45,7 +45,7 @@
     	<WordRow v-for="(word, index) in currentList['words']" :index="index" :word="word[0]" :meaning="word[1]"></WordRow>
     </md-table>
 
-    <ModalController :CSVModal="CSVModal" :NewListModal="newListModal" :DeleteListModal="deleteListModal" :SaveListModal="saveListModal" v-if="CSVModal == true || newListModal == true || deleteListModal == true || saveListModal == true" />
+    <ModalController :CSVModal="CSVModal" :NewListModal="newListModal" :DeleteListModal="deleteListModal" :SaveListModal="saveListModal" v-if="$store.state.showModal == true" />
 
   </div>
 </template>
@@ -116,6 +116,14 @@
 			mobile(){
 				console.log(window.innerWidth);
 				return window.innerWidth < 480 ? true : false 
+			},
+			showModal(p){
+				console.log(p);
+				if (p == "newListModal") { this.newListModal = true }
+				else if (p == "CSVModal") { this.CSVModal = true }
+				else if (p == "deleteListModal") { this.deleteListModal = true }
+				else if (p == "saveListModal") { this.saveListModal = true }
+				this.$store.commit("setModal", true);
 			}
 		},
 		watch: {
