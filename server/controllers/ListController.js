@@ -127,7 +127,7 @@ module.exports = {
 				description,
 				words,
 				language,
-				nativeLanguagem
+				nativeLanguage,
 				editable,
 				share
 			}).then(() => {
