@@ -133,25 +133,6 @@ module.exports = {
 			})
 		}
 	},
-	async updateUser(req, res) {
-		try{
-			const {id} = req.body
-			const user = await users.findOne({where:{id: id}})
-			const {name, email, password} = req.body
-			user.update({
-			    name: name,
-			    email: email,
-			    password: password
-			}).then(function(){
-				res.send({user: user.toJSON()})
-			})
-		}catch(err){
-			console.log(err)
-			res.status(500).send({
-				error: "Failed to update User"
-			})
-		}
-	},
 	async matchUserToken(req, res, next) {
 		const {id} = req.body
 		const token = req.headers['x-access-token']
