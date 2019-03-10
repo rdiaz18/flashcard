@@ -36,6 +36,9 @@ module.exports = (app) => {
 		//get list by list ID
 		app.post('/getListByID',
 			ListController.getListByID)
+		//update List
+		app.post('/updateList',
+			ListController.updateList)
 		//Get list by user ID
 		app.post('/getListByUser',
 			ListController.getListByUser)

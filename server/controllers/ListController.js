@@ -102,7 +102,7 @@ module.exports = {
 				}
 			})
 			if(!list){
-				res.status(404).send({
+				return res.status(404).send({
 					error: "list not found"
 				})
 			}else{
@@ -111,6 +111,31 @@ module.exports = {
 		}catch(err){
 			console.log(err);
 			res.status(500).send("error fetching list")
+		}
+	},
+	async updateList(req, res){
+		try{
+			const {id, name, description, words, language, nativeLanguage, editable, share} = req.body
+			const list = await List.findOne({
+				where: {id: id}
+			})
+			if(!list){
+				return res.status(400).send({error: "list not found"})
+			}
+			list.update({
+				name,
+				description,
+				words,
+				language,
+				nativeLanguagem
+				editable,
+				share
+			}).then(() => {
+				res.send({list})
+			})
+		}catch(err){
+			console.log(err)
+			res.status(500).send({error: "Server Error Updating List"})
 		}
 	},
 	async getListByUser(req, res){
