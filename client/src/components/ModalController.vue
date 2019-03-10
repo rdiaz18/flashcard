@@ -66,6 +66,21 @@
 			</md-card-actions>
 		</md-card>
 
+		<md-card id="passwordReset" class="modal" md-with-hover v-if="PasswordResetModal == true">
+			<md-card-header>
+				<div class="md-title">
+					No Problem!
+				</div>
+			</md-card-header>
+			<div class="md-subhead">
+				Please enter your Wordza email
+			</div>
+			<md-input v-model="email" placeholder="Enter Email"></md-input>
+			<md-card-actions>
+				<md-button @click="resetPassword">Okay</md-button>
+			</md-card-actions>
+		</md-card>
+
 		<div id="modalFade"></div>
 	</div>
 </template>
@@ -73,7 +88,13 @@
 <script>
 	export default {
 		name: "ModalController",
-		props: ["CSVModal", "NewListModal", "DeleteListModal", "SaveListModal"],
+		props: {
+			CSVModal: Boolean,
+			NewListModal: Boolean, 
+			DeleteListModal: Boolean, 
+			SaveListModal: Boolean,
+			PasswordResetModal: Boolean
+		},
 		methods: {
 			createNewList(){
 				this.$store.commit("showPreloader", true);
@@ -85,10 +106,16 @@
 					"nativeLanguage": this.nativeLanguage,
 					"userId": this.$store.state.user.id
 				});
+			},
+			resetPassword(){
+				this.PasswordResetModal = false;
+				this.$store.commit("showPreloader", true);
+				this.$store.dispatch("resetPassword", { "email": this.email });
 			}
 		},
 		data(){
 			return {
+				email: "",
 				listName: "",
 				listDescription: "",
 				language: "",
@@ -141,6 +168,20 @@
 			left: 0;
 			background-color: rgba(0,0,0,0.6);
 			position: absolute;
+		}
+	}
+
+	#passwordReset.modal {
+		background-color: white;
+
+		.md-button {
+			display: block;
+			margin: auto;
+		}
+
+		.md-input {
+			width: 75%;
+			margin-top: 15px;
 		}
 	}
 </style>

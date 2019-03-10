@@ -20,14 +20,16 @@
       <md-button type="submit" class="md-primary" @click="login">Login</md-button>
       <p id="forgotPassword" @click="forgotPassword">Forgot Password?</p>
     </md-card>
+    <ModalController :PasswordResetModal="passwordResetModal" v-if="passwordResetModal == true" />
   </div>
 </template>
 
 <script>
+import ModalController from "../components/ModalController";
 export default {
   name: 'LoginModal',
-  props: {
-    msg: String
+  components: {
+    ModalController
   },
   watch: {
     '$store.state.jwt'(val, oldVal){
@@ -64,13 +66,14 @@ export default {
       }
     },
     forgotPassword(){
-
+      this.passwordResetModal = true;
     }
   },
   data(){
     return {
       email: "",
-      password: ""
+      password: "",
+      passwordResetModal: false
     }
   }
 }

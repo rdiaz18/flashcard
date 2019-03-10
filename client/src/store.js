@@ -10,7 +10,7 @@ const store = new Vuex.Store({
       yandex: "trnsl.1.1.20190114T000445Z.95291844b30dc809.79341b7169f080deb7cfa0ce4eb4a65e7897cf3a"
      },
      jwt: '',
-     userId: null,
+     user: null,
      showPreloader: false,
      // showPreloader: true,
      preloaderMsg: "Loading",
@@ -439,7 +439,7 @@ const store = new Vuex.Store({
 
     savePassword (state, payload){
       var that = this;
-      this.commit("setPreloaderMsg","Creating New Password");
+      this.commit("setPreloaderMsg", "Creating New Password");
       fetch('http://18.188.201.66:8081/createNewPassword', {
         method: "POST",
         body: JSON.stringify(payload),
@@ -460,7 +460,35 @@ const store = new Vuex.Store({
           return res.json();
       }).then(response => {
         console.log('Success:', response);
-        that.commit("showPreloader", true);
+        that.commit("setPreloader", false);
+      })
+    },
+
+    resetPassword (state, payload){
+      var that = this;
+      this.commit("setPreloaderMsg", "Emailing Password");
+      fetch('http://18.188.201.66:8081/resetPassword', {
+        method: "POST",
+        body: JSON.stringify(payload),
+        headers: {
+          'Content-Type': 'application/json',
+          'x-access-token': state.jwt
+        }
+      }).then(res => {
+          if (!res.ok){
+            res.json().then(function(err){
+            that.commit("setPreloaderMsg", err["error"]);
+            setTimeout(function(){ // UX
+              that.commit("setPreloader", false);
+            }, 500);
+              throw new Error();
+            });
+          }
+          return res.json();
+      }).then(response => {
+        console.log('Success:', response);
+        this.commit("setPreloaderMsg", "Password Sent");
+        this.commit("setPreloader", false);
       })
     },
 
