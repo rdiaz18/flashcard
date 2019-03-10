@@ -10,7 +10,7 @@
       </nav>
       <router-view/>
     </div>
-    <Preloader v-if="$store.getters.showPreloader == true" :text="Loading" />
+    <Preloader v-if="$store.getters.showPreloader == true" />
   </div>
 </template>
 

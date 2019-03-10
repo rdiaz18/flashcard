@@ -213,42 +213,53 @@ const store = new Vuex.Store({
       return state.currentWord;
     },
     currentWord(state){
-      return state.currentList.words[state.currentWord][0];
+      if (state.currentList[0] != undefined) {
+        // console.log(state.currentList.words);
+        // console.log("state.currentWord");
+        // console.log(state.currentWord);
+        // console.log("state.currentList.words[state.currentWord]");
+        // console.log(state.currentList.words[state.currentWord]);
+        // console.log("state.currentList.words[state.currentWord][0]");
+        // console.log(state.currentList.words[state.currentWord][0]);
+        return state.currentList[0].words[state.currentWord][0];
+      }
     },
     currentMeaning(state){
-      return state.currentList.words[state.currentWord][1];
+      if (state.currentList[0] != undefined) {
+        return state.currentList[0].words[state.currentWord][1];
+      }
     },
     previousWord(state){
         if (state.currentWord != 0) {
-          return state.currentList.words[state.currentWord - 1][0];
+          return state.currentList[0].words[state.currentWord - 1][0];
         } else {
              return false;
         }
      },
      previousMeaning(state){
         if (state.currentWord != 0) {
-          return state.currentList.words[state.currentWord - 1][1];
+          return state.currentList[0].words[state.currentWord - 1][1];
         } else {
           return false;
         }
      },
      nextWord(state){
-        if (state.currentWord != state.currentList.words.length) {
-          return state.currentList.words[state.currentWord + 1][0];
+        if (state.currentList[0] != undefined && state.currentWord != state.currentList[0].words.length) {
+          return state.currentList[0].words[state.currentWord + 1][0];
         } else {
           return false;
         }
      },
      nextMeaning(state){
-        if (state.currentWord != state.currentList.words.length) {
-          return state.currentList.words[state.currentWord + 1][1];
+        if (state.currentList[0] != undefined && state.currentWord != state.currentList[0].words.length) {
+          return state.currentList[0].words[state.currentWord + 1][1];
         } else {
           return false;
         }
      },
     duplicateEmptyCheck(state){
-      if (state.currentList.length >= 2) {
-        if (state.currentList[state.currentList.length-2][0] == 0 || state.currentList[state.currentList.length-2][1] == 0) {
+      if (state.currentList[0] != undefined && state.currentList.length >= 2) {
+        if (state.currentList[0].words[state.currentList.length-2][0] == 0 || state.currentList[0].words[state.currentList.length-2][1] == 0) {
           return true;
         }
       } else {
@@ -348,6 +359,7 @@ const store = new Vuex.Store({
     setCurrentList(state, payload){
       state.currentList = [];
       state.currentList.push(payload);
+      console.log(state.currentList);
     },
     addSkip(state){
       state.skipped++;
@@ -360,8 +372,9 @@ const store = new Vuex.Store({
       state.nativeLanguage = payload;
     },
     addList(state, payload){
+      console.log("addList");
+      console.log(payload);
       state.wordList.push(payload[0]);
-      console.log(state.wordList);
     },
     setWordList(state, payload){
       state.currentList = [];

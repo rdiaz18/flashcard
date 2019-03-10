@@ -13,7 +13,7 @@
         </md-field>
         <md-field>
           <label>Password</label>
-          <md-input name="password" v-model="password"></md-input>
+          <md-input name="password" v-model="password" @keyup.enter="login"></md-input>
         </md-field>
       </md-card-content>
       <md-button type="submit" class="md-primary" @click="register">Register</md-button>

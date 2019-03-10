@@ -2,10 +2,11 @@
 	<div class="flashcardContainer">
 		<div id="info-wrap">
 			<div>
+				<!-- {{ $store.getters.wordLists }} -->
 				<md-field>
 					<label>Word List</label>
-					<md-select id="list-select" v-model="currentList" @change="changeList(e.target.value)">
-			  			<md-option v-for="(list, index) in $store.getters.wordLists" :value="list.title">{{ list.title }}</md-option>
+					<md-select id="list-select" v-model="currentList" placeholder="Select Word List">
+			  			<md-option v-for="(list, index) in $store.getters.wordLists" :value="list">{{ list.name }}</md-option>
 			  		</md-select>
 				</md-field>
 			</div>
@@ -51,44 +52,17 @@
 			'$store.state.currentWord': function (newVal) {
 				let that = this;
 	            setTimeout(function(){ that.playTTS() }, 500);
+	        },
+	        'currentList': function(newVal){
+	        	console.log("CURRENT LIST WATCHER");
+	        	console.log(newVal);
+	        	this.$store.commit("setCurrentList", newVal);
 	        }
-		},
-		mounted(){
-			// if (localStorage.getItem("currentList") == null) {
-			// 	localStorage.setItem("currentList", null);
-			// } else {
-			// 	this.$store.commit("setCurrentList", localStorage.getItem("currentList"));
-			// }
-
-			// if (localStorage.getItem("currentListData") == null){
-			// 	localStorage.setItem("currentListData", {
-			// 		""
-			// 	});
-			// }
-
-			// // Get or Create Correct in Local Storage -> Update Store
-			// if (localStorage.getItem("correct") == null) {
-			// 	localStorage.setItem("correct", 0);
-			// } else {
-			// 	this.$store.commit("setCorrect", parseInt(localStorage.getItem("correct")) );
-			// }
-			// // Get or Create Incorrect in Local Storage -> Update Store
-			// if (localStorage.getItem("incorrect") == null) {
-			// 	localStorage.setItem("incorrect", 0)
-			// } else {
-			// 	this.$store.commit("setIncorrect", parseInt(localStorage.getItem("incorrect")) );
-			// }
-			// // Get or Create Current Word in Local Storage -> Update Store
-			// if (localStorage.getItem("currentWord") == null) {
-			// 	localStorage.setItem("currentWord", 0);
-			// } else {
-			// 	this.$store.commit("setCurrentWord", parseInt(localStorage.getItem("currentWord")) )
-			// }
 		},
 		computed: {
 			speechColor(){
 				if (this.speechWord != "...") {
-					return this.speechWord.toLowerCase() == this.$store.getters.currentWord ? "green" : "red" 
+					return this.speechWord.toLowerCase() == this.$store.getters.currentWord.trim() ? "green" : "red" 
 				}
   			}
 		},
@@ -133,11 +107,10 @@
 				// Update Local Storage Current Word
 				// localStorage.setItem("currentWord", this.$store.getters.currentWordCount);
 			},
-			changeList(payload){
-				this.$store.commit("setCurrentList", payload);
-				// Update Local Storage
-				// localStorage.setItem("currentList", payload);
-			},
+			// changeList(payload){
+			// 	console.log(payload);
+			// 	this.$store.commit("setCurrentList", payload);
+			// },
 			skipWord(){
 				this.$store.commit("addSkip");
 			},
@@ -163,7 +136,8 @@
 					var word = event.results[0][0].transcript;
 					that.speechWord = word;
 					that.recording = false;
-					if (word == that.$store.getters.currentWord) {
+
+					if (word == that.$store.getters.currentWord.trim()) {
 						that.speechMatch = true;
 						that.playCorrectBeep();
 					} else {
@@ -194,7 +168,7 @@
 			return {
 				cardInput: "",
 				cardAnswer: "",
-				currentList: this.$store.getters.currentListTitle,
+				currentList: this.$store.getters.currentList,
 				speechMatch: null,
 				speechWord: "",
 				recognition: null,
@@ -245,9 +219,8 @@
 				transform: translateY(50%);
 			}
 
-			#control-wrap {
-				display: flex;
-				background-color: #2799f9;
+			.md-menu.md-select {
+				background-color: white;
 			}
 
 		}
@@ -350,12 +323,13 @@
 	#control-wrap {
 		display: flex;
 		margin-top: 40px;
-		background-color: white;
+		background-color: #2799f9;
 		justify-content: space-between;
 
 		.md-button {
 			color: black;
 			height: 48px;
+			background-color: white;
 		}
 	}
 
