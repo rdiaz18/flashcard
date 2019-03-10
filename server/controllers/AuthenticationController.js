@@ -1,6 +1,7 @@
 const {users} = require('../models')
 const jwt = require('jsonwebtoken')
 const config = require('../config/authConfig')
+const nodemailer = require('nodemailer')
 
 function jwtSignUser (user) {
 	const ONE_WEEK = 60 * 60 * 24 * 7
@@ -8,11 +9,19 @@ function jwtSignUser (user) {
 		expiresIn: ONE_WEEK
 	})
 }
+
+function jwtSignReset(user){
+	const ONE_HOUR = 60 * 60
+	return jwt.sign(user, config.authentication.jwtSecret, {
+		expiresIn: ONE_HOUR
+	})
+}
 module.exports = {
 	async register(req, res) {
 		try{
 			const user = await users.create(req.body)
-			const userJson = user.toJSON()
+			let userJson = user.toJSON()
+			delete userJson.resetToken
 			res.send({
 				user: userJson,
 				token: jwtSignUser(userJson)
@@ -43,6 +52,7 @@ module.exports = {
 				})
 			}
 			const userJson = user.toJSON()
+			delete userJson.resetToken
 			res.send({
 				user: userJson,
 				token: jwtSignUser(userJson)
@@ -159,6 +169,78 @@ module.exports = {
 				next()
 			}
 		})
+	},
+	async resetPassword(req, res){
+		try{
+			const {email} = req.body
+			const user = await users.findOne({
+				where: {
+					email: email
+				}
+			})
+			if(!user){
+				res.status(400).send({"message": "user not found"})
+			}
+			let userJson = user.toJSON()
+			delete userJson.resetToken
+			const resetToken = jwtSignReset(userJson)
+			user.update({
+				resetToken: resetToken
+			}).then(() => {
+				// var smtpTransport = nodemailer.createTransport('SMTP', {
+			 //        service: 'SendGrid',
+			 //        auth: {
+			 //          user: '!!! YOUR SENDGRID USERNAME !!!',
+			 //          pass: '!!! YOUR SENDGRID PASSWORD !!!'
+			 //        }
+			 //    });
+			 //    var mailOptions = {
+			 //        to: user.email,
+			 //        from: 'passwordreset@demo.com',
+			 //        subject: 'Node.js Password Reset',
+			 //        text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
+			 //          'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
+			 //          'http://' + req.headers.host + '/reset/' + token + '\n\n' +
+			 //          'If you did not request this, please ignore this email and your password will remain unchanged.\n'
+			 //    };
+			 //    smtpTransport.sendMail(mailOptions, function(err) {
+			 //        req.flash('info', 'An e-mail has been sent to ' + user.email + ' with further instructions.');
+			 //        done(err, 'done');
+			 //    });
+				res.send({
+					user,
+					resetToken
+				})
+			})
+		}catch(err){
+			console.log(err)
+			res.status(500).send({"error" : "Server Error"})
+		}
+	}, async createNewPassword(req, res){
+		try{
+			const {resetToken, password} = req.body
+			jwt.verify(resetToken, config.authentication.jwtSecret, async function(err, token){
+				if(err){
+					return res.status(500).send({message: 'Invalid Account'})
+				}else{
+					const tmpuser = await users.findById(token.id)
+					console.log({usr: tmpuser.resetToken})
+					console.log({sent: resetToken})
+					if(tmpuser.resetToken != resetToken){
+						return res.status(403).send({message: 'Token has expired'})
+					}
+					tmpuser.update({
+						password: password
+					}).then(() => {
+						res.send({tmpuser})
+					})
+					
+				}
+			})			
+		}catch(err){
+			console.log(err)
+			res.status(500).send({"error": "Server error setting new password"})
+		}
 	}
 
 }

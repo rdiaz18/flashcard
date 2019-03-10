@@ -17,6 +17,10 @@ module.exports = (app) => {
 		app.post('/updateUser',
 			AuthenticationController.matchUserToken,
 			AuthenticationController.updateUser)
+		app.post('/resetPassword',
+			AuthenticationController.resetPassword)
+		app.post('/createNewPassword',
+			AuthenticationController.createNewPassword)
 
 	//List Endpoints
 		//Read file for langs
@@ -32,6 +36,9 @@ module.exports = (app) => {
 		//get list by list ID
 		app.post('/getListByID',
 			ListController.getListByID)
+		//update List
+		app.post('/updateList',
+			ListController.updateList)
 		//Get list by user ID
 		app.post('/getListByUser',
 			ListController.getListByUser)
