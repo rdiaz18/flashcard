@@ -19,7 +19,7 @@
 	  		</md-field>
 	  		<md-button @click="showModal('newListModal')">Create New List</md-button>
 	  		<md-button @click="showModal('CSVModal')">Create List from CSV</md-button>
-	  		<md-button @click="showModal('deleteListModal')" v-show="$store.getters.ttsExpiry != 'Not Purchased'">Delete List</md-button>
+	  		<md-button @click="showModal('deleteListModal')">Delete List</md-button>
 	  		<md-button @click="showModal('saveListModal')">Save List</md-button>
 	  	</div>
 
@@ -45,7 +45,7 @@
     	<WordRow v-for="(word, index) in currentList['words']" :index="index" :word="word[0]" :meaning="word[1]"></WordRow>
     </md-table>
 
-    <ModalController :CSVModal="CSVModal" :NewListModal="newListModal" :DeleteListModal="deleteListModal" :SaveListModal="saveListModal" v-if="$store.state.showModal == true" />
+    <ModalController :CSVModal="CSVModal" :NewListModal="newListModal" :DeleteListModal="deleteListModal" :SaveListModal="saveListModal" v-if="$store.getters.showModal == true" />
 
   </div>
 </template>
@@ -92,7 +92,7 @@
 					url = this.imgCache[key];
 
 				return url;				
-			},
+			}
 		},
 		methods: {
 			setCurrentList(){

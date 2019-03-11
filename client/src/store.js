@@ -299,6 +299,9 @@ const store = new Vuex.Store({
     },
     showPreloader(state){
       return state.showPreloader;
+    },
+    showModal(state){
+      return state.showModal;
     }
   },
   mutations: {

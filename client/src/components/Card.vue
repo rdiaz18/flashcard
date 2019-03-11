@@ -340,25 +340,28 @@
 		background-size: 30px;
 		background-repeat: no-repeat;
 		background-position: center;
-		opacity: 0.75;			
+		opacity: 1;
+		transition: 0.4s all;			
 	}
 
 	#soundIcon:hover, 
 	#microphone:hover,
 	#microphone-stop:hover {
 		opacity: 1;
+		transform: scale(1.1);
+
 	}
 
 	#soundIcon {
-		background-image: url("./../assets/volume.png");
+		background-image: url("./../assets/white-volume.png");
 	}
 
 	#microphone {
-		background-image: url('./../assets/microphone-icon.png');
+		background-image: url('./../assets/white-microphone-icon.png');
 	}
 
 	#microphone-stop {
-		background-image: url('./../assets/microphone-stop-icon.png');
+		background-image: url('./../assets/white-microphone-stop-icon.png');
 	}
 
 	#microphone.green {
