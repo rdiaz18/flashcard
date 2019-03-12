@@ -10,10 +10,10 @@
 	  		<md-field>
 	  			<label style="margin-left: 5px">Word List</label>
 	  			<md-select id="list-select" v-model="currentList" @change="setCurrentList()">
-		  			<md-option v-for="(list, index) in $store.getters.wordLists" :value="list">{{ list.name }}</md-option>
+		  			<md-option v-for="(list, index) in $store.getters.wordLists" :value="list.id">{{ list.name }}</md-option>
 		  		</md-select>
 	  		</md-field>
-	  		<md-field v-show="newListCheck == true && $store.getters.ttsExpiry != 'Not Purchased'">
+	  		<md-field v-show="newListCheck == true && $store.getters.ttsExpiry !== 'Not Purchased'">
 	  			<label>New List Name</label>
 	  			<md-input></md-input>
 	  		</md-field>
@@ -25,14 +25,14 @@
 
 	  	<!-- Left Col Flag Img -->
 
-  		<div class="lang-select" v-if="$store.getters.currentList.length != 0">
-			<h1>I Learn <span id="flag-container" :style="{ backgroundImage: `url(${langSrc})` }"></span></h1>
+  		<div class="lang-select" v-if="$store.getters.currentList.length !== 0">
+			<h1>I Learn <span id="flag-container-1" :style="{ backgroundImage: `url(${langSrc})` }"></span></h1>
 		</div>
 
 		<!-- Right Col Flag Img -->
 
-	  	<div class="lang-select" v-if="$store.getters.currentList.length != 0">
-			<h1>I Know <span id="flag-container" :style="{ backgroundImage: `url(${nativeLangSrc})` }"></span></h1>
+	  	<div class="lang-select" v-if="$store.getters.currentList.length !== 0">
+			<h1>I Know <span id="flag-container-2" :style="{ backgroundImage: `url(${nativeLangSrc})` }"></span></h1>
 		</div>
 
   	</md-card>
@@ -42,10 +42,10 @@
     		<md-table-head>Word</md-table-head>
     		<md-table-head>Meaning</md-table-head>
     	</md-table-row>
-    	<WordRow v-for="(word, index) in currentList['words']" :index="index" :word="word[0]" :meaning="word[1]"></WordRow>
+    	<!--<WordRow v-if="currentList['words']" v-for="(word, index) in currentList['words']" :index="index" :word="word[0]" :meaning="word[1]"></WordRow>-->
     </md-table>
 
-    <ModalController :CSVModal="CSVModal" :NewListModal="newListModal" :DeleteListModal="deleteListModal" :SaveListModal="saveListModal" v-if="$store.getters.showModal == true" />
+    <ModalController :CSVModal="CSVModal" :NewListModal="newListModal" :DeleteListModal="deleteListModal" :SaveListModal="saveListModal" @close="closeModal" v-if="$store.getters.showModal" />
 
   </div>
 </template>
@@ -74,7 +74,7 @@
 			// Check for selected lang
 			// this.langCheck();
 
-			// Check if List Has Empty Row if Not Add 
+			// Check if List Has Empty Row if Not Add
 			// let lastWord = this.$store.getters.lastWord;
 			// if (lastWord[0].length > 0 || lastWord[1].length > 0) {
 			// 	this.$store.commit("addEmptyWord");
@@ -91,7 +91,7 @@
 				var key = `./flag-${this.nativeCountry}.png`,
 					url = this.imgCache[key];
 
-				return url;				
+				return url;
 			}
 		},
 		methods: {
@@ -115,7 +115,7 @@
 			},
 			mobile(){
 				console.log(window.innerWidth);
-				return window.innerWidth < 480 ? true : false 
+				return window.innerWidth < 480 ? true : false
 			},
 			showModal(p){
 				console.log(p);
@@ -124,6 +124,13 @@
 				else if (p == "deleteListModal") { this.deleteListModal = true }
 				else if (p == "saveListModal") { this.saveListModal = true }
 				this.$store.commit("setModal", true);
+			},
+			closeModal () {
+				this.newListModal = false
+				this.CSVModal = false
+				this.deleteListModal = false
+				this.saveListModal = false
+				this.$store.commit("setModal", false);
 			}
 		},
 		watch: {
@@ -140,9 +147,9 @@
 				country: this.$store.getters.currentLang,
 				nativeCountry: this.$store.getters.currentNativeLang,
 				imgCache: {},
-				CSVModal: false, 
-				newListModal: false, 
-				deleteListModal: false, 
+				CSVModal: false,
+				newListModal: false,
+				deleteListModal: false,
 				saveListModal: false
 			}
 		}
@@ -150,7 +157,7 @@
 </script>
 
 <style lang="scss" scoped>
-	#words { 
+	#words {
 		.md-card-header,
 		h1 {
 			background-color: #2799f9;
@@ -277,7 +284,7 @@
 
 		&:hover {
 			opacity: 1;
-		} 
+		}
 
 		&.selectedLang {
 			transform: scale(1.2);
@@ -290,7 +297,7 @@
 		background-repeat: no-repeat;
 		background-position: 30px;
 		padding-left: 30px;
-	}		
+	}
 
 	h1 {
 		padding-top: 20px;
@@ -300,7 +307,7 @@
 	.md-table {
 		max-width: 800px;
 		max-height: 600px;
-		
+
 		margin: auto;
 		background-color: #dfdfdf;
 	}

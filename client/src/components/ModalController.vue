@@ -1,7 +1,7 @@
 <template>
 	<div id="modalContainer">
 
-	    <md-card class="modal" md-with-hover v-if="CSVModal == true">
+	    <md-card class="modal" md-with-hover v-if="CSVModal">
 			<md-card-header>
 				<div class="md-title">
 					Upload List from CSV
@@ -18,12 +18,12 @@
 					<textarea v-model="textCSV"></textarea>
 				</md-card-content>
 			<md-card-actions>
-				<md-button @click="showCSVModal = false">Cancel</md-button>
+				<md-button @click="closeModal">Cancel</md-button>
 				<md-button @click="uploadCSV">Upload</md-button>
 			</md-card-actions>
 		</md-card>
 
-		<md-card class="modal" md-with-hover v-if="NewListModal == true">
+		<md-card class="modal" md-with-hover v-if="NewListModal">
 			<md-card-header>
 				<div class="md-title">
 					Create List
@@ -61,12 +61,12 @@
 				  	</md-field>
 				</md-card-content>
 			<md-card-actions>
-				<md-button @click="NewListModal = false">Cancel</md-button>
+				<md-button @click="closeModal">Cancel</md-button>
 				<md-button @click="createNewList">Create</md-button>
 			</md-card-actions>
 		</md-card>
 
-		<md-card id="passwordReset" class="modal" md-with-hover v-if="PasswordResetModal == true">
+		<md-card id="passwordReset" class="modal" md-with-hover v-if="PasswordResetModal">
 			<md-card-header>
 				<div class="md-title">
 					No Problem!
@@ -90,8 +90,8 @@
 		name: "ModalController",
 		props: {
 			CSVModal: Boolean,
-			NewListModal: Boolean, 
-			DeleteListModal: Boolean, 
+			NewListModal: Boolean,
+			DeleteListModal: Boolean,
 			SaveListModal: Boolean,
 			PasswordResetModal: Boolean
 		},
@@ -111,6 +111,9 @@
 				this.PasswordResetModal = false;
 				this.$store.commit("setPreloader", true);
 				this.$store.dispatch("resetPassword", { "email": this.email });
+			},
+			closeModal () {
+				this.$emit('close')
 			}
 		},
 		data(){
@@ -120,7 +123,7 @@
 				listDescription: "",
 				language: "",
 				nativeLanguage: "",
-				textCSV: 
+				textCSV:
 				`Example CSV Format Below
 				Word, Meaning #1, Meaning #2...
 
@@ -136,7 +139,7 @@
 </script>
 
 <style scoped lang="scss">
-	
+
 	#modalContainer {
 		position: fixed;
 		z-index: 999;
