@@ -59,6 +59,9 @@
 
 <script>
 	export default {
+		beforeMount(){
+			this.$store.dispatch("stockWordList");
+		},
 		methods: {
 			saveCurrentList(){ 
 				this.showModal = true;

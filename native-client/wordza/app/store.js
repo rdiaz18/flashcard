@@ -1,7 +1,7 @@
 import Vue from 'nativescript-vue'
 import Vuex from 'vuex'
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 const store = new Vuex.Store({
   state: {
@@ -10,15 +10,19 @@ const store = new Vuex.Store({
       yandex: "trnsl.1.1.20190114T000445Z.95291844b30dc809.79341b7169f080deb7cfa0ce4eb4a65e7897cf3a"
      },
      jwt: '',
+     user: null,
      showPreloader: false,
+     showModal: false,
+     // showPreloader: true,
+     preloaderMsg: "Loading",
      email: "mpaccione1991@gmail.com",
      password: "rspaccio",
-     ttsExpiry: "Purchased",// "Not Purchased",
+     // ttsExpiry: "Purchased",// "Not Purchased",
      currentWord: 0,
      correct: 0,
      incorrect: 0,
      skipped: 0,
-     currentList: "Top 1,000 Words",
+     currentList: [],
      language: "ru-RU",
      nativeLanguage: "en-US",
      languages: {
@@ -200,1235 +204,85 @@ const store = new Vuex.Store({
          ["South Africa", "zu-ZA"]
        ]
      },
-     wordList: [
-      {
-        title: "Top 1,000 Words",
-        id: 0,
-        words: [
-          ["и", "and, though"],
-          ["в", "in, at"],
-          ["не", "not"],
-          ["он", "he"],
-          ["на", "on, in, at, to"],
-          ["я", "i"],
-          ["что", "what, that, why"],
-          ["тот", "that"],
-          ["быть", "to be"],
-          ["с", "with, and, from, of"],
-          ["а", "while, and, but"],
-          ["весь", "all, everything"],
-          ["это", "that, this, it"],
-          ["как", "how, what, as , like"],
-          ["она", "she"],
-          ["они", "they"],
-          ["к", "to, for, by"],
-          ["у", "by, with, of"],
-          ["ты", "you, thou"],
-          ["из", "from, of, in"],
-          ["мы", "we"],
-          ["за", "behind, over, at, after"],
-          ["вы", "you"],
-          ["так", "so, thus, then"],
-          ["же", "and, as, for, but, same"],
-          ["от", "from, of, for"],
-          ["сказать", "to say, to speak"],
-          ["зтот", "this"],
-          ["который", "which, who, that"],
-          ["мочь", "be able"],
-          ["человек", "man, person"],
-          ["о", "of, about, against"],
-          ["один", "one, some, alone"],
-          ["ещё", "stil, yet"],
-          ["бы", "would"],
-          ["такой", "such, so, some"],
-          ["только", "only, merely, but"],
-          ["себя", "myself, himself, herself"],
-          ["своё", "one's own, my, our"],
-          ["какой", "what, which, how"],
-          ["когда", "when, while, as"],
-          ["уже", "already, by now"],
-          ["для", "for, to"],
-          ["вот", "here, there, this is, that's"],
-          ["кто", "who, that, some"],
-          ["говорить", "to say, to tell, to speak"],
-          ["год", "year"],
-          ["знать", "to know, be aware"],
-          ["мой", "my, mine"],
-          ["до", "to, up to, about, before"],
-          ["или", "or"],
-          ["если", "if"],
-          ["время", "time, season"],
-          ["рука", "hand, arm"],
-          ["самый", "most, the very, the same"],
-          ["ни", "not a, not, neither, nor"],
-          ["стать", "to become, begin, come"],
-          ["большой", "bug, large, important"],
-          ["даже", "even"],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""],
-          ["", ""]
-        ]
-      }
-    ]
+     wordList: []
   },
   getters: {
-  	allWords(state){
-      for (var i = 0; i < state.wordList.length; i++) {
-        if (state.wordList[i].title == state.currentList){
-          return state.wordList[i].words;
-        }
+    allWords(state){
+      return state.currentList.words;
+    },
+    currentWordCount(state){
+      return state.currentWord;
+    },
+    currentWord(state){
+      if (state.currentList[0] != undefined) {
+        return state.currentList[0].words[state.currentWord][0].trim();
       }
-  	},
-  	currentWordCount(state){
-  		return state.currentWord;
-  	},
-  	currentWord(state){
-      for (var i = 0; i < state.wordList.length; i++) {
-        if (state.wordList[i].title == state.currentList){
-          return state.wordList[i].words[state.currentWord][0];
-        }
+    },
+    currentMeaning(state){
+      if (state.currentList[0] != undefined) {
+        return state.currentList[0].words[state.currentWord][1];
       }
-  	},
-  	currentMeaning(state){
-      for (var i = 0; i < state.wordList.length; i++) {
-        if (state.wordList[i].title == state.currentList){
-          return state.wordList[i].words[state.currentWord][1];
-        }
-      }
-  	},
+    },
     previousWord(state){
-          if (state.currentWord != 0) {
-               for (var i = 0; i < state.wordList.length; i++) {
-                    if (state.wordList[i].title == state.currentList){
-                         return state.wordList[i].words[state.currentWord - 1][0];
-                    }
-               }
-          } else {
-               return false;
-          }
+        if (state.currentWord != 0) {
+          return state.currentList[0].words[state.currentWord - 1][0];
+        } else {
+             return false;
+        }
      },
      previousMeaning(state){
-          if (state.currentWord != 0) {
-               for (var i = 0; i < state.wordList.length; i++) {
-                    if (state.wordList[i].title == state.currentList){
-                         return state.wordList[i].words[state.currentWord - 1][1];
-                    }
-               }
-          } else {
-               return false;
-          }
+        if (state.currentWord != 0) {
+          return state.currentList[0].words[state.currentWord - 1][1];
+        } else {
+          return false;
+        }
      },
      nextWord(state){
-          console.log(state.currentWord+" | "+state.wordList[0].words.length);
-          if (state.currentWord != state.wordList[0].words.length) {
-               for (var i = 0; i < state.wordList.length; i++) {
-                    if (state.wordList[i].title == state.currentList){
-                         return state.wordList[i].words[state.currentWord + 1][0];
-                    }
-               }
-          } else {
-               return false;
-          }
+        if (state.currentList[0] != undefined && state.currentWord != state.currentList[0].words.length) {
+          return state.currentList[0].words[state.currentWord + 1][0];
+        } else {
+          return false;
+        }
      },
      nextMeaning(state){
-          if (state.currentWord != state.wordList.length) {
-               for (var i = 0; i < state.wordList.length; i++) {
-                    if (state.wordList[i].title == state.currentList){
-                         return state.wordList[i].words[state.currentWord + 1][1];
-                    }
-               }
-          } else {
-               return false;
-          }
-     },
-  	lastWord(state){
-      for (var i = 0; i < state.wordList.length; i++) {
-        if (state.wordList[i]["title"] == state.currentList){
-          return state.wordList[i]["words"][state.wordList[i]["words"].length-1];
+        if (state.currentList[0] != undefined && state.currentWord != state.currentList[0].words.length) {
+          return state.currentList[0].words[state.currentWord + 1][1];
+        } else {
+          return false;
         }
+     },
+    duplicateEmptyCheck(state){
+      if (state.currentList[0] != undefined && state.currentList.length >= 2) {
+        if (state.currentList[0].words[state.currentList.length-2][0] == 0 || state.currentList[0].words[state.currentList.length-2][1] == 0) {
+          return true;
+        }
+      } else {
+        return false;
       }
-  	},
-  	duplicateEmptyCheck(state){
-  		if (state.words.length >= 2) {
-  			if (state.words[state.words.length-2][0] == 0 
-  				|| state.words[state.words.length-2][1] == 0) {
-				return true;
-			}
-  		} else {
-  			return false;
-  		}
-  	},
+    },
     languageCategories(state){
       let arr = [];
       for (var category in state.languages){
            arr.push(category);
       }
-      console.log(arr);
       return arr;
     },
-  	currentLang(state){
-  		return state.language;
-  	},
+    currentLang(state){
+      return state.language;
+    },
     currentNativeLang(state){
       return state.nativeLanguage;
     },
-  	correctCount(state){
-  		return state.correct;
-  	},
-  	incorrectCount(state){
-  		return state.incorrect;
-  	},
+    correctCount(state){
+      return state.correct;
+    },
+    incorrectCount(state){
+      return state.incorrect;
+    },
     wordLists(state){
         return state.wordList;
     },
-    currentListTitle(state){
+    currentList(state){
         return state.currentList;
     },
     email(state){
@@ -1437,99 +291,143 @@ const store = new Vuex.Store({
     password(state){
         return state.password;
     },
-    ttsExpiry(state){
-        return state.ttsExpiry;
-    },
+    // ttsExpiry(state){
+    //     return state.ttsExpiry;
+    // },
     getJWT(state){
       return state.jwt;
+    },
+    showPreloader(state){
+      return state.showPreloader;
+    },
+    preloaderMsg(state){
+      return state.preloaderMsg;
+    },
+    showModal(state){
+      return state.showModal;
     }
   },
   mutations: {
-  	login(state){
-  		state.login = true;
-  	},
+    login(state){
+      state.login = true;
+    },
+    setUser(state, payload){
+      state.user = payload;
+    },
     setPreloader(state, payload){
       state.showPreloader = payload;
+    },
+    setModal(state, payload){
+      state.showModal = payload;
+    },
+    setPreloaderMsg(state, payload){
+      state.preloaderMsg = payload;
     },
     setJWT(state, payload){
       state.jwt = payload;
     },
-  	addEmptyWord(state){
+    addEmptyWord(state){
       for (var i = 0; i < state.wordLists.length; i++) {
         if (state.wordLists[i]["title"] == state.currentListTitle){
           state.wordLists[i]["words"].push(["",""]);
         }
       }
-  	},
-  	updateWord(state, payload){
-  		// Index, Word, Meaning
+    },
+    updateWord(state, payload){
+      // Index, Word, Meaning
       for (var i = 0; i < state.wordLists.length; i++) {
         if (state.wordLists[i]["title"] == state.currentListTitle){
           state.wordLists[i]["words"][payload["index"]][0] = payload["word"];
           state.wordLists[i]["words"][payload["index"]][1] = payload["meaning"];
         }
       }
-  	},
-  	addCorrect(state){
-  		state.correct++;
-  		state.currentWord++;
-  	},
-  	addIncorrect(state){
-  		state.incorrect++;
-  		state.currentWord++;
-  	},
-  	setCorrect(state, payload){
-  		state.correct = payload;
-  	},
-  	setIncorrect(state, payload){
-  		state.incorrect = payload;
-  	},
-  	setCurrentWord(state, payload){
-  		state.currentWord = payload;
-  	},
-    setCurrentList(state, payload){
-      state.currentList = payload;
     },
-  	addSkip(state){
-  		state.skipped++;
-  		state.currentWord++;
-  	},
-  	updateLang(state, payload){
-  		state.language = payload;
-  	},
+    addCorrect(state){
+      state.correct++;
+      state.currentWord++;
+    },
+    addIncorrect(state){
+      state.incorrect++;
+      state.currentWord++;
+    },
+    setCorrect(state, payload){
+      state.correct = payload;
+    },
+    setIncorrect(state, payload){
+      state.incorrect = payload;
+    },
+    setCurrentWord(state, payload){
+      state.currentWord = payload;
+    },
+    setCurrentList(state, payload){
+      state.currentList = [];
+      state.currentList.push(payload);
+      console.log(state.currentList);
+    },
+    addSkip(state){
+      state.skipped++;
+      state.currentWord++;
+    },
+    updateLang(state, payload){
+      state.language = payload;
+    },
     updateNativeLang(state, payload){
       state.nativeLanguage = payload;
     },
     addList(state, payload){
-      state.wordList.push({
-        "title": payload,
-        "id": state.wordList.length, // id = index for now
-        "words": [
-          ["", ""]
-        ]
-      });
-      state.currentList = payload;
-      console.log(state.wordList);
+      console.log("addList");
+      console.log(payload);
+      state.wordList.push(payload[0]);
+    },
+    setWordList(state, payload){
+      state.currentList = [];
+      state.currentList.push(payload);
     }
-  	// removeLastWord(state){
-  	// 	state.words.pop();
-  	// }
+    // removeLastWord(state){
+    //  state.words.pop();
+    // }
   },
   actions: {
-  	login (state, payload){
+    login (state, payload){
+      var that = this;
       fetch('http://18.188.201.66:8081/login', {
         method: "POST",
         body: JSON.stringify(payload),
         headers: {
           'Content-Type': 'application/json'
-          // 'x-access-token': this.$store.state.jwt
         }
       }).then(res => {
           if (!res.ok){
             res.json().then(function(err){
-              // this.commit("setLoginError", err["error"]);
+              this.commit("setPreloaderMsg", err["message"]);
             setTimeout(function(){ // UX
-              this.commit("setPreloader", false);
+              that.commit("setPreloader", false);
+            }, 500);
+              throw new Error();
+            });
+          }
+          return res.json();
+      }).then(response => {
+        console.log('Success:', response);
+        this.commit('setUser', response.user);
+        this.commit("setJWT", response.token);
+      })
+    },
+
+    register (state, payload){
+      var that = this;
+      fetch('http://18.188.201.66:8081/register', {
+        method: "POST",
+        body: JSON.stringify(payload),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(res => {
+          if (!res.ok){
+            res.json().then(function(err){
+              this.commit("setPreloaderMsg", err["message"]);
+            setTimeout(function(){ // UX
+              that.commit("setPreloader", false);
             }, 500);
               throw new Error();
             });
@@ -1540,8 +438,170 @@ const store = new Vuex.Store({
         // this.commit('setLoginError', '');
         this.commit("setJWT", response.token);
       })
+    },
+
+    savePassword (state, payload){
+      var that = this;
+      this.commit("setPreloaderMsg", "Creating New Password");
+      fetch('http://18.188.201.66:8081/createNewPassword', {
+        method: "POST",
+        body: JSON.stringify(payload),
+        headers: {
+          'Content-Type': 'application/json',
+          'x-access-token': state.jwt
+        }
+      }).then(res => {
+          if (!res.ok){
+            res.json().then(function(err){
+            this.commit("setPreloaderMsg", err["message"]);
+            setTimeout(function(){ // UX
+              that.commit("setPreloader", false);
+            }, 500);
+              throw new Error();
+            });
+          }
+          return res.json();
+      }).then(response => {
+        console.log('Success:', response);
+        that.commit("setPreloader", false);
+      })
+    },
+
+    resetPassword (state, payload){
+      var that = this;
+      this.commit("setPreloaderMsg", "Emailing Password");
+      fetch('http://18.188.201.66:8081/resetPassword', {
+        method: "POST",
+        body: JSON.stringify(payload),
+        headers: {
+          'Content-Type': 'application/json',
+          'x-access-token': state.jwt
+        }
+      }).then(res => {
+          if (!res.ok){
+            res.json().then(function(err){
+            console.log(err);
+            that.commit("setPreloaderMsg", err["message"]);
+            setTimeout(function(){ // UX
+              that.commit("setPreloader", false);
+              that.commit("setModal", false);
+            }, 500);
+              throw new Error();
+            });
+          }
+          return res.json();
+      }).then(response => {
+        console.log('Success:', response);
+        this.commit("setPreloaderMsg", "Password Sent");
+        this.commit("setPreloader", false);
+      })
+    },
+
+    getStockWordList (state){
+      this.commit("setPreloaderMsg", "Downloading WordLists");
+
+      var language = state.state.language.split("-")[1],
+          nativeLanguage = state.state.nativeLanguage.split("-")[1];
+
+      if (language == "US") { language = "EN" }
+      if (nativeLanguage == "US") { nativeLanguage = "EN" }
+
+      fetch('http://18.188.201.66:8081/getListByLanguage', {
+        method: "POST",
+        body: JSON.stringify({ 
+          fromLang: nativeLanguage,
+          toLang: language
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+          'x-access-token': state.jwt
+        }
+      }).then(res => {
+        if (!res.ok){
+          res.json().then(function(err){
+          this.commit("setPreloaderMsg", err["message"]);
+          setTimeout(function(){ // UX
+            this.commit("setPreloader", false);
+          }, 500);
+            throw new Error();
+          });
+        }
+        return res.json();
+      }).then(response => {
+        console.log('Success');
+        this.commit("setPreloaderMsg", "Parsing WordLists");
+        var res = response["listArr"],
+            filteredRes = [];
+
+        for (var i = 0; i < res.length; i++) {
+
+          if (res[i]["words"] != null) {
+            let newWordsArr = [],
+                splitArr = res[i]["words"].toString().split(",");
+
+            for (var n = 0; n < splitArr.length; n = n+2) {
+              let arr = [splitArr[n], splitArr[n+1]];
+              newWordsArr.push(arr);
+            }
+
+            res[i]["words"] = newWordsArr;
+            filteredRes.push(res[i]);
+          }
+          
+        }
+        this.commit("addList", filteredRes);
+      })
+    },
+
+    userCreateList (state){
+      this.commit("setPreloaderMsg", "Uploading WordList");
+
+      fetch('http://18.188.201.66:8081/userCreateList', {
+        method: "POST",
+        body: JSON.stringify(payload),
+        headers: {
+          'Content-Type': 'application/json',
+          'x-access-token': state.jwt
+        }
+      }).then(res => {
+        if (!res.ok){
+          res.json().then(function(err){
+          this.commit("setPreloaderMsg", err["message"]);
+          setTimeout(function(){ // UX
+            this.commit("setPreloader", false);
+          }, 500);
+            throw new Error();
+          });
+        }
+        return res.json();
+      }).then(response => {
+        console.log('Success');
+        console.log(response);
+        this.commit("setPreloaderMsg", "Created WordList");
+        // var res = response["listArr"],
+        //     filteredRes = [];
+
+        // for (var i = 0; i < res.length; i++) {
+
+        //   if (res[i]["words"] != null) {
+        //     let newWordsArr = [],
+        //         splitArr = res[i]["words"].toString().split(",");
+
+        //     for (var n = 0; n < splitArr.length; n = n+2) {
+        //       let arr = [splitArr[n], splitArr[n+1]];
+        //       newWordsArr.push(arr);
+        //     }
+
+        //     res[i]["words"] = newWordsArr;
+        //     filteredRes.push(res[i]);
+        //   }
+          
+        // }
+        // this.commit("addList", filteredRes);
+      })
+
     }
   }
 })
 
-export default store
+export default store;

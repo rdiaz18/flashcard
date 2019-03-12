@@ -1,8 +1,8 @@
-import Login from '../components/Login' 
-import Home from '../components/Home' 
-import Cards from '../components/Cards' 
-import Words from '../components/Words'
-import Account from '../components/Account'
+import Login from '../views/Login' 
+import Home from '../views/Home' 
+import Cards from '../views/Cards' 
+import Words from '../views/Words'
+import Account from '../views/Account'
 
 const router = { 
    login: Login, 
