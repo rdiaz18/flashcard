@@ -357,9 +357,7 @@ const store = new Vuex.Store({
       state.currentWord = payload;
     },
     setCurrentList(state, payload){
-      state.currentList = [];
-      state.currentList.push(payload);
-      console.log(state.currentList);
+      state.currentList = payload;
     },
     addSkip(state){
       state.skipped++;
@@ -505,7 +503,7 @@ const store = new Vuex.Store({
 
       fetch('http://18.188.201.66:8081/getListByLanguage', {
         method: "POST",
-        body: JSON.stringify({ 
+        body: JSON.stringify({
           fromLang: nativeLanguage,
           toLang: language
         }),
@@ -544,7 +542,7 @@ const store = new Vuex.Store({
             res[i]["words"] = newWordsArr;
             filteredRes.push(res[i]);
           }
-          
+
         }
         this.commit("addList", filteredRes);
       })
@@ -592,7 +590,7 @@ const store = new Vuex.Store({
         //     res[i]["words"] = newWordsArr;
         //     filteredRes.push(res[i]);
         //   }
-          
+
         // }
         // this.commit("addList", filteredRes);
       })

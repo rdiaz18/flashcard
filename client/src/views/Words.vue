@@ -1,367 +1,381 @@
 <template>
   <div id="words">
 
-	<md-card id="list-select-container">
-		<md-card-header>
-			<div class="md-title">Word List Select</div>
-		</md-card-header>
+    <md-card id="list-select-container">
+      <md-card-header>
+        <div class="md-title">Word List Select</div>
+      </md-card-header>
 
-	  	<div id="listController">
-	  		<md-field>
-	  			<label style="margin-left: 5px">Word List</label>
-	  			<md-select id="list-select" v-model="currentList" @change="setCurrentList()">
-		  			<md-option v-for="(list, index) in $store.getters.wordLists" :value="list.id">{{ list.name }}</md-option>
-		  		</md-select>
-	  		</md-field>
-	  		<md-field v-show="newListCheck == true && $store.getters.ttsExpiry !== 'Not Purchased'">
-	  			<label>New List Name</label>
-	  			<md-input></md-input>
-	  		</md-field>
-	  		<md-button @click="showModal('newListModal')">Create New List</md-button>
-	  		<md-button @click="showModal('CSVModal')">Create List from CSV</md-button>
-	  		<md-button @click="showModal('deleteListModal')">Delete List</md-button>
-	  		<md-button @click="showModal('saveListModal')">Save List</md-button>
-	  	</div>
+      <div id="listController">
+        <md-field>
+          <label style="margin-left: 5px">Word List</label>
+          <md-select id="list-select" v-model="currentList" @change="setCurrentList()">
+            <md-option v-for="(list, index) in $store.getters.wordLists" :key="index" :value="list.id">
+              {{list.name }}
+            </md-option>
+          </md-select>
+        </md-field>
+        <md-field v-show="newListCheck && $store.getters.ttsExpiry !== 'Not Purchased'">
+          <label>New List Name</label>
+          <md-input></md-input>
+        </md-field>
+        <md-button @click="showModal('newListModal')">Create New List</md-button>
+        <md-button @click="showModal('CSVModal')">Create List from CSV</md-button>
+        <md-button @click="showModal('deleteListModal')">Delete List</md-button>
+        <md-button @click="showModal('saveListModal')">Save List</md-button>
+      </div>
 
-	  	<!-- Left Col Flag Img -->
+      <!-- Left Col Flag Img -->
 
-  		<div class="lang-select" v-if="$store.getters.currentList.length !== 0">
-			<h1>I Learn <span id="flag-container-1" :style="{ backgroundImage: `url(${langSrc})` }"></span></h1>
-		</div>
+      <div class="lang-select" v-if="$store.getters.currentList.length !== 0">
+        <h1>I Learn <span id="flag-container-1" :style="{ backgroundImage: `url(${langSrc})` }"></span></h1>
+      </div>
 
-		<!-- Right Col Flag Img -->
+      <!-- Right Col Flag Img -->
 
-	  	<div class="lang-select" v-if="$store.getters.currentList.length !== 0">
-			<h1>I Know <span id="flag-container-2" :style="{ backgroundImage: `url(${nativeLangSrc})` }"></span></h1>
-		</div>
+      <div class="lang-select" v-if="$store.getters.currentList.length !== 0">
+        <h1>I Know <span id="flag-container-2" :style="{ backgroundImage: `url(${nativeLangSrc})` }"></span>
+        </h1>
+      </div>
 
-  	</md-card>
+    </md-card>
     <md-table>
-    	<md-table-row>
-    		<md-table-head v-show="!mobile">Index</md-table-head>
-    		<md-table-head>Word</md-table-head>
-    		<md-table-head>Meaning</md-table-head>
-    	</md-table-row>
-    	<!--<WordRow v-if="currentList['words']" v-for="(word, index) in currentList['words']" :index="index" :word="word[0]" :meaning="word[1]"></WordRow>-->
+      <md-table-row>
+        <md-table-head v-show="!mobile">Index</md-table-head>
+        <md-table-head>Word</md-table-head>
+        <md-table-head>Meaning</md-table-head>
+      </md-table-row>
+      <!--<WordRow v-for="(word, index) in currentList['words']" :index="index" :word="word[0]" :meaning="word[1]"></WordRow>-->
     </md-table>
 
-    <ModalController :CSVModal="CSVModal" :NewListModal="newListModal" :DeleteListModal="deleteListModal" :SaveListModal="saveListModal" @close="closeModal" v-if="$store.getters.showModal" />
+    {{showModalState}}
+    <ModalController :CSVModal="CSVModal" :NewListModal="newListModal" :DeleteListModal="deleteListModal"
+                     :SaveListModal="saveListModal" @close="closeModal" v-if="showModalState"/>
 
   </div>
 </template>
 
 <script>
-	import WordRow from "../components/WordRow.vue";
-	import ModalController from "../components/ModalController.vue";
-	export default {
-		name: "Words",
-		components: {
-			WordRow,
-			ModalController
-		},
-		beforeMount(){
-			var that = this;
-			// Map Asset Flags
-			function importAll (r) {
-			  r.keys().forEach(key => that.imgCache[key] = r(key));
-			}
+  import WordRow from "../components/WordRow.vue";
+  import ModalController from "../components/ModalController.vue";
+  import {mapGetters} from 'vuex'
 
-			importAll(require.context('../assets/flags/', true, /\.png$/));
-		},
-		mounted(){
-			// Remove Preloader
-			this.$store.commit("setPreloader", false);
-			// Check for selected lang
-			// this.langCheck();
+  export default {
+    name: "Words",
+    components: {
+      WordRow,
+      ModalController
+    },
+    beforeMount() {
+      var that = this;
 
-			// Check if List Has Empty Row if Not Add
-			// let lastWord = this.$store.getters.lastWord;
-			// if (lastWord[0].length > 0 || lastWord[1].length > 0) {
-			// 	this.$store.commit("addEmptyWord");
-			// }
-		},
-		computed: {
-			langSrc(){
-				var key = `./flag-${this.country}.png`,
-					url = this.imgCache[key];
+      // Map Asset Flags
+      function importAll(r) {
+        r.keys().forEach(key => that.imgCache[key] = r(key));
+      }
 
-				return url;
-			},
-			nativeLangSrc(){
-				var key = `./flag-${this.nativeCountry}.png`,
-					url = this.imgCache[key];
+      importAll(require.context('../assets/flags/', true, /\.png$/));
+    },
+    mounted() {
+      // Remove Preloader
+      this.$store.commit("setPreloader", false);
+      // Check for selected lang
+      // this.langCheck();
 
-				return url;
-			}
-		},
-		methods: {
-			setCurrentList(){
-				this.$store.commit("setCurrentList", this.currentList);
-			},
-			newListCheck(){
-				// If Make New List Selected
-				return this.currentList == "newList" ? true : false;
-			},
-			createNewList(){
-				if (this.newListName.length > 0){
-					this.$store.commit("addList", this.newListName);
-					this.newListName = '';
-				} else {
-					alert("Please Add List Title");
-				}
-			},
-			saveList(){
-				// this.$store.dispatch("saveList");
-			},
-			mobile(){
-				console.log(window.innerWidth);
-				return window.innerWidth < 480 ? true : false
-			},
-			showModal(p){
-				console.log(p);
-				if (p == "newListModal") { this.newListModal = true }
-				else if (p == "CSVModal") { this.CSVModal = true }
-				else if (p == "deleteListModal") { this.deleteListModal = true }
-				else if (p == "saveListModal") { this.saveListModal = true }
-				this.$store.commit("setModal", true);
-			},
-			closeModal () {
-				this.newListModal = false
-				this.CSVModal = false
-				this.deleteListModal = false
-				this.saveListModal = false
-				this.$store.commit("setModal", false);
-			}
-		},
-		watch: {
-			currentList(){
-				this.$store.commit("setCurrentList", this.currentList);
-			}
-		},
-		data() {
-			return {
-				allWordLists: this.$store.getters.wordLists,
-				currentList: this.$store.getters.currentList || "Select Word List",
-				newListName: '',
-				centerIt: this.$store.getters.ttsExpiry == "Not Purchased" ? true : false,
-				country: this.$store.getters.currentLang,
-				nativeCountry: this.$store.getters.currentNativeLang,
-				imgCache: {},
-				CSVModal: false,
-				newListModal: false,
-				deleteListModal: false,
-				saveListModal: false
-			}
-		}
-	}
+      // Check if List Has Empty Row if Not Add
+      // let lastWord = this.$store.getters.lastWord;
+      // if (lastWord[0].length > 0 || lastWord[1].length > 0) {
+      // 	this.$store.commit("addEmptyWord");
+      // }
+    },
+    computed: {
+      ...mapGetters({showModalState: 'showModal'}),
+      langSrc() {
+        var key = `./flag-${this.country}.png`,
+          url = this.imgCache[key];
+
+        return url;
+      },
+      nativeLangSrc() {
+        var key = `./flag-${this.nativeCountry}.png`,
+          url = this.imgCache[key];
+
+        return url;
+      }
+    },
+    methods: {
+      setCurrentList() {
+        this.$store.commit("setCurrentList", this.currentList);
+      },
+      newListCheck() {
+        // If Make New List Selected
+        return this.currentList === "newList";
+      },
+      createNewList() {
+        if (this.newListName.length > 0) {
+          this.$store.commit("addList", this.newListName);
+          this.newListName = '';
+        } else {
+          alert("Please Add List Title");
+        }
+      },
+      saveList() {
+        // this.$store.dispatch("saveList");
+      },
+      mobile() {
+        console.log(window.innerWidth);
+        return window.innerWidth < 480
+      },
+      showModal(p) {
+        console.log(p);
+        if (p === "newListModal") {
+          this.newListModal = true
+        } else if (p === "CSVModal") {
+          this.CSVModal = true
+        } else if (p === "deleteListModal") {
+          this.deleteListModal = true
+        } else if (p === "saveListModal") {
+          this.saveListModal = true
+        }
+        this.$store.commit("setModal", true);
+      },
+      closeModal() {
+        this.newListModal = false
+        this.CSVModal = false
+        this.deleteListModal = false
+        this.saveListModal = false
+        this.$store.commit("setModal", false);
+      }
+    },
+    watch: {
+      currentList(val) {
+        this.$store.commit("setCurrentList", this.$store.getters.wordLists.filter((v) => v.id === val));
+      }
+    },
+    data() {
+      return {
+        allWordLists: this.$store.getters.wordLists,
+        currentList: this.$store.getters.currentList || "Select Word List",
+        newListName: '',
+        centerIt: this.$store.getters.ttsExpiry === "Not Purchased",
+        country: this.$store.getters.currentLang,
+        nativeCountry: this.$store.getters.currentNativeLang,
+        imgCache: {},
+        CSVModal: false,
+        newListModal: false,
+        deleteListModal: false,
+        saveListModal: false
+      }
+    }
+  }
 </script>
 
 <style lang="scss" scoped>
-	#words {
-		.md-card-header,
-		h1 {
-			background-color: #2799f9;
-			color: white;
-			margin: auto;
-			padding: 20px 0px;
-		}
+  #words {
+    .md-card-header,
+    h1 {
+      background-color: #2799f9;
+      color: white;
+      margin: auto;
+      padding: 20px 0px;
+    }
 
-		.md-menu.md-select {
-			background-color: white;
-		}
+    .md-menu.md-select {
+      background-color: white;
+    }
 
-		.md-field {
-			min-height: 30px;
-		}
+    .md-field {
+      min-height: 30px;
+    }
 
-		.md-table {
-			background-color: rgba(0,0,0,0.50);
-			padding: 0px 5px 0px 10px;
-			color: white;
-		}
+    .md-table {
+      background-color: rgba(0, 0, 0, 0.50);
+      padding: 0px 5px 0px 10px;
+      color: white;
+    }
 
-		.md-table-row {
-			background-color: transparent;
-		}
-	}
+    .md-table-row {
+      background-color: transparent;
+    }
+  }
 
-	.md-table .md-table-content {
-		overflow: initial !important;
-	}
+  .md-table .md-table-content {
+    overflow: initial !important;
+  }
 
 
-	.lang-select {
-		width: calc(100% / 2) !important;
-		display: flex;
+  .lang-select {
+    width: calc(100% / 2) !important;
+    display: flex;
 
-		h1 {
-			padding-right: 25px;
-			margin-left: -50px !important;
-		}
-	}
+    h1 {
+      padding-right: 25px;
+      margin-left: -50px !important;
+    }
+  }
 
-	#flag-container {
-		width: 100px;
-		height: 50px;
-		position: absolute;
-		top: calc(100% - 55px);
-		background-position: center;
-		background-repeat: no-repeat;
-		background-size: contain;
-	}
+  #flag-container {
+    width: 100px;
+    height: 50px;
+    position: absolute;
+    top: calc(100% - 55px);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
 
-	#select-container {
-		width: 100%;
-		margin: 0px;
-		padding: 0px;
-		display: block;
+  #select-container {
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+    display: block;
 
-		select {
-			margin: auto;
-			width: 100%;
-			border: 0px;
-			cursor: pointer;
-			height: 32px;
-		}
+    select {
+      margin: auto;
+      width: 100%;
+      border: 0px;
+      cursor: pointer;
+      height: 32px;
+    }
 
-		select, label {
-			padding: 0px 0px 0px 20px;
-		}
+    select, label {
+      padding: 0px 0px 0px 20px;
+    }
 
-		label {
-			position: relative;
-			left: initial;
-			top: initial;
-		}
-	}
+    label {
+      position: relative;
+      left: initial;
+      top: initial;
+    }
+  }
 
-	#lang-container,
-	#list-select-container {
-		max-width: 800px;
-		margin: auto;
-		position: relative;
-	}
+  #lang-container,
+  #list-select-container {
+    max-width: 800px;
+    margin: auto;
+    position: relative;
+  }
 
-	#list-select-container {
-		background-color: white;
-		overflow: hidden;
+  #list-select-container {
+    background-color: white;
+    overflow: hidden;
 
-		& div {
-			width: 100%;
-			display: inline-block;
-		}
+    & div {
+      width: 100%;
+      display: inline-block;
+    }
 
-		& div div,
-		input {
-			width: 100%;
-		}
+    & div div,
+    input {
+      width: 100%;
+    }
 
-		& div div.md-menu.md-select {
-			display: flex;
-		}
-	}
+    & div div.md-menu.md-select {
+      display: flex;
+    }
+  }
 
-	#listController {
-		padding: 15px;
-	}
+  #listController {
+    padding: 15px;
+  }
 
-	#list-select {
-		padding: 5px !important;
-		background-color: white !important;
-	}
+  #list-select {
+    padding: 5px !important;
+    background-color: white !important;
+  }
 
-	.tts-lang {
-		width: 150px;
-		height: 100px;
-		background-repeat: no-repeat;
-		background-size: contain;
-		background-position: center;
-		margin: auto;
-		transform: scale(0.8);
-		opacity: 0.5;
-		cursor: pointer;
-		transition: 0.4s all;
+  .tts-lang {
+    width: 150px;
+    height: 100px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    margin: auto;
+    transform: scale(0.8);
+    opacity: 0.5;
+    cursor: pointer;
+    transition: 0.4s all;
 
-		&:hover {
-			opacity: 1;
-		}
+    &:hover {
+      opacity: 1;
+    }
 
-		&.selectedLang {
-			transform: scale(1.2);
-			opacity: 1;
-		}
-	}
+    &.selectedLang {
+      transform: scale(1.2);
+      opacity: 1;
+    }
+  }
 
-	.lang-flag {
-		background-size: 30px;
-		background-repeat: no-repeat;
-		background-position: 30px;
-		padding-left: 30px;
-	}
+  .lang-flag {
+    background-size: 30px;
+    background-repeat: no-repeat;
+    background-position: 30px;
+    padding-left: 30px;
+  }
 
-	h1 {
-		padding-top: 20px;
-		margin-top: 0px;
-	}
+  h1 {
+    padding-top: 20px;
+    margin-top: 0px;
+  }
 
-	.md-table {
-		max-width: 800px;
-		max-height: 600px;
+  .md-table {
+    max-width: 800px;
+    max-height: 600px;
 
-		margin: auto;
-		background-color: #dfdfdf;
-	}
+    margin: auto;
+    background-color: #dfdfdf;
+  }
 
-	.md-field {
-		margin: 4px 0px 0px;
-	}
+  .md-field {
+    margin: 4px 0px 0px;
+  }
 
-	.md-list, .md-input {
-		background-color: white !important;
-	}
+  .md-list, .md-input {
+    background-color: white !important;
+  }
 
-	.md-input, input {
-		padding: 5px !important;
-		font-size: 1.8em;
-	}
+  .md-input, input {
+    padding: 5px !important;
+    font-size: 1.8em;
+  }
 
-	.md-button:hover {
-		background-color: lightgray !important;
-	}
+  .md-button:hover {
+    background-color: lightgray !important;
+  }
 
-	.center {
-		margin: auto;
-		display: flex;
-		margin-bottom: 15px;
-		width: auto !important;
+  .center {
+    margin: auto;
+    display: flex;
+    margin-bottom: 15px;
+    width: auto !important;
 
-		button {
-			top: 12px;
-		}
-	}
+    button {
+      top: 12px;
+    }
+  }
 
-	@media (max-width: 1023px){
-		.md-table {
-			max-height: inherit !important;
-		}
-	}
+  @media (max-width: 1023px) {
+    .md-table {
+      max-height: inherit !important;
+    }
+  }
 
-	@media (max-width: 420px){
-		h1 {
-			font-size: 1.6em !important;
-		}
+  @media (max-width: 420px) {
+    h1 {
+      font-size: 1.6em !important;
+    }
 
-		#lang-container .lang-select h1 {
-			padding-left: 10px;
-			text-align: left;
-		}
-	}
+    #lang-container .lang-select h1 {
+      padding-left: 10px;
+      text-align: left;
+    }
+  }
 </style>
 
 <style>
-	@media (max-width: 420px){
-		.md-table-cell-container {
-			padding: 0px !important;
-		}
-	}
+  @media (max-width: 420px) {
+    .md-table-cell-container {
+      padding: 0px !important;
+    }
+  }
 </style>
