@@ -10,7 +10,7 @@
         <md-field>
           <label style="margin-left: 5px">Word List</label>
           <md-select id="list-select" v-model="currentList" @change="setCurrentList()">
-            <md-option v-for="(list, index) in $store.getters.wordLists" :key="index" :value="list.id">
+            <md-option v-for="(list, index) in $store.getters.wordLists" :key="index" :value="list">
               {{list.name }}
             </md-option>
           </md-select>
@@ -28,13 +28,13 @@
       <!-- Left Col Flag Img -->
 
       <div class="lang-select" v-if="$store.getters.currentList.length !== 0">
-        <h1>I Learn <span id="flag-container-1" :style="{ backgroundImage: `url(${langSrc})` }"></span></h1>
+        <h1>I Learn <span class="flag-container" :style="{ backgroundImage: `url(${langSrc})` }"></span></h1>
       </div>
 
       <!-- Right Col Flag Img -->
 
       <div class="lang-select" v-if="$store.getters.currentList.length !== 0">
-        <h1>I Know <span id="flag-container-2" :style="{ backgroundImage: `url(${nativeLangSrc})` }"></span>
+        <h1>I Know <span class="flag-container" :style="{ backgroundImage: `url(${nativeLangSrc})` }"></span>
         </h1>
       </div>
 
@@ -45,10 +45,9 @@
         <md-table-head>Word</md-table-head>
         <md-table-head>Meaning</md-table-head>
       </md-table-row>
-      <!--<WordRow v-for="(word, index) in currentList['words']" :index="index" :word="word[0]" :meaning="word[1]"></WordRow>-->
+      <WordRow v-for="(word, index) in currentList['words']" :index="index" :word="word[0]" :meaning="word[1]"></WordRow>
     </md-table>
 
-    {{showModalState}}
     <ModalController :CSVModal="CSVModal" :NewListModal="newListModal" :DeleteListModal="deleteListModal"
                      :SaveListModal="saveListModal" @close="closeModal" v-if="showModalState"/>
 
@@ -214,7 +213,7 @@
     }
   }
 
-  #flag-container {
+  .flag-container {
     width: 100px;
     height: 50px;
     position: absolute;
