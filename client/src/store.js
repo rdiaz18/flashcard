@@ -280,16 +280,23 @@ const store = new Vuex.Store({
       return state.incorrect;
     },
     wordLists(state){
-        return state.wordList;
+      return state.wordList;
     },
     currentList(state){
-        return state.currentList;
+      return state.currentList;
+    },
+    currentListWords(state){
+      if (state.currentList.length != 0) {
+        return state.currentList[0].words;
+      } else {
+        return [];
+      }
     },
     email(state){
-        return state.email;
+      return state.email;
     },
     password(state){
-        return state.password;
+      return state.password;
     },
     // ttsExpiry(state){
     //     return state.ttsExpiry;

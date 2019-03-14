@@ -10,8 +10,8 @@
         <md-field>
           <label style="margin-left: 5px">Word List</label>
           <md-select id="list-select" v-model="currentList" @change="setCurrentList()">
-            <md-option v-for="(list, index) in $store.getters.wordLists" :key="index" :value="list">
-              {{list.name }}
+            <md-option v-for="(list, index) in $store.getters.wordLists" :key="index" :value="list.id">
+              {{list.name}}
             </md-option>
           </md-select>
         </md-field>
@@ -45,7 +45,7 @@
         <md-table-head>Word</md-table-head>
         <md-table-head>Meaning</md-table-head>
       </md-table-row>
-      <WordRow v-for="(word, index) in currentList['words']" :index="index" :word="word[0]" :meaning="word[1]"></WordRow>
+      <WordRow v-for="(word, index) in computedList" :index="index" :word="word[0]" :meaning="word[1]"></WordRow>
     </md-table>
 
     <ModalController :CSVModal="CSVModal" :NewListModal="newListModal" :DeleteListModal="deleteListModal"
@@ -88,7 +88,10 @@
       // }
     },
     computed: {
-      ...mapGetters({showModalState: 'showModal'}),
+      ...mapGetters({
+        showModalState: 'showModal',
+        computedList: 'currentListWords'
+      }),
       langSrc() {
         var key = `./flag-${this.country}.png`,
           url = this.imgCache[key];
@@ -104,7 +107,15 @@
     },
     methods: {
       setCurrentList() {
-        this.$store.commit("setCurrentList", this.currentList);
+        var that = this,
+            id = this.currentList,
+            wordLists = $store.getters.wordLists[i];
+
+        for (var i = 0; i < wordLists.length; i++) {
+          if (id == wordLists[i]["id"]){ 
+            that.$store.commit("setCurrentList", wordLists[i]);
+          }
+        }
       },
       newListCheck() {
         // If Make New List Selected
