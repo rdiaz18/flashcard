@@ -36,7 +36,7 @@
 				
 			},
 			mobile(){
-				return window.innerWidth < 480 ? true: false 
+				return window.innerWidth < 480 ? true : false 
 			}	
 		},
 		data(){

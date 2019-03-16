@@ -129,20 +129,23 @@
           "nativeLanguage": this.nativeLanguage,
           "userId": this.$store.state.user.id
         });
+        this.$emit('close')
       },
       resetPassword(){
         this.PasswordResetModal = false;
         this.$store.commit("setPreloader", true);
         this.$store.dispatch("resetPassword", {"email": this.email});
+        this.$emit('close')
       },
       closeModal(){
         this.$emit('close')
       },
       uploadCSV(){
-
+        // this.$emit('close')
       },
       deleteList() {
         this.$store.dispatch("deleteList", {"id": this.listIdToDelete});
+        this.$emit('close')
       }
     },
     data() {

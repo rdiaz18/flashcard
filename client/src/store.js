@@ -495,7 +495,7 @@ const store = new Vuex.Store({
             that.commit("setPreloaderMsg", err["message"]);
             setTimeout(function(){ // UX
               that.commit("setPreloader", false);
-              that.commit("setModal", false);
+              // that.commit("setModal", false);
             }, 500);
               throw new Error();
             });
@@ -615,6 +615,7 @@ const store = new Vuex.Store({
         console.log(filteredRes);
         this.commit("addList", filteredRes);
         this.commit("setWordListLoaded", 1);
+        this.commit("setPreloader", false);
       })
     },
 
@@ -643,10 +644,10 @@ const store = new Vuex.Store({
         console.log('Success');
         console.log(response);
         this.commit("setPreloaderMsg", "Created WordList");
-        setTimeout(() => {
-          this.commit("setPreloader", false);
-          this.commit("setModal", false);
-        }, 500);
+        this.dispatch("getListByUser");
+        // setTimeout(() => {
+        //   this.commit("setPreloader", false);
+        // }, 500);
       })
 
     },
@@ -710,17 +711,17 @@ const store = new Vuex.Store({
         this.commit("setPreloaderMsg", "Wordlist Deleted");
         setTimeout(() => {
           this.commit("setPreloader", false);
-          this.commit("setModal", false);
+          // this.commit("setModal", false);
           console.log(state);
-          for (var i = 0; i < state.wordList.length; i++) {
-            if (payload["id"] === state.wordList[i]["id"]){
+          for (var i = 0; i < state["state"].wordList.length; i++) {
+            if (payload["id"] === state["state"].wordList[i]["id"]){
               this.commit("spliceWordList", {
                 "index": i,
                 "amount": 1
               });
             }
           }
-          if (payload["id"] === state.currentList.id) {
+          if (payload["id"] === state["state"].currentList.id) {
             this.commit("setCurrentList", []);
           }
         }, 500);
