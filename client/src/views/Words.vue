@@ -114,6 +114,7 @@
         for (var i = 0; i < wordLists.length; i++) {
           if (id == wordLists[i]["id"]){ 
             that.$store.commit("setCurrentList", wordLists[i]);
+            that.$store.commit("setTempList", wordLists[i]);
           }
         }
       },
@@ -130,7 +131,8 @@
         } else if (p === "deleteListModal") {
           this.deleteListModal = true
         } else if (p === "saveListModal") {
-          this.saveListModal = true
+          // this.saveListModal = true
+          this.$store.dispatch("updateList", this.$store.state.currentList);
         }
         this.$store.commit("setModal", true);
       },

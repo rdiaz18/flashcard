@@ -13,7 +13,6 @@ const store = new Vuex.Store({
      user: null,
      showPreloader: false,
      showModal: false,
-     // showPreloader: true,
      preloaderMsg: "Loading",
      email: "mpaccione1991@gmail.com",
      password: "rspaccio",
@@ -23,6 +22,7 @@ const store = new Vuex.Store({
      incorrect: 0,
      skipped: 0,
      currentList: [],
+     tempList: [],
      language: "ru-RU",
      nativeLanguage: "en-US",
      languages: {
@@ -340,12 +340,9 @@ const store = new Vuex.Store({
     },
     updateWord(state, payload){
       // Index, Word, Meaning
-      for (var i = 0; i < state.wordLists.length; i++) {
-        if (state.wordLists[i]["title"] == state.currentListTitle){
-          state.wordLists[i]["words"][payload["index"]][0] = payload["word"];
-          state.wordLists[i]["words"][payload["index"]][1] = payload["meaning"];
-        }
-      }
+      state.tempList[payload["index"]][0] = payload["word"];
+      state.tempList[payload["index"]][1] = payload["meaning"];
+      state.currentList = state.tempList;
     },
     addCorrect(state){
       state.correct++;
@@ -366,6 +363,9 @@ const store = new Vuex.Store({
     },
     setCurrentList(state, payload){
       state.currentList = payload;
+    },
+    setTempList(state, payload){
+      state.tempList = payload;
     },
     addSkip(state){
       state.skipped++;
@@ -390,6 +390,9 @@ const store = new Vuex.Store({
     },
     setWordListLoaded(state, payload){
       state.wordListsLoaded += payload;
+    },
+    spliceWordList(state, payload){
+      state.wordList.splice(payload["index"], payload["amount"]);
     }
     // removeLastWord(state){
     //  state.words.pop();
@@ -644,29 +647,87 @@ const store = new Vuex.Store({
           this.commit("setPreloader", false);
           this.commit("setModal", false);
         }, 500);
-        // var res = response["listArr"],
-        //     filteredRes = [];
+      })
 
-        // for (var i = 0; i < res.length; i++) {
+    },
 
-        //   if (res[i]["words"] != null) {
-        //     let newWordsArr = [],
-        //         splitArr = res[i]["words"].toString().split(",");
+    updateList (state, payload){
+      this.commit("setPreloaderMsg", "Saving WordList");
 
-        //     for (var n = 0; n < splitArr.length; n = n+2) {
-        //       let arr = [splitArr[n], splitArr[n+1]];
-        //       newWordsArr.push(arr);
-        //     }
+      fetch('http://18.188.201.66:8081/updateList', {
+        method: "POST",
+        body: JSON.stringify(payload),
+        headers: {
+          'Content-Type': 'application/json',
+          'x-access-token': state.jwt
+        }
+      }).then(res => {
+        if (!res.ok){
+          res.json().then((err) => {
+            this.commit("setPreloaderMsg", err["error"]);
+            setTimeout(() => { // UX
+              this.commit("setPreloader", false);
+            }, 500);
+             throw new Error();
+          });
+        }
+        return res.json();
+      }).then(response => {
+        console.log('Success');
+        console.log(response);
+        this.commit("setPreloaderMsg", "Wordlist Saved");
+        setTimeout(() => {
+          this.commit("setPreloader", false);
+        }, 500);
+      })
 
-        //     res[i]["words"] = newWordsArr;
-        //     filteredRes.push(res[i]);
-        //   }
+    },
 
-        // }
-        // this.commit("addList", filteredRes);
+    deleteList (state, payload){
+      this.commit("setPreloaderMsg", "Deleting WordList");
+
+      fetch('http://18.188.201.66:8081/deleteList', {
+        method: "POST",
+        body: JSON.stringify(payload),
+        headers: {
+          'Content-Type': 'application/json',
+          'x-access-token': state.jwt
+        }
+      }).then(res => {
+        if (!res.ok){
+          res.json().then((err) => {
+            this.commit("setPreloaderMsg", err["error"]);
+            setTimeout(() => { // UX
+              this.commit("setPreloader", false);
+            }, 500);
+             throw new Error();
+          });
+        }
+        return res.json();
+      }).then(response => {
+        console.log('Success');
+        console.log(response);
+        this.commit("setPreloaderMsg", "Wordlist Deleted");
+        setTimeout(() => {
+          this.commit("setPreloader", false);
+          this.commit("setModal", false);
+          console.log(state);
+          for (var i = 0; i < state.wordList.length; i++) {
+            if (payload["id"] === state.wordList[i]["id"]){
+              this.commit("spliceWordList", {
+                "index": i,
+                "amount": 1
+              });
+            }
+          }
+          if (payload["id"] === state.currentList.id) {
+            this.commit("setCurrentList", []);
+          }
+        }, 500);
       })
 
     }
+
   }
 })
 

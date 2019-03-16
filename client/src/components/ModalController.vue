@@ -28,9 +28,6 @@
         <div class="md-title">
           Create List
         </div>
-        <div class="md-subhead">
-          Subhead Here
-        </div>
       </md-card-header>
       <md-card-content>
         <md-field>
@@ -70,6 +67,28 @@
       </md-card-actions>
     </md-card>
 
+    <md-card md-with-hover class="modal" v-if="DeleteListModal">
+      <md-card-header>
+        <div class="md-title">
+          Delete List
+        </div>
+      </md-card-header>
+      <md-card-content>
+        <md-field>
+          <label>Select WordList to Delete</label>
+          <md-select v-model="listIdToDelete">
+            <md-option v-for="list in $store.getters.wordLists" :value="list['id']">
+              {{ list['name'] }}
+            </md-option>
+          </md-select>
+        </md-field>
+      </md-card-content>
+      <md-footer>
+        <md-button @click="closeModal">Cancel</md-button>
+        <md-button @click="deleteList">Delete</md-button>
+      </md-footer>
+    </md-card>
+
     <md-card id="passwordReset" class="modal" md-with-hover v-if="PasswordResetModal">
       <md-card-header>
         <div class="md-title">
@@ -100,7 +119,7 @@
       PasswordResetModal: Boolean
     },
     methods: {
-      createNewList() {
+      createNewList(){
         this.$store.commit("setPreloader", true);
         this.$store.dispatch("userCreateList", {
           "name": this.listName,
@@ -111,15 +130,20 @@
           "userId": this.$store.state.user.id
         });
       },
-      resetPassword() {
+      resetPassword(){
         this.PasswordResetModal = false;
         this.$store.commit("setPreloader", true);
         this.$store.dispatch("resetPassword", {"email": this.email});
       },
-      closeModal() {
+      closeModal(){
         this.$emit('close')
       },
-      uploadCSV() {}
+      uploadCSV(){
+
+      },
+      deleteList() {
+        this.$store.dispatch("deleteList", {"id": this.listIdToDelete});
+      }
     },
     data() {
       return {
@@ -129,6 +153,7 @@
         language: "",
         nativeLanguage: "",
         newListName: '',
+        listIdToDelete: null,
         textCSV:
           `Example CSV Format Below
 				Word, Meaning #1, Meaning #2...
@@ -145,7 +170,6 @@
 </script>
 
 <style scoped lang="scss">
-
   #modalContainer {
     position: fixed;
     z-index: 999;
@@ -163,7 +187,7 @@
     .modal {
       top: 50%;
       left: 50%;
-      height: 50%;
+      max-height: 50%;
       width: 50%;
       transform: translateX(-50%) translateY(-50%);
       background-color: white;
