@@ -117,21 +117,6 @@
           }
         }
       },
-      newListCheck() {
-        // If Make New List Selected
-        return this.currentList === "newList";
-      },
-      createNewList() {
-        if (this.newListName.length > 0) {
-          this.$store.commit("addList", this.newListName);
-          this.newListName = '';
-        } else {
-          alert("Please Add List Title");
-        }
-      },
-      saveList() {
-        // this.$store.dispatch("saveList");
-      },
       mobile() {
         console.log(window.innerWidth);
         return window.innerWidth < 480
@@ -179,6 +164,16 @@
     }
   }
 </script>
+
+<style>
+  .md-card-header,
+  h1 {
+    background-color: #2799f9;
+    color: white;
+    margin: auto;
+    padding: 20px 0px;
+  }
+</style>
 
 <style lang="scss" scoped>
   #words {

@@ -62,6 +62,7 @@
 <style lang="scss">
 html {
   background-color: #337EFF;
+  overflow: hidden;
 }
 html, body, #app {
   padding: 0px;

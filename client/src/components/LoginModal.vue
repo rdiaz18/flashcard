@@ -36,10 +36,11 @@ export default {
       if (val != '' && oldVal == '') {
         // Get Lists
         this.$store.dispatch("getStockWordList");
+        this.$store.dispatch("getListByUser");
       }
     },
-    '$store.state.wordList'(val, oldVal){
-      this.$router.push({ name: "words" })
+    '$store.state.wordListsLoaded'(val, oldVal){
+      if (val === 2){ this.$router.push({ name: "words" }) }
     }
   },
   methods: {

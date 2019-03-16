@@ -42,24 +42,26 @@
           <md-input v-model="listDescription"></md-input>
         </md-field>
         <md-field class="select-container">
-          <select v-model="nativeLanguage">
-            <optgroup v-for="(category, index) in $store.getters.languageCategories" :label="category">
-              <option v-for="(lang, i) in $store.state.languages[category]" :value="lang[1]" :data-category="category"
+          <label>Select Native List Language</label>
+          <md-select v-model="nativeLanguage">
+            <md-optgroup v-for="(category, index) in $store.getters.languageCategories" :label="category">
+              <md-option v-for="(lang, i) in $store.state.languages[category]" :value="lang[1]" :data-category="category"
                       class="lang-flag">
                 {{ lang[0] }}
-              </option>
-            </optgroup>
-          </select>
+              </md-option>
+            </md-optgroup>
+          </md-select>
         </md-field>
         <md-field class="select-container">
-          <select v-model="language">
-            <optgroup v-for="(category, index) in $store.getters.languageCategories" :label="category">
-              <option v-for="(lang, i) in $store.state.languages[category]" :value="lang[1]" :data-category="category"
+          <label>Select List Language</label>
+          <md-select v-model="language">
+            <md-optgroup v-for="(category, index) in $store.getters.languageCategories" :label="category">
+              <md-option v-for="(lang, i) in $store.state.languages[category]" :value="lang[1]" :data-category="category"
                       class="lang-flag">
                 {{ lang[0] }}
-              </option>
-            </optgroup>
-          </select>
+              </md-option>
+            </md-optgroup>
+          </md-select>
         </md-field>
       </md-card-content>
       <md-card-actions>
@@ -99,7 +101,7 @@
     },
     methods: {
       createNewList() {
-        this.$store.commit("showPreloader", true);
+        this.$store.commit("setPreloader", true);
         this.$store.dispatch("userCreateList", {
           "name": this.listName,
           "description": this.listDescription,
@@ -153,18 +155,24 @@
     width: 100%;
     display: block;
 
+    .md-input {
+      background-color: white;
+      padding-left: 5px;
+    }
+
     .modal {
       top: 50%;
       left: 50%;
       height: 50%;
       width: 50%;
       transform: translateX(-50%) translateY(-50%);
-      background-color: lightgray;
+      background-color: white;
 
       textarea {
         width: 100%;
         min-height: 200px;
         margin-top: 20px;
+        background-color: lightgray;
       }
     }
 
@@ -176,6 +184,16 @@
       background-color: rgba(0, 0, 0, 0.6);
       position: absolute;
     }
+
+    .select-container,
+    .select-container select {
+      width: 100% !important;
+    }
+
+    .md-menu.md-select {
+      background-color: white;
+    }
+
   }
 
   #passwordReset.modal {

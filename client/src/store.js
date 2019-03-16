@@ -204,7 +204,8 @@ const store = new Vuex.Store({
          ["South Africa", "zu-ZA"]
        ]
      },
-     wordList: []
+     wordList: [],
+     wordListsLoaded: 0
   },
   getters: {
     allWords(state){
@@ -379,11 +380,16 @@ const store = new Vuex.Store({
     addList(state, payload){
       console.log("addList");
       console.log(payload);
-      state.wordList.push(payload[0]);
+      for (var i = 0; i < payload.length; i++) {
+        state.wordList.push(payload[i]);
+      }
     },
     setWordList(state, payload){
       state.currentList = [];
       state.currentList.push(payload);
+    },
+    setWordListLoaded(state, payload){
+      state.wordListsLoaded += payload;
     }
     // removeLastWord(state){
     //  state.words.pop();
@@ -401,7 +407,7 @@ const store = new Vuex.Store({
       }).then(res => {
           if (!res.ok){
             res.json().then(function(err){
-              this.commit("setPreloaderMsg", err["message"]);
+              that.commit("setPreloaderMsg", err["error"]);
             setTimeout(function(){ // UX
               that.commit("setPreloader", false);
             }, 500);
@@ -500,7 +506,7 @@ const store = new Vuex.Store({
     },
 
     getStockWordList (state){
-      this.commit("setPreloaderMsg", "Downloading WordLists");
+      this.commit("setPreloaderMsg", "Downloading Stock WordLists");
 
       var language = state.state.language.split("-")[1],
           nativeLanguage = state.state.nativeLanguage.split("-")[1];
@@ -531,7 +537,7 @@ const store = new Vuex.Store({
         return res.json();
       }).then(response => {
         console.log('Success');
-        this.commit("setPreloaderMsg", "Parsing WordLists");
+        this.commit("setPreloaderMsg", "Parsing Stock WordLists");
         var res = response["listArr"],
             filteredRes = [];
 
@@ -552,10 +558,64 @@ const store = new Vuex.Store({
 
         }
         this.commit("addList", filteredRes);
+        this.commit("setWordListLoaded", 1);
       })
     },
 
-    userCreateList (state){
+    getListByUser (state){
+      this.commit("setPreloaderMsg", "Downloading User WordLists");
+      console.log(state);
+
+      fetch('http://18.188.201.66:8081/getListByUser', {
+        method: "POST",
+        body: JSON.stringify({
+          userId: state.state.user.id
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+          'x-access-token': state.jwt
+        }
+      }).then(res => {
+        if (!res.ok){
+          res.json().then(function(err){
+          this.commit("setPreloaderMsg", err["error"]);
+          setTimeout(function(){ // UX
+            this.commit("setPreloader", false);
+          }, 500);
+            throw new Error();
+          });
+        }
+        return res.json();
+      }).then(response => {
+        console.log('Success');
+        console.log(response);
+        this.commit("setPreloaderMsg", "Parsing User WordLists");
+        var res = response["listArr"],
+            filteredRes = [];
+
+        for (var i = 0; i < res.length; i++) {
+
+          if (res[i]["words"] != null) {
+            let newWordsArr = [],
+                splitArr = res[i]["words"].toString().split(",");
+
+            for (var n = 0; n < splitArr.length; n = n+2) {
+              let arr = [splitArr[n], splitArr[n+1]];
+              newWordsArr.push(arr);
+            }
+
+            res[i]["words"] = newWordsArr;
+            filteredRes.push(res[i]);
+          }
+
+        }
+        console.log(filteredRes);
+        this.commit("addList", filteredRes);
+        this.commit("setWordListLoaded", 1);
+      })
+    },
+
+    userCreateList (state, payload){
       this.commit("setPreloaderMsg", "Uploading WordList");
 
       fetch('http://18.188.201.66:8081/userCreateList', {
@@ -567,12 +627,12 @@ const store = new Vuex.Store({
         }
       }).then(res => {
         if (!res.ok){
-          res.json().then(function(err){
-          this.commit("setPreloaderMsg", err["message"]);
-          setTimeout(function(){ // UX
-            this.commit("setPreloader", false);
-          }, 500);
-            throw new Error();
+          res.json().then((err) => {
+            this.commit("setPreloaderMsg", err["message"]);
+            setTimeout(() => { // UX
+              this.commit("setPreloader", false);
+            }, 500);
+             throw new Error();
           });
         }
         return res.json();
@@ -580,6 +640,10 @@ const store = new Vuex.Store({
         console.log('Success');
         console.log(response);
         this.commit("setPreloaderMsg", "Created WordList");
+        setTimeout(() => {
+          this.commit("setPreloader", false);
+          this.commit("setModal", false);
+        }, 500);
         // var res = response["listArr"],
         //     filteredRes = [];
 
