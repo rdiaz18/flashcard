@@ -9,7 +9,7 @@
       <div id="listController">
         <md-field>
           <label style="margin-left: 5px">Word List</label>
-          <md-select id="list-select" v-model="currentList" @change="setCurrentList()">
+          <md-select id="list-select" v-model="currentList">
             <md-option v-for="(list, index) in $store.getters.wordLists" :key="index" :value="list.id">
               {{list.name}}
             </md-option>
@@ -106,18 +106,6 @@
       }
     },
     methods: {
-      setCurrentList() {
-        var that = this,
-            id = this.currentList,
-            wordLists = $store.getters.wordLists[i];
-
-        for (var i = 0; i < wordLists.length; i++) {
-          if (id == wordLists[i]["id"]){ 
-            that.$store.commit("setCurrentList", wordLists[i]);
-            that.$store.commit("setTempList", wordLists[i]);
-          }
-        }
-      },
       mobile() {
         console.log(window.innerWidth);
         return window.innerWidth < 480
@@ -146,7 +134,15 @@
     },
     watch: {
       currentList(val) {
-        this.$store.commit("setCurrentList", this.$store.getters.wordLists.filter((v) => v.id === val));
+        // console.log("val");
+        // console.log(val);
+        // this.$store.getters.wordLists.filter((v) => console.log(v));
+        let list = this.$store.getters.wordLists.filter((v) => v.id === val);
+        // console.log("list");
+        // console.log(list);
+
+        this.$store.commit("setCurrentList", list);
+        this.$store.commit("setTempList", list);
       }
     },
     data() {

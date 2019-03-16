@@ -13,9 +13,16 @@
 </template>
 
 <script>
+	import {mapGetters} from 'vuex'
 	export default {
 		name: "WordRow",
 		props: ["word", "meaning", "index"],
+		computed: {
+			...mapGetters({
+				lastWord: 'previousWord',
+				lastMeaning: 'previousMeaning'
+			})
+		},
 		methods: {
 			inputChange(){
 				// Update Word in State
@@ -25,8 +32,13 @@
 					"meaning": this.meaningData
 				});
 				// Check if List Has Empty Row if Not Add 
-				let lastWord = this.$store.getters.lastWord;
-				if (lastWord[0].length > 0 || lastWord[1].length > 0) {
+				// let lastWord = this.$store.getters.lastWord;
+				let that = this;
+				console.log("that.lastWord");
+				console.log(that.lastWord);
+				console.log("that.lastMeaning");
+				console.log(that.lastMeaning);
+				if (this.lastWord == false || this.lastMeaning.length == false) {
 					this.$store.commit("addEmptyWord");
 				}
 				// Check if Extra Empty Row

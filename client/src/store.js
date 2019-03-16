@@ -228,7 +228,7 @@ const store = new Vuex.Store({
         if (state.currentWord != 0) {
           return state.currentList[0].words[state.currentWord - 1][0];
         } else {
-             return false;
+          return false;
         }
      },
      previousMeaning(state){
@@ -239,10 +239,10 @@ const store = new Vuex.Store({
         }
      },
      nextWord(state){
-        console.log(state);
-        console.log(state.currentList);
-        console.log(state.currentList[0].words);
-        console.log(state.currentList[0].words.length);
+        // console.log(state);
+        // console.log(state.currentList);
+        // console.log(state.currentList[0].words);
+        // console.log(state.currentList[0].words.length);
         if (state.currentList[0] != undefined && state.currentWord != state.currentList[0].words.length) {
           return state.currentList[0].words[state.currentWord + 1][0];
         } else {
@@ -336,11 +336,8 @@ const store = new Vuex.Store({
       state.jwt = payload;
     },
     addEmptyWord(state){
-      for (var i = 0; i < state.wordLists.length; i++) {
-        if (state.wordLists[i]["title"] == state.currentListTitle){
-          state.wordLists[i]["words"].push(["",""]);
-        }
-      }
+      state.currentList.words.push(["",""]);
+      state.tempList.words.push(["",""]);
     },
     updateWord(state, payload){
       // Index, Word, Meaning
@@ -366,10 +363,14 @@ const store = new Vuex.Store({
       state.currentWord = payload;
     },
     setCurrentList(state, payload){
+      console.log("setCurrentList");
       state.currentList = payload;
+      console.log(state.currentList);
     },
     setTempList(state, payload){
+      console.log('setTempList');
       state.tempList = payload;
+      console.log(state.tempList);
     },
     addSkip(state){
       state.skipped++;

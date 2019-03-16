@@ -6,7 +6,7 @@
         <md-field>
           <label>Word List</label>
           <md-select id="list-select" v-model="currentList" placeholder="Select Word List">
-            <md-option v-for="(list, index) in $store.getters.wordLists" :key="index" :value="list.name">{{ list.name }}
+            <md-option v-for="(list, index) in $store.getters.wordLists" :key="index" :value="list.id">{{ list.name }}
             </md-option>
           </md-select>
         </md-field>
@@ -14,17 +14,17 @@
     </div>
     <div id="flashcardInnerContainer">
       <div id="previous-flashcard" :class="{ hidden: $store.getters.previousWord === false }">
-        <h1>{{ $store.getters.previousWord }}</h1>
         <h2>{{ $store.getters.previousMeaning }}</h2>
+        <h1>{{ $store.getters.previousWord }}</h1>
       </div>
       <div id="flashcard">
-        <h1>{{ $store.getters.currentWord }}</h1>
-        <h2>{{ cardAnswer }}</h2>
         <h2 id="speechWord" :style="{ color: speechColor }">{{ speechWord }}</h2>
+        <h2>{{ cardAnswer }}</h2>
+        <h1>{{ $store.getters.currentWord }}</h1>
       </div>
       <div id="next-flashcard" :class="{ hidden: $store.getters.nextWord === false }">
-        <h1>{{ $store.getters.nextWord }}</h1>
         <h2></h2>
+        <h1>{{ $store.getters.nextWord }}</h1>
       </div>
     </div>
     <div id="flashcardControls">
@@ -51,16 +51,16 @@
   export default {
     name: "Card",
     watch: {
-      '$store.state.currentWord': function (newVal) {
+      '$store.state.currentWord': (newVal) => {
         let that = this;
         setTimeout(function () {
           that.playTTS()
         }, 500);
       },
-      'currentList': function (newVal) {
-        console.log("CURRENT LIST WATCHER");
-        console.log(newVal);
-        this.$store.commit("setCurrentList", this.$store.getters.wordLists.filter((v) => v.id === newVal));
+      currentList(val) {
+        console.log("VAL");
+        console.log(val);
+        this.$store.commit("setCurrentList", this.$store.getters.wordLists.filter((v) => v.id === val));
       }
     },
     computed: {
@@ -244,13 +244,16 @@
       -webkit-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75);
       -moz-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75);
       box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75);
+      display: flex;
+      flex-flow: column;
+      flex-direction: column;
 
       h1 {
         font-size: 3em;
-        top: 50%;
-        transform: translateY(-50%);
         position: relative;
         margin: 0 auto;
+        background-color: transparent !important;
+        color: black !important;
       }
 
       &.correct {
