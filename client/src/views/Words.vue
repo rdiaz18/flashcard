@@ -361,12 +361,6 @@
     }
   }
 
-  @media (max-width: 1023px) {
-    .md-table {
-      max-height: inherit !important;
-    }
-  }
-
   @media (max-width: 420px) {
     h1 {
       font-size: 1.6em !important;

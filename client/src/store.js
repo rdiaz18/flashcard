@@ -239,6 +239,10 @@ const store = new Vuex.Store({
         }
      },
      nextWord(state){
+        console.log(state);
+        console.log(state.currentList);
+        console.log(state.currentList[0].words);
+        console.log(state.currentList[0].words.length);
         if (state.currentList[0] != undefined && state.currentWord != state.currentList[0].words.length) {
           return state.currentList[0].words[state.currentWord + 1][0];
         } else {
