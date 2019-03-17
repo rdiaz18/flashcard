@@ -13,7 +13,7 @@
       </div>
     </div>
     <div id="flashcardInnerContainer">
-      <div id="previous-flashcard" :class="{ hidden: $store.getters.previousWord === false }">
+      <div id="previous-flashcard" :class="{ hidden: $store.getters.previousWord === undefined }">
         <h2>{{ $store.getters.previousMeaning }}</h2>
         <h1>{{ $store.getters.previousWord }}</h1>
       </div>
@@ -22,7 +22,7 @@
         <h2>{{ cardAnswer }}</h2>
         <h1>{{ $store.getters.currentWord }}</h1>
       </div>
-      <div id="next-flashcard" :class="{ hidden: $store.getters.nextWord === false }">
+      <div id="next-flashcard" :class="{ hidden: $store.getters.nextWord === undefined }">
         <h2></h2>
         <h1>{{ $store.getters.nextWord }}</h1>
       </div>
@@ -51,15 +51,13 @@
   export default {
     name: "Card",
     watch: {
-      '$store.state.currentWord': (newVal) => {
+      '$store.state.currentWord'(newVal) {
         let that = this;
         setTimeout(function () {
-          that.playTTS()
+          that.playTTS();
         }, 500);
       },
       currentList(val) {
-        console.log("VAL");
-        console.log(val);
         this.$store.commit("setCurrentList", this.$store.getters.wordLists.filter((v) => v.id === val));
       }
     },

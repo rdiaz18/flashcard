@@ -153,7 +153,6 @@
         allWordLists: this.$store.getters.wordLists,
         currentList: this.$store.getters.currentList || "Select Word List",
         newListName: '',
-        centerIt: this.$store.getters.ttsExpiry === "Not Purchased",
         country: this.$store.getters.currentLang,
         nativeCountry: this.$store.getters.currentNativeLang,
         imgCache: {},

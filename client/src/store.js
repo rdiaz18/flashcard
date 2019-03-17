@@ -225,37 +225,33 @@ const store = new Vuex.Store({
       }
     },
     previousWord(state){
-      if (state.currentList[0].length != 0) {
-        return state.currentList[0].words[state.currentList[0].words.length - 1][0];
+      if (state.currentList[0] != undefined && state.currentWord != 0) {
+        return state.currentList[0].words[state.currentWord - 1][0];
       } else {
         return undefined;
       }
     },
     previousMeaning(state){
-      if (state.currentList[0].length != 0) {
-        return state.currentList[0].words[state.currentList[0].words.length - 1][1];
+      if (state.currentList[0] != undefined && state.currentWord != 0) {
+        return state.currentList[0].words[state.currentWord - 1][1];
       } else {
         return undefined;
       }
     },
-     // nextWord(state){
-     //    // console.log(state);
-     //    // console.log(state.currentList);
-     //    // console.log(state.currentList[0].words);
-     //    // console.log(state.currentList[0].words.length);
-     //    if (state.currentList[0] != undefined && state.currentWord != state.currentList[0].words.length) {
-     //      return state.currentList[0].words[state.currentWord + 1][0];
-     //    } else {
-     //      return false;
-     //    }
-     // },
-     // nextMeaning(state){
-     //    if (state.currentList[0] != undefined && state.currentWord != state.currentList[0].words.length) {
-     //      return state.currentList[0].words[state.currentWord + 1][1];
-     //    } else {
-     //      return false;
-     //    }
-     // },
+     nextWord(state){
+        if (state.currentList[0] != undefined && state.currentWord != state.currentList[0].words.length) {
+          return state.currentList[0].words[state.currentWord + 1][0];
+        } else {
+          return undefined;
+        }
+     },
+     nextMeaning(state){
+        if (state.currentList[0] != undefined && state.currentWord != state.currentList[0].words.length) {
+          return state.currentList[0].words[state.currentWord + 1][1];
+        } else {
+          return undefined;
+        }
+     },
     duplicateEmptyCheck(state){
       if (state.currentList[0] != undefined && state.currentList.length >= 2) {
         if (state.currentList[0].words[state.currentList.length-2][0] == 0 || state.currentList[0].words[state.currentList.length-2][1] == 0) {
