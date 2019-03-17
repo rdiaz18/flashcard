@@ -20,7 +20,9 @@
 		computed: {
 			...mapGetters({
 				lastWord: 'previousWord',
-				lastMeaning: 'previousMeaning'
+				lastMeaning: 'previousMeaning',
+				currentList: 'currentList',
+				currentWordListLength: 'currentWordListLength'
 			})
 		},
 		methods: {
@@ -32,19 +34,13 @@
 					"meaning": this.meaningData
 				});
 				// Check if List Has Empty Row if Not Add 
-				// let lastWord = this.$store.getters.lastWord;
 				let that = this;
-				console.log("that.lastWord");
-				console.log(that.lastWord);
-				console.log("that.lastMeaning");
-				console.log(that.lastMeaning);
-				if (this.lastWord == false || this.lastMeaning.length == false) {
-					this.$store.commit("addEmptyWord");
+				if ((this.indexData + 1) == this.currentWordListLength) {
+					if (this.lastWord == undefined || this.lastMeaning == undefined || this.lastWord == "" || this.lastMeaning == "") {
+						this.$store.commit("addEmptyWord");
+					}
 				}
-				// Check if Extra Empty Row
-				// if (this.$store.getters.duplicateEmptyCheck == true) {
-				// 	this.$store.commit("removeLastWord");
-				// }
+				this.$emit("editedList");
 				
 			},
 			mobile(){

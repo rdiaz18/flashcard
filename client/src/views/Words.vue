@@ -18,7 +18,7 @@
         <md-button @click="showModal('newListModal')">Create New List</md-button>
         <md-button @click="showModal('CSVModal')">Create List from CSV</md-button>
         <md-button @click="showModal('deleteListModal')">Delete List</md-button>
-        <md-button @click="showModal('saveListModal')">Save List</md-button>
+        <md-button @click="showModal('saveListModal')" :class="{ listEdit: editedList }">Save List</md-button>
       </div>
 
       <!-- Left Col Flag Img -->
@@ -41,7 +41,7 @@
         <md-table-head>Word</md-table-head>
         <md-table-head>Meaning</md-table-head>
       </md-table-row>
-      <WordRow v-for="(word, index) in computedList" :index="index" :word="word[0]" :meaning="word[1]"></WordRow>
+      <WordRow v-for="(word, index) in computedList" :index="index" :word="word[0]" :meaning="word[1]" @editedList="editList"></WordRow>
     </md-table>
 
     <ModalController :CSVModal="CSVModal" :NewListModal="newListModal" :DeleteListModal="deleteListModal"
@@ -118,6 +118,7 @@
         } else if (p === "saveListModal") {
           // this.saveListModal = true
           this.$store.dispatch("updateList", this.$store.state.currentList);
+          this.editedList = false;
         }
         this.$store.commit("setModal", true);
       },
@@ -127,6 +128,9 @@
         this.deleteListModal = false
         this.saveListModal = false
         this.$store.commit("setModal", false);
+      },
+      editList(){
+        this.editedList = !this.editedList;
       }
     },
     watch: {
@@ -156,7 +160,8 @@
         CSVModal: false,
         newListModal: false,
         deleteListModal: false,
-        saveListModal: false
+        saveListModal: false,
+        editedList: false
       }
     }
   }
@@ -353,6 +358,22 @@
 
     button {
       top: 12px;
+    }
+  }
+
+  .listEdit {
+    animation: flash 2s infinite;
+    animation-direction: alternate;
+  }
+
+  @keyframes flash {
+    from {
+      background-color: white;
+      color: black;
+    }
+    to {
+      background-color: #2799f9;
+      color: white;
     }
   }
 

@@ -225,19 +225,19 @@ const store = new Vuex.Store({
       }
     },
     previousWord(state){
-        if (state.currentWord != 0) {
-          return state.currentList[0].words[state.currentWord - 1][0];
-        } else {
-          return false;
-        }
-     },
-     previousMeaning(state){
-        if (state.currentWord != 0) {
-          return state.currentList[0].words[state.currentWord - 1][1];
-        } else {
-          return false;
-        }
-     },
+      if (state.currentList[0].length != 0) {
+        return state.currentList[0].words[state.currentList[0].words.length - 1][0];
+      } else {
+        return undefined;
+      }
+    },
+    previousMeaning(state){
+      if (state.currentList[0].length != 0) {
+        return state.currentList[0].words[state.currentList[0].words.length - 1][1];
+      } else {
+        return undefined;
+      }
+    },
      // nextWord(state){
      //    // console.log(state);
      //    // console.log(state.currentList);
@@ -290,6 +290,9 @@ const store = new Vuex.Store({
     currentList(state){
       return state.currentList;
     },
+    currentWordListLength(state){
+      return state.currentList[0].words.length;
+    },
     currentListWords(state){
       if (state.currentList.length != 0) {
         return state.currentList[0].words;
@@ -336,14 +339,13 @@ const store = new Vuex.Store({
       state.jwt = payload;
     },
     addEmptyWord(state){
-      state.currentList.words.push(["",""]);
-      state.tempList.words.push(["",""]);
+      state.currentList[0].words.push(["",""]);
+      // state.tempList[0].words.push(["",""]);
     },
     updateWord(state, payload){
       // Index, Word, Meaning
-      state.tempList[0]["words"][payload["index"]][0] = payload["word"];
-      state.tempList[0]["words"][payload["index"]][1] = payload["meaning"];
-      state.currentList = state.tempList;
+      state.currentList[0]["words"][payload["index"]][0] = payload["word"];
+      state.currentList[0]["words"][payload["index"]][1] = payload["meaning"];
     },
     addCorrect(state){
       state.correct++;
