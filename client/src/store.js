@@ -238,24 +238,24 @@ const store = new Vuex.Store({
           return false;
         }
      },
-     nextWord(state){
-        // console.log(state);
-        // console.log(state.currentList);
-        // console.log(state.currentList[0].words);
-        // console.log(state.currentList[0].words.length);
-        if (state.currentList[0] != undefined && state.currentWord != state.currentList[0].words.length) {
-          return state.currentList[0].words[state.currentWord + 1][0];
-        } else {
-          return false;
-        }
-     },
-     nextMeaning(state){
-        if (state.currentList[0] != undefined && state.currentWord != state.currentList[0].words.length) {
-          return state.currentList[0].words[state.currentWord + 1][1];
-        } else {
-          return false;
-        }
-     },
+     // nextWord(state){
+     //    // console.log(state);
+     //    // console.log(state.currentList);
+     //    // console.log(state.currentList[0].words);
+     //    // console.log(state.currentList[0].words.length);
+     //    if (state.currentList[0] != undefined && state.currentWord != state.currentList[0].words.length) {
+     //      return state.currentList[0].words[state.currentWord + 1][0];
+     //    } else {
+     //      return false;
+     //    }
+     // },
+     // nextMeaning(state){
+     //    if (state.currentList[0] != undefined && state.currentWord != state.currentList[0].words.length) {
+     //      return state.currentList[0].words[state.currentWord + 1][1];
+     //    } else {
+     //      return false;
+     //    }
+     // },
     duplicateEmptyCheck(state){
       if (state.currentList[0] != undefined && state.currentList.length >= 2) {
         if (state.currentList[0].words[state.currentList.length-2][0] == 0 || state.currentList[0].words[state.currentList.length-2][1] == 0) {
@@ -341,8 +341,8 @@ const store = new Vuex.Store({
     },
     updateWord(state, payload){
       // Index, Word, Meaning
-      state.tempList[payload["index"]][0] = payload["word"];
-      state.tempList[payload["index"]][1] = payload["meaning"];
+      state.tempList[0]["words"][payload["index"]][0] = payload["word"];
+      state.tempList[0]["words"][payload["index"]][1] = payload["meaning"];
       state.currentList = state.tempList;
     },
     addCorrect(state){

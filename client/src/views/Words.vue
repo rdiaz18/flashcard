@@ -10,14 +10,10 @@
         <md-field>
           <label style="margin-left: 5px">Word List</label>
           <md-select id="list-select" v-model="currentList">
-            <md-option v-for="(list, index) in $store.getters.wordLists" :key="index" :value="list.id">
+            <md-option v-for="(list, index) in wordLists" :key="index" :value="list.id">
               {{list.name}}
             </md-option>
           </md-select>
-        </md-field>
-        <md-field v-show="newListCheck && $store.getters.ttsExpiry !== 'Not Purchased'">
-          <label>New List Name</label>
-          <md-input></md-input>
         </md-field>
         <md-button @click="showModal('newListModal')">Create New List</md-button>
         <md-button @click="showModal('CSVModal')">Create List from CSV</md-button>
@@ -57,7 +53,7 @@
 <script>
   import WordRow from "../components/WordRow.vue";
   import ModalController from "../components/ModalController.vue";
-  import {mapGetters} from 'vuex'
+  import {mapGetters} from 'vuex';
 
   export default {
     name: "Words",
@@ -90,7 +86,8 @@
     computed: {
       ...mapGetters({
         showModalState: 'showModal',
-        computedList: 'currentListWords'
+        computedList: 'currentListWords',
+        wordLists: 'wordLists' 
       }),
       langSrc() {
         var key = `./flag-${this.country}.png`,
@@ -137,7 +134,9 @@
         // console.log("val");
         // console.log(val);
         // this.$store.getters.wordLists.filter((v) => console.log(v));
-        let list = this.$store.getters.wordLists.filter((v) => v.id === val);
+        console.log("wordLists in currentList watcher");
+        console.log(this.wordLists);
+        let list = this.wordLists.filter((v) => v.id === val).slice();
         // console.log("list");
         // console.log(list);
 
