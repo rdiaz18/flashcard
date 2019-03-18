@@ -151,7 +151,7 @@
     data() {
       return {
         allWordLists: this.$store.getters.wordLists,
-        currentList: this.$store.getters.currentList || "Select Word List",
+        currentList: this.$store.getters.currentList,
         newListName: '',
         country: this.$store.getters.currentLang,
         nativeCountry: this.$store.getters.currentNativeLang,

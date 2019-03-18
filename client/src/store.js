@@ -64,7 +64,7 @@ const store = new Vuex.Store({
          ["Hong Kong", "yue-Hant-HK"]
        ],
        "Croatian": [ // 1000 to EN DONE
-         ["Croatia", "hr_HR"]
+         ["Croatia", "hr-HR"]
        ],
        "Czech": [ // 1000 to EN DONE
          ["Czech Republic", "cs-CZ"]
