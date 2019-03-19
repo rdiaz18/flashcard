@@ -47,8 +47,127 @@ for (var prop in languageObj){
 	readFile(prop, languageObj[prop]);
 }
 
+// Getting List Test
+
+(function(){
+
+	var nativeLanguage = "AF",
+		language = "EN";
+
+	login(nativeLanguage, language);
+
+	function login(nativeLanguage, language){
+		let xhttp = new XMLHttpRequest(),
+			url = 'http://18.188.201.66:8081/login',
+			credentials = JSON.stringify({ "email":"admin@acc.one", "password":"password" });
+
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				window.jwt = JSON.parse(xhttp.responseText)["token"];
+				getListByLanguage(`${nativeLanguage}`, `${language}`);
+			}
+		};
+
+		xhttp.open("POST", url, true);
+		xhttp.setRequestHeader("Content-Type", "application/json");
+		xhttp.send(credentials);
+	};
+
+	function getListByLanguage(fromLang, toLang){
+		var xhttp = new XMLHttpRequest(),
+			url = 'http://18.188.201.66:8081/getListByLanguage',
+			fUrl = JSON.stringify({ 
+				fromLang: `${fromLang}`,
+				toLang: `${toLang}` 
+			});
+
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				console.log(xhttp.responseText);
+			}
+		};
+
+		xhttp.open("POST", url, true);
+		xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+		xhttp.send(fUrl);
+	}
+
+})();
+	
 
 
+// Latest Func for Storing Admin Lists
+(function saveAdminList(){
+	var nativeLanguage = "CA",
+		language = "EN",
+		fileType = "csv";
+		// fileType = "txt";
+
+	login(nativeLanguage, language);
+
+	function login(nativeLanguage, language){
+		let xhttp = new XMLHttpRequest(),
+			url = 'http://18.188.201.66:8081/login',
+			credentials = JSON.stringify({ "email":"admin@acc.one", "password":"password" });
+
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				window.jwt = JSON.parse(xhttp.responseText)["token"];
+				readFile(`${nativeLanguage}`, `${language}`);
+			}
+		};
+
+		xhttp.open("POST", url, true);
+		xhttp.setRequestHeader("Content-Type", "application/json");
+		xhttp.send(credentials);
+	};
+
+	// Access Text Files
+	function readFile(nativeLanguage, language){
+		var xhttp = new XMLHttpRequest(),
+			url = 'http://18.188.201.66:8081/readFile',
+			fUrl = JSON.stringify({ 'file': `${nativeLanguage}-${language}-1000.${fileType}` });
+
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				console.log(xhttp.responseText);
+				let json = {
+					name: `${nativeLanguage}-${language}-1000`,
+					description: `1,000 Most Common Words`,
+					words: `${xhttp.responseText}`,
+					language: `${language}`,
+					nativeLanguage: `${nativeLanguage}`
+				}
+				sendDB(JSON.stringify(json));
+			}
+		};
+
+		xhttp.open("POST", url, true);
+		xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+		xhttp.send(fUrl);
+	};
+
+	// Send translated result to DB
+	function sendDB(json){
+		var xhr2 = new XMLHttpRequest(),
+			dbURL = 'http://18.188.201.66:8081/addAdminList';
+
+		xhr2.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				console.log(xhr2.responseText);
+			}
+		};
+
+		xhr2.open("POST", dbURL, true);
+		xhr2.setRequestHeader("Content-Type", "application/json");
+		xhr2.setRequestHeader("x-access-token", window.jwt);
+		xhr2.send(json);
+	}
+
+})();
+
+/////////////////////////////////////////////////////
+/////////////////////////////////////////////////////
 
 // Login to get admin access
 (function login(){
@@ -113,11 +232,6 @@ function processRes(res, fromLang, toLang){
 
 // Send To Yandex For Translation
 function yandexTranslate(yandexText, langArr, fromLang, toLang){
-	// console.log("langArr");
-	// console.log(langArr);
-	// console.log("yandexText");
-	// console.log(yandexText);
-	console.log("--------------");
 	var yandexTextFixed = yandexText.replace(/,/g,'.'),
 		yandexUrl = `https://translate.yandex.net/api/v1.5/tr.json/translate?key=trnsl.1.1.20190114T000445Z.95291844b30dc809.79341b7169f080deb7cfa0ce4eb4a65e7897cf3a&text=${yandexTextFixed}&lang=${fromLang.toLowerCase()}-${toLang.toLowerCase()}`,
 		xhr = new XMLHttpRequest();
@@ -126,11 +240,6 @@ function yandexTranslate(yandexText, langArr, fromLang, toLang){
 		if (this.readyState == 4 && this.status == 200) {
 			var resArr = JSON.parse(xhr.responseText),
 				resArr = resArr['text'];
-
-			// console.log("resArr");
-			// console.log(xhr.responseText);
-			// console.log(resArr);
-			// console.log(resArr.toString().split(", "));
 
 			translatedRes(langArr, resArr, fromLang, toLang);
 		}

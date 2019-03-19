@@ -60,6 +60,24 @@
 
 		</StackLayout>
 
+		<StackLayout class="modal" v-if="DeleteListModal">
+
+			<StackLayout class="header">
+				<Label class="title" text="Delete List" />
+			</StackLayout>
+
+			<StackLayout class="content">
+				<Label text="Select WordList to Delete" class="subhead" />
+				<ListPicker v-model="listIdToDelete" :items="$store.getters.wordLists" />
+			</StackLayout>
+
+			<StackLayout>
+				<Button @click="closeModal" text="Cancel" />
+				<Button @click="deleteList" text="Delete" />
+			</StackLayout>
+
+	    </StackLayout>
+
 		<StackLayout id="passwordReset" class="modal" md-with-hover v-if="PasswordResetModal == true">
 
 			<StackLayout>
@@ -82,42 +100,56 @@
 </template>
 
 <script>
-	export default {
-		name: "ModalController",
-		props: {
-			CSVModal: Boolean,
-			NewListModal: Boolean, 
-			DeleteListModal: Boolean, 
-			SaveListModal: Boolean,
-			PasswordResetModal: Boolean
-		},
-		methods: {
-			createNewList(){
-				this.$store.commit("showPreloader", true);
-				this.$store.dispatch("userCreateList", {
-					"name": this.listName,
-					"description": this.listDescription,
-					"words": "",
-					"language": this.language,
-					"nativeLanguage": this.nativeLanguage,
-					"userId": this.$store.state.user.id
-				});
-			},
-			resetPassword(){
-				this.PasswordResetModal = false;
-				this.$store.commit("setPreloader", true);
-				this.$store.dispatch("resetPassword", { "email": this.email });
-			}
-		},
-		data(){
-			return {
-				email: "",
-				listName: "",
-				listDescription: "",
-				language: "",
-				nativeLanguage: "",
-				textCSV: 
-				`Example CSV Format Below
+  export default {
+    name: "ModalController",
+    props: {
+      CSVModal: Boolean,
+      NewListModal: Boolean,
+      DeleteListModal: Boolean,
+      SaveListModal: Boolean,
+      PasswordResetModal: Boolean
+    },
+    methods: {
+      createNewList(){
+        this.$store.commit("setPreloader", true);
+        this.$store.dispatch("userCreateList", {
+          "name": this.listName,
+          "description": this.listDescription,
+          "words": "",
+          "language": this.language,
+          "nativeLanguage": this.nativeLanguage,
+          "userId": this.$store.state.user.id
+        });
+        this.$emit('close')
+      },
+      resetPassword(){
+        this.PasswordResetModal = false;
+        this.$store.commit("setPreloader", true);
+        this.$store.dispatch("resetPassword", {"email": this.email});
+        this.$emit('close')
+      },
+      closeModal(){
+        this.$emit('close')
+      },
+      uploadCSV(){
+        // this.$emit('close')
+      },
+      deleteList() {
+        this.$store.dispatch("deleteList", {"id": this.listIdToDelete});
+        this.$emit('close')
+      }
+    },
+    data() {
+      return {
+        email: "",
+        listName: "",
+        listDescription: "",
+        language: "",
+        nativeLanguage: "",
+        newListName: '',
+        listIdToDelete: null,
+        textCSV:
+          `Example CSV Format Below
 				Word, Meaning #1, Meaning #2...
 
 				и, "and, though",
@@ -126,9 +158,9 @@
 				он, "he",
 				на, "on, in, at, to"`
 
-			}
-		}
-	}
+      }
+    }
+  }
 </script>
 
 <style scoped lang="scss">

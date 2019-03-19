@@ -13,7 +13,6 @@ const store = new Vuex.Store({
      user: null,
      showPreloader: false,
      showModal: false,
-     // showPreloader: true,
      preloaderMsg: "Loading",
      email: "mpaccione1991@gmail.com",
      password: "rspaccio",
@@ -23,6 +22,7 @@ const store = new Vuex.Store({
      incorrect: 0,
      skipped: 0,
      currentList: [],
+     tempList: [],
      language: "ru-RU",
      nativeLanguage: "en-US",
      languages: {
@@ -204,7 +204,8 @@ const store = new Vuex.Store({
          ["South Africa", "zu-ZA"]
        ]
      },
-     wordList: []
+     wordList: [],
+     wordListsLoaded: 0
   },
   getters: {
     allWords(state){
@@ -227,7 +228,7 @@ const store = new Vuex.Store({
         if (state.currentWord != 0) {
           return state.currentList[0].words[state.currentWord - 1][0];
         } else {
-             return false;
+          return false;
         }
      },
      previousMeaning(state){
@@ -238,6 +239,10 @@ const store = new Vuex.Store({
         }
      },
      nextWord(state){
+        // console.log(state);
+        // console.log(state.currentList);
+        // console.log(state.currentList[0].words);
+        // console.log(state.currentList[0].words.length);
         if (state.currentList[0] != undefined && state.currentWord != state.currentList[0].words.length) {
           return state.currentList[0].words[state.currentWord + 1][0];
         } else {
@@ -280,16 +285,23 @@ const store = new Vuex.Store({
       return state.incorrect;
     },
     wordLists(state){
-        return state.wordList;
+      return state.wordList;
     },
     currentList(state){
-        return state.currentList;
+      return state.currentList;
+    },
+    currentListWords(state){
+      if (state.currentList.length != 0) {
+        return state.currentList[0].words;
+      } else {
+        return [];
+      }
     },
     email(state){
-        return state.email;
+      return state.email;
     },
     password(state){
-        return state.password;
+      return state.password;
     },
     // ttsExpiry(state){
     //     return state.ttsExpiry;
@@ -299,9 +311,6 @@ const store = new Vuex.Store({
     },
     showPreloader(state){
       return state.showPreloader;
-    },
-    preloaderMsg(state){
-      return state.preloaderMsg;
     },
     showModal(state){
       return state.showModal;
@@ -327,20 +336,14 @@ const store = new Vuex.Store({
       state.jwt = payload;
     },
     addEmptyWord(state){
-      for (var i = 0; i < state.wordLists.length; i++) {
-        if (state.wordLists[i]["title"] == state.currentListTitle){
-          state.wordLists[i]["words"].push(["",""]);
-        }
-      }
+      state.currentList.words.push(["",""]);
+      state.tempList.words.push(["",""]);
     },
     updateWord(state, payload){
       // Index, Word, Meaning
-      for (var i = 0; i < state.wordLists.length; i++) {
-        if (state.wordLists[i]["title"] == state.currentListTitle){
-          state.wordLists[i]["words"][payload["index"]][0] = payload["word"];
-          state.wordLists[i]["words"][payload["index"]][1] = payload["meaning"];
-        }
-      }
+      state.tempList[payload["index"]][0] = payload["word"];
+      state.tempList[payload["index"]][1] = payload["meaning"];
+      state.currentList = state.tempList;
     },
     addCorrect(state){
       state.correct++;
@@ -360,9 +363,14 @@ const store = new Vuex.Store({
       state.currentWord = payload;
     },
     setCurrentList(state, payload){
-      state.currentList = [];
-      state.currentList.push(payload);
+      console.log("setCurrentList");
+      state.currentList = payload;
       console.log(state.currentList);
+    },
+    setTempList(state, payload){
+      console.log('setTempList');
+      state.tempList = payload;
+      console.log(state.tempList);
     },
     addSkip(state){
       state.skipped++;
@@ -377,11 +385,19 @@ const store = new Vuex.Store({
     addList(state, payload){
       console.log("addList");
       console.log(payload);
-      state.wordList.push(payload[0]);
+      for (var i = 0; i < payload.length; i++) {
+        state.wordList.push(payload[i]);
+      }
     },
     setWordList(state, payload){
       state.currentList = [];
       state.currentList.push(payload);
+    },
+    setWordListLoaded(state, payload){
+      state.wordListsLoaded += payload;
+    },
+    spliceWordList(state, payload){
+      state.wordList.splice(payload["index"], payload["amount"]);
     }
     // removeLastWord(state){
     //  state.words.pop();
@@ -399,7 +415,7 @@ const store = new Vuex.Store({
       }).then(res => {
           if (!res.ok){
             res.json().then(function(err){
-              this.commit("setPreloaderMsg", err["message"]);
+              that.commit("setPreloaderMsg", err["error"]);
             setTimeout(function(){ // UX
               that.commit("setPreloader", false);
             }, 500);
@@ -484,7 +500,7 @@ const store = new Vuex.Store({
             that.commit("setPreloaderMsg", err["message"]);
             setTimeout(function(){ // UX
               that.commit("setPreloader", false);
-              that.commit("setModal", false);
+              // that.commit("setModal", false);
             }, 500);
               throw new Error();
             });
@@ -498,7 +514,7 @@ const store = new Vuex.Store({
     },
 
     getStockWordList (state){
-      this.commit("setPreloaderMsg", "Downloading WordLists");
+      this.commit("setPreloaderMsg", "Downloading Stock WordLists");
 
       var language = state.state.language.split("-")[1],
           nativeLanguage = state.state.nativeLanguage.split("-")[1];
@@ -508,7 +524,7 @@ const store = new Vuex.Store({
 
       fetch('http://18.188.201.66:8081/getListByLanguage', {
         method: "POST",
-        body: JSON.stringify({ 
+        body: JSON.stringify({
           fromLang: nativeLanguage,
           toLang: language
         }),
@@ -529,7 +545,7 @@ const store = new Vuex.Store({
         return res.json();
       }).then(response => {
         console.log('Success');
-        this.commit("setPreloaderMsg", "Parsing WordLists");
+        this.commit("setPreloaderMsg", "Parsing Stock WordLists");
         var res = response["listArr"],
             filteredRes = [];
 
@@ -547,13 +563,68 @@ const store = new Vuex.Store({
             res[i]["words"] = newWordsArr;
             filteredRes.push(res[i]);
           }
-          
+
         }
         this.commit("addList", filteredRes);
+        this.commit("setWordListLoaded", 1);
       })
     },
 
-    userCreateList (state){
+    getListByUser (state){
+      this.commit("setPreloaderMsg", "Downloading User WordLists");
+      console.log(state);
+
+      fetch('http://18.188.201.66:8081/getListByUser', {
+        method: "POST",
+        body: JSON.stringify({
+          userId: state.state.user.id
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+          'x-access-token': state.jwt
+        }
+      }).then(res => {
+        if (!res.ok){
+          res.json().then(function(err){
+          this.commit("setPreloaderMsg", err["error"]);
+          setTimeout(function(){ // UX
+            this.commit("setPreloader", false);
+          }, 500);
+            throw new Error();
+          });
+        }
+        return res.json();
+      }).then(response => {
+        console.log('Success');
+        console.log(response);
+        this.commit("setPreloaderMsg", "Parsing User WordLists");
+        var res = response["listArr"],
+            filteredRes = [];
+
+        for (var i = 0; i < res.length; i++) {
+
+          if (res[i]["words"] != null) {
+            let newWordsArr = [],
+                splitArr = res[i]["words"].toString().split(",");
+
+            for (var n = 0; n < splitArr.length; n = n+2) {
+              let arr = [splitArr[n], splitArr[n+1]];
+              newWordsArr.push(arr);
+            }
+
+            res[i]["words"] = newWordsArr;
+            filteredRes.push(res[i]);
+          }
+
+        }
+        console.log(filteredRes);
+        this.commit("addList", filteredRes);
+        this.commit("setWordListLoaded", 1);
+        this.commit("setPreloader", false);
+      })
+    },
+
+    userCreateList (state, payload){
       this.commit("setPreloaderMsg", "Uploading WordList");
 
       fetch('http://18.188.201.66:8081/userCreateList', {
@@ -565,12 +636,12 @@ const store = new Vuex.Store({
         }
       }).then(res => {
         if (!res.ok){
-          res.json().then(function(err){
-          this.commit("setPreloaderMsg", err["message"]);
-          setTimeout(function(){ // UX
-            this.commit("setPreloader", false);
-          }, 500);
-            throw new Error();
+          res.json().then((err) => {
+            this.commit("setPreloaderMsg", err["message"]);
+            setTimeout(() => { // UX
+              this.commit("setPreloader", false);
+            }, 500);
+             throw new Error();
           });
         }
         return res.json();
@@ -578,29 +649,91 @@ const store = new Vuex.Store({
         console.log('Success');
         console.log(response);
         this.commit("setPreloaderMsg", "Created WordList");
-        // var res = response["listArr"],
-        //     filteredRes = [];
+        this.dispatch("getListByUser");
+        // setTimeout(() => {
+        //   this.commit("setPreloader", false);
+        // }, 500);
+      })
 
-        // for (var i = 0; i < res.length; i++) {
+    },
 
-        //   if (res[i]["words"] != null) {
-        //     let newWordsArr = [],
-        //         splitArr = res[i]["words"].toString().split(",");
+    updateList (state, payload){
+      this.commit("setPreloaderMsg", "Saving WordList");
 
-        //     for (var n = 0; n < splitArr.length; n = n+2) {
-        //       let arr = [splitArr[n], splitArr[n+1]];
-        //       newWordsArr.push(arr);
-        //     }
+      fetch('http://18.188.201.66:8081/updateList', {
+        method: "POST",
+        body: JSON.stringify(payload),
+        headers: {
+          'Content-Type': 'application/json',
+          'x-access-token': state.jwt
+        }
+      }).then(res => {
+        if (!res.ok){
+          res.json().then((err) => {
+            this.commit("setPreloaderMsg", err["error"]);
+            setTimeout(() => { // UX
+              this.commit("setPreloader", false);
+            }, 500);
+             throw new Error();
+          });
+        }
+        return res.json();
+      }).then(response => {
+        console.log('Success');
+        console.log(response);
+        this.commit("setPreloaderMsg", "Wordlist Saved");
+        setTimeout(() => {
+          this.commit("setPreloader", false);
+        }, 500);
+      })
 
-        //     res[i]["words"] = newWordsArr;
-        //     filteredRes.push(res[i]);
-        //   }
-          
-        // }
-        // this.commit("addList", filteredRes);
+    },
+
+    deleteList (state, payload){
+      this.commit("setPreloaderMsg", "Deleting WordList");
+
+      fetch('http://18.188.201.66:8081/deleteList', {
+        method: "POST",
+        body: JSON.stringify(payload),
+        headers: {
+          'Content-Type': 'application/json',
+          'x-access-token': state.jwt
+        }
+      }).then(res => {
+        if (!res.ok){
+          res.json().then((err) => {
+            this.commit("setPreloaderMsg", err["error"]);
+            setTimeout(() => { // UX
+              this.commit("setPreloader", false);
+            }, 500);
+             throw new Error();
+          });
+        }
+        return res.json();
+      }).then(response => {
+        console.log('Success');
+        console.log(response);
+        this.commit("setPreloaderMsg", "Wordlist Deleted");
+        setTimeout(() => {
+          this.commit("setPreloader", false);
+          // this.commit("setModal", false);
+          console.log(state);
+          for (var i = 0; i < state["state"].wordList.length; i++) {
+            if (payload["id"] === state["state"].wordList[i]["id"]){
+              this.commit("spliceWordList", {
+                "index": i,
+                "amount": 1
+              });
+            }
+          }
+          if (payload["id"] === state["state"].currentList.id) {
+            this.commit("setCurrentList", []);
+          }
+        }, 500);
       })
 
     }
+
   }
 })
 

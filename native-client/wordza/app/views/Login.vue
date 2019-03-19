@@ -3,9 +3,10 @@
 
       <StackLayout class="form" verticalAlignment="center" orientation="vertical">
 
-        <Image src="~/assets/logo/logo-color.png" stretch="aspectFit" id="logo" class="whiteBg"/>
+        <Image src="~/assets/logo/logo-color.png" stretch="aspectFit" id="logo" class="whiteBg" />
 
         <GridLayout rows="auto, auto, auto">
+
           <StackLayout row="0" class="input-field">
             <TextField class="input whiteBg" hint="Email" keyboardType="email" autocorrect="false" autocapitalizationType="none" returnKeyPress="next" @returnPress="focusPassword" v-model="email" :isEnabled="!processing" />
           </StackLayout>
@@ -17,18 +18,18 @@
         </GridLayout>  
 
         <FlexboxLayout justifyContent="center" id="btnWrap">
-          <Button text="Register" @tap="register" dock="bottom" />
-          <Button text="Login" @tap="login" dock="bottom" />   
+          <Button text="Register" @tap="register" dock="bottom" class="btn" />
+          <Button text="Login" @tap="login" dock="bottom" class="btn" />   
         </FlexboxLayout>
 
         <FlexboxLayout justifyContent="center">
-          <Label text="Forgot Password?" @tap="forgotPassword" dock="bottom" id="forgotPassword" class="whiteColor" />  
+          <Label text="Forgot Password?" @tap="forgotPassword" dock="bottom" id="forgotPassword" />  
         </FlexboxLayout>
 
       </StackLayout>
 
-      <Preloader v-if="$store.getters.showPreloader"/>
-      <ModalController :PasswordResetModal="passwordResetModal" />
+      <Preloader v-if="$store.getters.showPreloader" />
+      <!-- <ModalController :PasswordResetModal="passwordResetModal" /> -->
 
   </Page>
 </template>
@@ -50,10 +51,14 @@
         if (val != '' && oldVal == '') {
           // Get Lists
           this.$store.dispatch("getStockWordList");
+          this.$store.dispatch("getListByUser");
         }
       },
-      '$store.state.wordList'(val, oldVal){
-        this.$goto('words');
+      '$store.state.wordListsLoaded'(val, oldVal){
+        if (val === 2){ 
+          alert("Switching Routes");
+          this.$goto('words'); 
+        }
       }
     },
     methods: {
@@ -117,7 +122,12 @@
 
 .form {
   padding: 45px;
-  background-color: transparent;
+  /*background-color: transparent;*/
+  background-color: white;
+}
+
+#parent .btn {
+  height: 80px;
 }
 
 #logo {
