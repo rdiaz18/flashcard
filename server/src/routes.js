@@ -1,6 +1,7 @@
 const AuthenticationController = require('../controllers/AuthenticationController')
 const AuthenticationControllerPolicy = require('../policies/AuthenticationControllerPolicy')
 const ListController = require('../controllers/ListController')
+const menuTranslationController = require('../controllers/menuTranslationController')
 module.exports = (app) => {
 
 	app.get('/route', (req, res) => res.send('routes'))
@@ -50,5 +51,15 @@ module.exports = (app) => {
 			ListController.insertList)
 		app.post('/deleteList',
 			ListController.deleteList)
+
+		//Menu Routes
+		app.post('/createMenu',
+			menuTranslationController.createMenu)
+		app.post('/getMenuById',
+			menuTranslationController.getMenuById)
+		app.post('/getMenuByLanguage',
+			menuTranslationController.getMenuByLanguage)
+		app.post('/deleteMenu',
+			menuTranslationController.deleteMenu)
 
 }
