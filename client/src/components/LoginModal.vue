@@ -26,6 +26,7 @@
 
 <script>
 import ModalController from "../components/ModalController";
+
 export default {
   name: 'LoginModal',
   components: {
@@ -40,7 +41,9 @@ export default {
       }
     },
     '$store.state.wordListsLoaded'(val, oldVal){
-      if (val === 2){ this.$router.push({ name: "words" }) }
+      if (val === 2){
+        this.$router.push({ name: "words" })
+      }
     }
   },
   methods: {

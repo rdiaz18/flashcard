@@ -215,12 +215,12 @@ const store = new Vuex.Store({
       return state.currentWord;
     },
     currentWord(state){
-      if (state.currentList[0] != undefined) {
+      if (state.currentList.length != 0 && state.currentList[0] != undefined) {
         return state.currentList[0].words[state.currentWord][0].trim();
       }
     },
     currentMeaning(state){
-      if (state.currentList[0] != undefined) {
+      if (state.currentList.length != 0 && state.currentList[0] != undefined) {
         return state.currentList[0].words[state.currentWord][1];
       }
     },
@@ -287,7 +287,9 @@ const store = new Vuex.Store({
       return state.currentList;
     },
     currentWordListLength(state){
-      return state.currentList[0].words.length;
+      if (state.currentList.length != 0) {
+        return state.currentList[0].words.length;
+      }
     },
     currentListWords(state){
       if (state.currentList.length != 0) {
@@ -362,12 +364,15 @@ const store = new Vuex.Store({
     },
     setCurrentList(state, payload){
       console.log("setCurrentList");
-      state.currentList = payload;
+      Vue.set(state, "currentList", payload);
+      // state.currentList = [];
+      // state.currentList.push(payload);
       console.log(state.currentList);
     },
     setTempList(state, payload){
       console.log('setTempList');
-      state.tempList = payload;
+      state.tempList = [];
+      state.tempList.push(payload);
       console.log(state.tempList);
     },
     addSkip(state){
@@ -564,6 +569,7 @@ const store = new Vuex.Store({
 
         }
         this.commit("addList", filteredRes);
+        this.commit("setCurrentList", filteredRes);
         this.commit("setWordListLoaded", 1);
       })
     },

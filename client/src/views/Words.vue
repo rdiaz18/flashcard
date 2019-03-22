@@ -87,7 +87,7 @@
       ...mapGetters({
         showModalState: 'showModal',
         computedList: 'currentListWords',
-        wordLists: 'wordLists' 
+        wordLists: 'wordLists'
       }),
       langSrc() {
         var key = `./flag-${this.country}.png`,
@@ -135,17 +135,15 @@
     },
     watch: {
       currentList(val) {
-        // console.log("val");
-        // console.log(val);
+        console.log("val");
+        console.log(val);
         // this.$store.getters.wordLists.filter((v) => console.log(v));
         console.log("wordLists in currentList watcher");
         console.log(this.wordLists);
-        let list = this.wordLists.filter((v) => v.id === val).slice();
-        // console.log("list");
-        // console.log(list);
-
-        this.$store.commit("setCurrentList", list);
-        this.$store.commit("setTempList", list);
+        if (val != undefined) {
+          let list = this.wordLists.filter((v) => v.id === val).slice();
+          this.$store.commit("setCurrentList", list);
+        }
       }
     },
     data() {
