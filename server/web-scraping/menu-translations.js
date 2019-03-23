@@ -1,3 +1,57 @@
+// Save Menu Translation
+function createMenuLanguage(language, translation){
+	var xhttp = new XMLHttpRequest(),
+		url = 'http://18.188.201.66:8081/createMenu',
+		obj = JSON.stringify({ 
+			"language": `${language}`,
+			"translation": `${translation}` 
+		});
+
+	xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+			console.log(xhttp.responseText);
+		}
+	};
+
+	xhttp.open("POST", url, true);
+	xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+	xhttp.send(obj);
+}
+
+// createMenuLanguage("testLanguage", "testTranslation");
+
+for (var i = 0; i < menuTranslations.length; i++) {
+	console.log(menuTranslations[i]["LANGCODE"]);
+	createMenuLanguage(menuTranslations[i]["LANGCODE"], menuTranslations[i]);
+}
+
+// Get Menu Translation
+function getMenuLanguage(language){
+	var xhttp = new XMLHttpRequest(),
+		url = 'http://18.188.201.66:8081/getMenuByLanguage',
+		obj = JSON.stringify({ 
+			"language": `${language}`
+		});
+
+	xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+			console.log(xhttp.responseText);
+			let res = JSON.parse(xhttp.responseText);
+			console.log(res);
+			console.log(res.menu);
+			console.log(res.menu.translation);
+			console.log(JSON.parse(res.menu.translation))
+		}
+	};
+
+	xhttp.open("POST", url, true);
+	xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+	xhttp.send(obj);
+}
+
+getMenuLanguage("uk");
+
+
 // Send To Yandex For Translation
 function yandexTranslate(yandexText, fromLang, toLang){
 
@@ -18,6 +72,8 @@ function yandexTranslate(yandexText, fromLang, toLang){
 
 			console.log(fromLang+"-"+toLang);
 			console.log(resObj);
+
+			createMenuLanguage(toLang, resObj);
 		}
 	};
 
