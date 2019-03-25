@@ -41,7 +41,7 @@
         <md-table-head>Word</md-table-head>
         <md-table-head>Meaning</md-table-head>
       </md-table-row>
-      <WordRow v-for="(word, index) in computedList" :index="index" :word="word[0]" :meaning="word[1]" @editedList="editList"></WordRow>
+      <WordRow v-for="(word, index) in computedList" :key="index" :index="index" :word="word[0]" :meaning="word[1]" @editedList="editList"></WordRow>
     </md-table>
 
     <ModalController :CSVModal="CSVModal" :NewListModal="newListModal" :DeleteListModal="deleteListModal"

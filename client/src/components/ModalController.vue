@@ -41,8 +41,8 @@
         <md-field class="select-container">
           <label>Select Native List Language</label>
           <md-select v-model="nativeLanguage">
-            <md-optgroup v-for="(category, index) in $store.getters.languageCategories" :label="category">
-              <md-option v-for="(lang, i) in $store.state.languages[category]" :value="lang[1]" :data-category="category"
+            <md-optgroup v-for="(category, index) in $store.getters.languageCategories" :key="index" :label="category">
+              <md-option v-for="(lang, i) in $store.state.languages[category]" :value="lang[1]" :key="i" :data-category="category"
                       class="lang-flag">
                 {{ lang[0] }}
               </md-option>
@@ -52,8 +52,8 @@
         <md-field class="select-container">
           <label>Select List Language</label>
           <md-select v-model="language">
-            <md-optgroup v-for="(category, index) in $store.getters.languageCategories" :label="category">
-              <md-option v-for="(lang, i) in $store.state.languages[category]" :value="lang[1]" :data-category="category"
+            <md-optgroup v-for="(category, index) in $store.getters.languageCategories" :key="index" :label="category">
+              <md-option v-for="(lang, i) in $store.state.languages[category]" :key="i" :value="lang[1]" :data-category="category"
                       class="lang-flag">
                 {{ lang[0] }}
               </md-option>
@@ -77,7 +77,7 @@
         <md-field>
           <label>Select WordList to Delete</label>
           <md-select v-model="listIdToDelete">
-            <md-option v-for="list in $store.getters.wordLists" :value="list['id']">
+            <md-option v-for="(list, index) in $store.getters.wordLists" :value="list['id']" :key="index">
               {{ list['name'] }}
             </md-option>
           </md-select>
