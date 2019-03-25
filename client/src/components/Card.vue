@@ -5,7 +5,7 @@
         <!-- {{ $store.getters.wordLists }} -->
         <md-field>
           <label>Word List</label>
-          <md-select id="list-select" v-model="currentList" placeholder="Select Word List">
+          <md-select id="list-select" v-model="currentListID" @input="onChangeCurrentList" placeholder="Select Word List">
             <md-option v-for="(list, index) in $store.getters.wordLists" :key="index" :value="list.id">{{ list.name }}
             </md-option>
           </md-select>
@@ -68,7 +68,16 @@
         }
       }
     },
+    mounted () {
+      this.currentListID = this.currentList ? this.currentList.id : null;
+    },
     methods: {
+      onChangeCurrentList(item) {
+        if (item) {
+          let list = this.$store.getters.wordLists.find((v) => v.id === item);
+          this.$store.commit("setCurrentList", list);
+        }
+      },
       checkSubmission() {
         var flashcard = document.getElementById("flashcard"),
           that = this,
@@ -170,6 +179,7 @@
     },
     data() {
       return {
+        currentListID: null,
         cardInput: "",
         cardAnswer: "",
         currentList: this.$store.getters.currentList,

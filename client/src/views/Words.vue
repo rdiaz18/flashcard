@@ -9,7 +9,7 @@
       <div id="listController">
         <md-field>
           <label style="margin-left: 5px">Word List</label>
-          <md-select id="list-select" v-model="currentList">
+          <md-select id="list-select" v-model="currentListID" @input="onChangeCurrentList">
             <md-option v-for="(list, index) in wordLists" :key="index" :value="list.id">
               {{list.name}}
             </md-option>
@@ -41,7 +41,8 @@
         <md-table-head>Word</md-table-head>
         <md-table-head>Meaning</md-table-head>
       </md-table-row>
-      <WordRow v-for="(word, index) in computedList" :key="index" :index="index" :word="word[0]" :meaning="word[1]" @editedList="editList"></WordRow>
+      <WordRow v-for="(word, index) in computedList" :key="index" :index="index" :word="word[0]" :meaning="word[1]"
+               @editedList="editList"></WordRow>
     </md-table>
 
     <ModalController :CSVModal="CSVModal" :NewListModal="newListModal" :DeleteListModal="deleteListModal"
@@ -74,14 +75,7 @@
     mounted() {
       // Remove Preloader
       this.$store.commit("setPreloader", false);
-      // Check for selected lang
-      // this.langCheck();
-
-      // Check if List Has Empty Row if Not Add
-      // let lastWord = this.$store.getters.lastWord;
-      // if (lastWord[0].length > 0 || lastWord[1].length > 0) {
-      // 	this.$store.commit("addEmptyWord");
-      // }
+      this.currentListID = this.currentList ? this.currentList.id : null;
     },
     computed: {
       ...mapGetters({
@@ -103,18 +97,24 @@
       }
     },
     methods: {
+      onChangeCurrentList(item) {
+        if (item) {
+          let list = this.wordLists.find((v) => v.id === item);
+          this.$store.commit("setCurrentList", list);
+        }
+      },
       mobile() {
         console.log(window.innerWidth);
-        return window.innerWidth < 480
+        return window.innerWidth < 480;
       },
       showModal(p) {
         console.log(p);
         if (p === "newListModal") {
-          this.newListModal = true
+          this.newListModal = true;
         } else if (p === "CSVModal") {
-          this.CSVModal = true
+          this.CSVModal = true;
         } else if (p === "deleteListModal") {
-          this.deleteListModal = true
+          this.deleteListModal = true;
         } else if (p === "saveListModal") {
           // this.saveListModal = true
           this.$store.dispatch("updateList", this.$store.state.currentList);
@@ -123,32 +123,19 @@
         this.$store.commit("setModal", true);
       },
       closeModal() {
-        this.newListModal = false
-        this.CSVModal = false
-        this.deleteListModal = false
-        this.saveListModal = false
+        this.newListModal = false;
+        this.CSVModal = false;
+        this.deleteListModal = false;
+        this.saveListModal = false;
         this.$store.commit("setModal", false);
       },
-      editList(){
+      editList() {
         this.editedList = !this.editedList;
-      }
-    },
-    watch: {
-      currentList(val) {
-        console.log("val");
-        console.log(val);
-        // this.$store.getters.wordLists.filter((v) => console.log(v));
-        console.log("wordLists in currentList watcher");
-        console.log(this.wordLists);
-        if (val != undefined) {
-          let list = this.wordLists.filter((v) => v.id === val).slice();
-          this.$store.commit("setCurrentList", list);
-        }
       }
     },
     data() {
       return {
-        allWordLists: this.$store.getters.wordLists,
+        currentListID: null,
         currentList: this.$store.getters.currentList,
         newListName: '',
         country: this.$store.getters.currentLang,
@@ -159,9 +146,9 @@
         deleteListModal: false,
         saveListModal: false,
         editedList: false
-      }
+      };
     }
-  }
+  };
 </script>
 
 <style>
