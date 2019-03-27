@@ -727,7 +727,7 @@ const store = new Vuex.Store({
             }
           }
           if (payload["id"] === state["state"].currentList.id) {
-            this.commit("setCurrentList", []);
+            this.commit("setCurrentList", {});
           }
         }, 500);
       })
