@@ -15,22 +15,39 @@
           <label>Password</label>
           <md-input name="password" v-model="password" @keyup.enter="login"></md-input>
         </md-field>
+        <md-field>
+          <label>Menu Language</label>
+          <md-select id="list-select" v-model="menuLanguageCode" @input="onChangeMenuLanguage">
+            <md-option v-for="(list, index) in languagesArr" :key="index" :value="list[1]">
+              {{list[0]}}
+            </md-option>
+          </md-select>
+        </md-field>
       </md-card-content>
-      <md-button type="submit" class="md-primary" @click="register">Register</md-button>
-      <md-button type="submit" class="md-primary" @click="login">Login</md-button>
-      <p id="forgotPassword" @click="forgotPassword">Forgot Password?</p>
     </md-card>
+    <br />
+    <md-button type="submit" class="md-primary" @click="register">Register</md-button>
+    <md-button type="submit" class="md-primary" @click="login">Login</md-button>
+    <p id="forgotPassword" @click="forgotPassword">Forgot Password?</p>
     <ModalController :PasswordResetModal="passwordResetModal" v-if="$store.state.showModal == true" />
   </div>
 </template>
 
 <script>
 import ModalController from "../components/ModalController";
+import {mapGetters} from 'vuex';
 
 export default {
   name: 'LoginModal',
   components: {
     ModalController
+  },
+  computed: {
+    ...mapGetters({
+      languageCategories: 'languageCategories',
+      languagesArr: 'languagesArr',
+      currentMenuLanguage: 'currentMenuLanguage'
+    })
   },
   watch: {
     '$store.state.jwt'(val, oldVal){
@@ -72,13 +89,28 @@ export default {
     forgotPassword(){
       this.passwordResetModal = true;
       this.$store.commit("setModal", true);
+    },
+    onChangeMenuLanguage(){
+      var that = this;
+      console.log(that.menuLanguageCode)
+      window.localStorage.setItem("menuLanguageCode", this.menuLanguageCode)
+      this.$store.commit("setMenuLanguage", this.menuLanguageCode)
+    }
+  },
+  beforeMount(){
+    if (window.localStorage.getItem("menuLanguageCode")) {
+      this.menuLanguageCode = window.localStorage.getItem("menuLanguageCode");
+      this.$store.commit("setMenuLanguage", this.menuLanguageCode);
     }
   },
   data(){
     return {
       email: "",
       password: "",
-      passwordResetModal: false
+      passwordResetModal: false,
+      menuLanguage: null,
+      menuLanguageCode: null,
+      menuLanguageIndex: null
     }
   }
 }
@@ -101,7 +133,7 @@ export default {
   .md-card {
     background-color: #fdfdfd;
     width: 600px;
-    height: 400px;
+    height: auto;
   }
 
   .md-card-content {

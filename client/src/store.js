@@ -23,6 +23,8 @@ const store = new Vuex.Store({
     skipped: 0,
     currentList: {},
     tempList: [],
+    menuLanguage: "",
+    menuKey: null,
     language: "ru-RU",
     nativeLanguage: "en-US",
     languages: {
@@ -268,6 +270,18 @@ const store = new Vuex.Store({
       }
       return arr;
     },
+    languagesArr(state) {
+      let arr = [];
+      for (var category in state.languages) {
+        for (var i = 0; i < state.languages[category].length; i++) {
+          arr.push(state.languages[category][i])
+        }
+      }
+      return arr;
+    },
+    currentMenuLanguage(state){
+      return state.menuLanguage;
+    },
     currentLang(state) {
       return state.language;
     },
@@ -351,6 +365,12 @@ const store = new Vuex.Store({
     addIncorrect(state) {
       state.incorrect++;
       state.currentWord++;
+    },
+    setMenuLanguage(state, payload) {
+      state.menuLanguage = payload;
+    },
+    setMenuKey(state, payload) {
+      state.menuKey = payload;
     },
     setCorrect(state, payload) {
       state.correct = payload;
