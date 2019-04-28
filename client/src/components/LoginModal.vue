@@ -91,16 +91,18 @@ export default {
       this.$store.commit("setModal", true);
     },
     onChangeMenuLanguage(){
-      var that = this;
-      console.log(that.menuLanguageCode)
+      // this.$store.commit("setPreloader", true);
       window.localStorage.setItem("menuLanguageCode", this.menuLanguageCode)
       this.$store.commit("setMenuLanguage", this.menuLanguageCode)
+      this.$store.dispatch("getMenuByLanguage", this.menuLanguageCode)
     }
   },
   beforeMount(){
     if (window.localStorage.getItem("menuLanguageCode")) {
+      // this.$store.commit("setPreloader", true);
       this.menuLanguageCode = window.localStorage.getItem("menuLanguageCode");
       this.$store.commit("setMenuLanguage", this.menuLanguageCode);
+      this.$store.dispatch("getMenuByLanguage", this.menuLanguageCode)
     }
   },
   data(){

@@ -258,7 +258,10 @@
 
       h1 {
         font-size: 3em;
-        position: relative;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translateX(-50%) translateY(-50%);
         margin: 0 auto;
         background-color: transparent !important;
         color: black !important;

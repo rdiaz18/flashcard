@@ -227,31 +227,45 @@ const store = new Vuex.Store({
       }
     },
     previousWord(state) {
-      if (state.currentList.word && state.currentWord !== 0) {
-        return state.currentList.words[state.currentWord - 1][0];
-      } else {
-        return undefined;
+      if (Object.is(state.currentList.words, undefined) === false){
+          if (state.currentWord !== 0) {
+          return state.currentList.words[state.currentWord - 1][0];
+        } else {
+          return undefined;
+        }
       }
     },
     previousMeaning(state) {
-      if (state.currentList[0] != undefined && state.currentWord != 0) {
-        return state.currentList[0].words[state.currentWord - 1][1];
-      } else {
-        return undefined;
+      if (Object.is(state.currentList.words, undefined) === false){ 
+        if (state.currentWord != 0) {
+          return state.currentList.words[state.currentWord - 1][1];
+        } else {
+          return undefined;
+        }
       }
     },
     nextWord(state) {
-      if (state.currentList.word && state.currentWord !== state.currentList.words.length) {
-        return state.currentList[0].words[state.currentWord + 1][0];
-      } else {
-        return undefined;
+      if (Object.is(state.currentList.words, undefined) === false){ 
+        if (state.currentWord !== state.currentList.words.length) {
+          console.log("state.currentList");
+          console.log(state.currentList);
+          console.log("state.currentList.words");
+          console.log(state.currentList.words)
+          console.log("state.currentList.words[state.currentWord+1]");
+          console.log(state.currentList.words[state.currentWord+1]);
+          return state.currentList.words[state.currentWord + 1][0];
+        } else {
+          return undefined;
+        }
       }
     },
     nextMeaning(state) {
-      if (state.currentList.word && state.currentWord !== state.currentList.words.length) {
-        return state.currentList[0].words[state.currentWord + 1][1];
-      } else {
-        return undefined;
+      if (!Object.is(state.currentList.words, undefined) === false){ 
+        if (state.currentWord !== state.currentList.words.length) {
+          return state.currentList.words[state.currentWord + 1][1];
+        } else {
+          return undefined;
+        }
       }
     },
     // duplicateEmptyCheck(state){
@@ -274,9 +288,13 @@ const store = new Vuex.Store({
       let arr = [];
       for (var category in state.languages) {
         for (var i = 0; i < state.languages[category].length; i++) {
-          arr.push(state.languages[category][i])
+          let langCategory = state.languages[category][i],
+              tempArr = [langCategory[0]+' ('+langCategory[1]+')', langCategory[1]];
+          arr.push(tempArr)
         }
       }
+      arr.sort();
+      console.log(arr);
       return arr;
     },
     currentMenuLanguage(state){
@@ -755,7 +773,42 @@ const store = new Vuex.Store({
         }, 500);
       });
 
+    },
+
+    getMenuByLanguage(state, payload){
+
+      this.commit("setPreloaderMsg", "Downloading Menu Translation");
+
+      fetch('18.188.201.66:8081/getMenuByLanguage', {
+        method: "POST",
+        body: JSON.stringify(payload),
+        headers: {
+          'Content-Type': 'application/json',
+          'x-access-token': state.jwt
+        }
+      }).then(res => {
+        if (!res.ok) {
+          res.json().then((err) => {
+            this.commit("setPreloaderMsg", err["error"]);
+            setTimeout(() => { // UX
+              this.commit("setPreloader", false);
+            }, 500);
+            throw new Error();
+          });
+        }
+        return res.json();
+      }).then(response => {
+        console.log('Success');
+        console.log(response);
+        this.commit("setPreloaderMsg", "Menu Translation Complete");
+        setTimeout(() => {
+          this.commit("setPreloader", false);
+          this.commit("setMenuKey", response);
+        }, 500);
+      });
+
     }
+
 
   }
 });
