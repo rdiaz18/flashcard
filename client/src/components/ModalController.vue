@@ -39,10 +39,10 @@
           <md-input v-model="listDescription"></md-input>
         </md-field>
         <md-field class="select-container">
-          <label>Select Native List Language</label>
-          <md-select v-model="nativeLanguage">
+          <label>Select Language You Plan to Learn</label>
+          <md-select v-model="language">
             <md-optgroup v-for="(category, index) in $store.getters.languageCategories" :key="index" :label="category">
-              <md-option v-for="(lang, i) in $store.state.languages[category]" :value="lang[1]" :key="i" :data-category="category"
+              <md-option v-for="(lang, i) in $store.state.languages[category]" :key="i" :value="lang[1]" :data-category="category"
                       class="lang-flag">
                 {{ lang[0] }}
               </md-option>
@@ -50,10 +50,10 @@
           </md-select>
         </md-field>
         <md-field class="select-container">
-          <label>Select List Language</label>
-          <md-select v-model="language">
+          <label>Select Language You Already Know</label>
+          <md-select v-model="nativeLanguage">
             <md-optgroup v-for="(category, index) in $store.getters.languageCategories" :key="index" :label="category">
-              <md-option v-for="(lang, i) in $store.state.languages[category]" :key="i" :value="lang[1]" :data-category="category"
+              <md-option v-for="(lang, i) in $store.state.languages[category]" :value="lang[1]" :key="i" :data-category="category"
                       class="lang-flag">
                 {{ lang[0] }}
               </md-option>

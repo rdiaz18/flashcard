@@ -8,15 +8,15 @@
       </md-card-header>
       <md-card-content>
         <md-field>
-          <label>Email</label>
-          <md-input name="email" v-model="email"></md-input>
+          <label>{{emailText}}</label>
+          <md-input name="email" type="email" v-model="email"></md-input>
         </md-field>
         <md-field>
-          <label>Password</label>
-          <md-input name="password" v-model="password" @keyup.enter="login"></md-input>
+          <label>{{passwordText}}</label>
+          <md-input name="password" type="password" v-model="password" @keyup.enter="login"></md-input>
         </md-field>
         <md-field>
-          <label>Menu Language</label>
+          <label>{{menuLanguageText}}</label>
           <md-select id="list-select" v-model="menuLanguageCode" @input="onChangeMenuLanguage">
             <md-option v-for="(list, index) in languagesArr" :key="index" :value="list[1]">
               {{list[0]}}
@@ -26,9 +26,9 @@
       </md-card-content>
     </md-card>
     <br />
-    <md-button type="submit" class="md-primary" @click="register">Register</md-button>
-    <md-button type="submit" class="md-primary" @click="login">Login</md-button>
-    <p id="forgotPassword" @click="forgotPassword">Forgot Password?</p>
+    <md-button type="submit" class="md-primary" @click="register">{{registerText}}</md-button>
+    <md-button type="submit" class="md-primary" @click="login">{{loginText}}</md-button>
+    <p id="forgotPassword" @click="forgotPassword">{{forgotPasswordText}}?</p>
     <ModalController :PasswordResetModal="passwordResetModal" v-if="$store.state.showModal == true" />
   </div>
 </template>
@@ -44,6 +44,7 @@ export default {
   },
   computed: {
     ...mapGetters({
+      menuKey: 'menuKey',
       languageCategories: 'languageCategories',
       languagesArr: 'languagesArr',
       currentMenuLanguage: 'currentMenuLanguage'
@@ -61,6 +62,17 @@ export default {
       if (val === 2){
         this.$router.push({ name: "words" })
       }
+    },
+    '$store.state.menuKey'(val){
+      console.log("val");
+      console.log(val);
+      let translation = val.translation;
+      this.emailText = translation.email;
+      this.passwordText = translation.password;
+      this.menuLanguageText = translation.menu_language;
+      this.registerText = translation.register;
+      this.loginText = translation.login;
+      this.forgotPasswordText = translation.forgot_password;
     }
   },
   methods: {
@@ -92,15 +104,15 @@ export default {
     },
     onChangeMenuLanguage(){
       // this.$store.commit("setPreloader", true);
-      window.localStorage.setItem("menuLanguageCode", this.menuLanguageCode)
+      localStorage.setItem("menuLanguageCode", this.menuLanguageCode)
       this.$store.commit("setMenuLanguage", this.menuLanguageCode)
       this.$store.dispatch("getMenuByLanguage", this.menuLanguageCode)
     }
   },
   beforeMount(){
-    if (window.localStorage.getItem("menuLanguageCode")) {
+    if (localStorage.getItem("menuLanguageCode")) {
       // this.$store.commit("setPreloader", true);
-      this.menuLanguageCode = window.localStorage.getItem("menuLanguageCode");
+      this.menuLanguageCode = localStorage.getItem("menuLanguageCode");
       this.$store.commit("setMenuLanguage", this.menuLanguageCode);
       this.$store.dispatch("getMenuByLanguage", this.menuLanguageCode)
     }
@@ -112,7 +124,13 @@ export default {
       passwordResetModal: false,
       menuLanguage: null,
       menuLanguageCode: null,
-      menuLanguageIndex: null
+      menuLanguageIndex: null,
+      emailText: "Email",
+      passwordText: "Password",
+      menuLanguageText: "Menu Language",
+      registerText: "Register",
+      loginText: "Login",
+      forgotPasswordText: "Forgot Password"
     }
   }
 }

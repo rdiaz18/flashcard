@@ -247,12 +247,6 @@ const store = new Vuex.Store({
     nextWord(state) {
       if (Object.is(state.currentList.words, undefined) === false){ 
         if (state.currentWord !== state.currentList.words.length) {
-          console.log("state.currentList");
-          console.log(state.currentList);
-          console.log("state.currentList.words");
-          console.log(state.currentList.words)
-          console.log("state.currentList.words[state.currentWord+1]");
-          console.log(state.currentList.words[state.currentWord+1]);
           return state.currentList.words[state.currentWord + 1][0];
         } else {
           return undefined;
@@ -261,7 +255,7 @@ const store = new Vuex.Store({
     },
     nextMeaning(state) {
       if (!Object.is(state.currentList.words, undefined) === false){ 
-        if (state.currentWord !== state.currentList.words.length) {
+        if (state.currentWord !== 0) {
           return state.currentList.words[state.currentWord + 1][1];
         } else {
           return undefined;
@@ -289,7 +283,8 @@ const store = new Vuex.Store({
       for (var category in state.languages) {
         for (var i = 0; i < state.languages[category].length; i++) {
           let langCategory = state.languages[category][i],
-              tempArr = [langCategory[0]+' ('+langCategory[1]+')', langCategory[1]];
+              menuCode = langCategory[1].substr(0, 2),
+              tempArr = [langCategory[0]+' ('+langCategory[1]+')', menuCode];
           arr.push(tempArr)
         }
       }
@@ -347,6 +342,9 @@ const store = new Vuex.Store({
     },
     showModal(state) {
       return state.showModal;
+    },
+    menuKey(state) {
+      return state.menuKey;
     }
   },
   mutations: {
@@ -776,20 +774,21 @@ const store = new Vuex.Store({
     },
 
     getMenuByLanguage(state, payload){
-
+      console.log(payload);
+      const editedPayload = `"${payload}"`;
       this.commit("setPreloaderMsg", "Downloading Menu Translation");
 
-      fetch('18.188.201.66:8081/getMenuByLanguage', {
+      fetch('http://18.188.201.66:8081/getMenuByLanguage', {
         method: "POST",
-        body: JSON.stringify(payload),
+        body: JSON.stringify({'language': editedPayload}),
         headers: {
-          'Content-Type': 'application/json',
-          'x-access-token': state.jwt
+          'Content-Type': 'application/json'
         }
       }).then(res => {
         if (!res.ok) {
           res.json().then((err) => {
             this.commit("setPreloaderMsg", err["error"]);
+            this.commit("setPreloader", true);
             setTimeout(() => { // UX
               this.commit("setPreloader", false);
             }, 500);
@@ -803,7 +802,8 @@ const store = new Vuex.Store({
         this.commit("setPreloaderMsg", "Menu Translation Complete");
         setTimeout(() => {
           this.commit("setPreloader", false);
-          this.commit("setMenuKey", response);
+          response["menu"]["translation"] = JSON.parse(response["menu"]["translation"]);
+          this.commit("setMenuKey", response["menu"]);
         }, 500);
       });
 
