@@ -344,6 +344,8 @@ const store = new Vuex.Store({
       return state.showModal;
     },
     menuKey(state) {
+      console.log("menuKeyGetter");
+      console.log(state.menuKey);
       return state.menuKey;
     }
   },

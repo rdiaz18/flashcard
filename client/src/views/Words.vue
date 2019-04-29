@@ -3,34 +3,34 @@
 
     <md-card id="list-select-container">
       <md-card-header>
-        <div class="md-title">Word List Select</div>
+        <div class="md-title">{{wordListSelectText}}</div>
       </md-card-header>
 
       <div id="listController">
         <md-field>
-          <label style="margin-left: 5px">Word List</label>
+          <label style="margin-left: 5px">{{wordListText}}</label>
           <md-select id="list-select" v-model="currentListID" @input="onChangeCurrentList">
             <md-option v-for="(list, index) in wordLists" :key="index" :value="list.id">
               {{list.name}}
             </md-option>
           </md-select>
         </md-field>
-        <md-button @click="showModal('newListModal')">Create New List</md-button>
-        <md-button @click="showModal('CSVModal')">Create List from CSV</md-button>
-        <md-button @click="showModal('deleteListModal')">Delete List</md-button>
-        <md-button @click="showModal('saveListModal')" :class="{ listEdit: editedList }">Save List</md-button>
+        <md-button @click="showModal('newListModal')">{{createNewListText}}</md-button>
+        <md-button @click="showModal('CSVModal')">{{createListFromCSVText}}</md-button>
+        <md-button @click="showModal('deleteListModal')">{{deleteListText}}</md-button>
+        <md-button @click="showModal('saveListModal')" :class="{ listEdit: editedList }">{{saveListText}}</md-button>
       </div>
 
       <!-- Left Col Flag Img -->
 
       <div class="lang-select" v-if="$store.getters.currentList.length !== 0">
-        <h1>I Learn <span class="flag-container" :style="{ backgroundImage: `url(${langSrc})` }"></span></h1>
+        <h1>{{iLearnText}} <span class="flag-container" :style="{ backgroundImage: `url(${langSrc})` }"></span></h1>
       </div>
 
       <!-- Right Col Flag Img -->
 
       <div class="lang-select" v-if="$store.getters.currentList.length !== 0">
-        <h1>I Know <span class="flag-container" :style="{ backgroundImage: `url(${nativeLangSrc})` }"></span>
+        <h1>{{iKnowText}} <span class="flag-container" :style="{ backgroundImage: `url(${nativeLangSrc})` }"></span>
         </h1>
       </div>
 
@@ -38,8 +38,8 @@
     <md-table>
       <md-table-row>
         <md-table-head v-show="!mobile">Index</md-table-head>
-        <md-table-head>Word</md-table-head>
-        <md-table-head>Meaning</md-table-head>
+        <md-table-head>{{wordText}}</md-table-head>
+        <md-table-head>{{meaningText}}</md-table-head>
       </md-table-row>
       <WordRow v-for="(word, index) in computedList" :key="index" :index="index" :word="word[0]" :meaning="word[1]"
                @editedList="editList"></WordRow>
@@ -63,11 +63,9 @@
       ModalController
     },
     beforeMount() {
-      var that = this;
-
       // Map Asset Flags
-      function importAll(r) {
-        r.keys().forEach(key => that.imgCache[key] = r(key));
+      importAll = (r) => {
+        r.keys().forEach(key => this.imgCache[key] = r(key));
       }
 
       importAll(require.context('../assets/flags/', true, /\.png$/));
@@ -104,11 +102,9 @@
         }
       },
       mobile() {
-        console.log(window.innerWidth);
         return window.innerWidth < 480;
       },
       showModal(p) {
-        console.log(p);
         if (p === "newListModal") {
           this.newListModal = true;
         } else if (p === "CSVModal") {
@@ -145,7 +141,17 @@
         newListModal: false,
         deleteListModal: false,
         saveListModal: false,
-        editedList: false
+        editedList: false,
+        wordListSelectText: this.$store.getters.menuKey.translation.word_list_select || "Word List Select",
+        wordListText: this.$store.getters.menuKey.translation.word_list || "Word List",
+        createNewListText: this.$store.getters.menuKey.translation.create_new_list || "CREATE NEW LIST",
+        createListFromCSVText: this.$store.getters.menuKey.translation.create_list_from_CSV || "CREATE NEW LIST FROM CSV",
+        deleteListText: this.$store.getters.menuKey.translation.delete_list || "DELETE LIST",
+        saveListText: this.$store.getters.menuKey.translation.save_list || "SAVE LIST",
+        iLearnText: this.$store.getters.menuKey.translation.i_learn || "I Learn",
+        iKnowText: this.$store.getters.menuKey.translation.i_know || "I Know",
+        wordText: this.$store.getters.menuKey.translation.word || "Word",
+        meaningText: this.$store.getters.menuKey.translation.meaning || "Meaning"
       };
     }
   };

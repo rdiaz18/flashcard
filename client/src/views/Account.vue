@@ -2,18 +2,18 @@
 	<div id="account">
 		<md-card>
 			<md-card-header>
-				<div class="md-title">Login Settings</div>
+				<div class="md-title">{{loginSettingsText}}</div>
 			</md-card-header>
 			<md-field id="email-field" class="icon-field">
-				<label>Email</label>
+				<label>{{emailText}}</label>
 				<md-input name="email" type="email" disabled :value="$store.getters.email">{{ $store.getters.email }}</md-input>
 			</md-field>
 			<div id="password-container">
 				<md-field id="password-field" class="icon-field">
-					<label>Password</label>
+					<label>{{passwordText}}</label>
 					<md-input name="password" type="password" :value="password" v-model="password">{{ $store.getters.password }}</md-input>
 				</md-field>
-				<md-button @click="savePassword" id="save-password-btn">Save Password</md-button>
+				<md-button @click="savePassword" id="save-password-btn">{{savePasswordText}}</md-button>
 			</div>
 			<md-field id="expiry-field" class="icon-field" style="display: none">
 				<label>TTS Expiry</label>
@@ -138,7 +138,11 @@
 		data(){
 			return {
 				selectedPackage: 0,
-				password: this.$store.getters.password
+				password: this.$store.getters.password,
+				emailText: this.$store.getters.menuKey.translation.email || "Email", 
+				passwordText: this.$store.getters.menuKey.translation.password || "Password",
+				savePasswordText: this.$store.getters.menuKey.translation.save_password || "Save Password",
+				loginSettingsText: this.$store.getters.menuKey.translation.login_settings || "Login Settings",
 			}
 		},
 		methods: {

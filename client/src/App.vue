@@ -4,9 +4,9 @@
     <div id="view">
       <!-- <nav> -->
       <nav v-if="$store.state.jwt != ''">  
-        <router-link to="/account">Account</router-link> |
-        <router-link to="/cards">Cards</router-link> |
-        <router-link to="/words">Words</router-link>
+        <router-link to="/account">{{accountText}}</router-link> |
+        <router-link to="/cards">{{cardsText}}</router-link> |
+        <router-link to="/words">{{wordsText}}</router-link>
       </nav>
       <router-view/>
     </div>
@@ -25,6 +25,12 @@
         if (this.$store.state.jwt == '') {
           this.$router.push({ name: "login" })
         }
+      },
+      '$store.state.menuKey'(val){
+        let translation = val.translation;
+        this.accountText = translation.account;
+        this.passwordText = translation.password;
+        this.wordsText = translation.words;
       }
     },
     beforeMount(){
@@ -43,17 +49,15 @@
             url = this.imgCache[key],
             that = this;
 
-        console.log(lang);
-        console.log(key);
-        console.log(that.imgCache);
-        console.log(url);
-
         return url;
       }
     },
     data(){ 
       return {
-        imgCache: {}
+        imgCache: {},
+        accountText: "Account",
+        cardsText: "Cards",
+        wordsText: "Words",
       }
     }
   }

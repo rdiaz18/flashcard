@@ -9,11 +9,11 @@
       <md-card-content>
         <md-field>
           <label>{{emailText}}</label>
-          <md-input name="email" type="email" v-model="email"></md-input>
+          <md-input name="email" type="email" required v-model="email"></md-input>
         </md-field>
         <md-field>
           <label>{{passwordText}}</label>
-          <md-input name="password" type="password" v-model="password" @keyup.enter="login"></md-input>
+          <md-input name="password" type="password" required v-model="password" @keyup.enter="login"></md-input>
         </md-field>
         <md-field>
           <label>{{menuLanguageText}}</label>

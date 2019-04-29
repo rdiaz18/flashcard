@@ -4,7 +4,7 @@
       <div>
         <!-- {{ $store.getters.wordLists }} -->
         <md-field>
-          <label>Word List</label>
+          <label>{{wordListText}}</label>
           <md-select id="list-select" v-model="currentListID" @input="onChangeCurrentList" placeholder="Select Word List">
             <md-option v-for="(list, index) in $store.getters.wordLists" :key="index" :value="list.id">{{ list.name }}
             </md-option>
@@ -28,12 +28,12 @@
       </div>
     </div>
     <div id="flashcardControls">
-      <input type="text" name="meaningInput" placeholder="Enter Meaning" v-model="cardInput"
+      <input type="text" name="meaningInput" :placeholder="enterMeaningText" v-model="cardInput"
              @keyup.enter="checkSubmission">
       <!-- 		<md-button @click="skipWord">Skip</md-button> -->
       <div id="control-wrap">
         <div id="soundIcon" @click="playTTS"></div>
-        <md-button @click="checkSubmission">Check</md-button>
+        <md-button @click="checkSubmission">{{checkText}}</md-button>
         <div id="microphone" @click="recordAudio" v-show="recording === false"></div>
         <div id="microphone-stop" @click="stopRecord" v-show="recording === true"></div>
       </div>
@@ -166,7 +166,7 @@
       playTTS() {
         let utterance = new SpeechSynthesisUtterance(this.$store.getters.currentWord);
         utterance.lang = this.$store.getters.currentLang;
-        utterance.voice = speechSynthesis.getVoices()[18];
+        utterance.voice = speechSynthesis.getVoices()[18]; // Russian Voice
         speechSynthesis.speak(utterance);
       },
       playCorrectBeep() {
@@ -187,7 +187,11 @@
         speechWord: "",
         recognition: null,
         recording: false,
-        audioSrc: ""
+        audioSrc: "",
+        checkText: this.$store.getters.menuKey.translation.check,
+        enterMeaningText: this.$store.getters.menuKey.translation.enter_meaning,
+        wordListText: this.$store.getters.menuKey.translation.word_list
+
       }
     }
   }
