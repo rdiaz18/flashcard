@@ -27,6 +27,52 @@ const store = new Vuex.Store({
     menuKey: null,
     language: "ru-RU",
     nativeLanguage: "en-US",
+    languagesKey: {
+      "ar": "Arabic",
+      "af": "Afrikaans",
+      "eu": "Euskal", // Basque,
+      "bg": "български", // "Bulgarian",
+      "ca": "Català", // "Catalan",
+      "cmn": "Mandarin",
+      "yue": "Cantonese",
+      "hr": "Hrvatski", // "Croatian",
+      "cs": "Ceština", // "Czech",
+      "da": "Dansk", // "Danish",
+      "en": "English",
+      "fa": "Farsi",
+      "fr": "French",
+      "fil": "Filipino",
+      "fi": "Suomalainen", // "Finnish",
+      "gl": "Galaco", // "Galacian",
+      "de": "Deutsche", // "German",
+      "el": "Ελληνικά", // "Greek",
+      "he": "Hebrew",
+      "hi": "हिंदी", // Hindi",
+      "hu": "Magyar", // "Hungarian",
+      "is": "Íslensku", // "Icelandic",
+      "id": "Bbahasa Indonesia", // "Indonesian",
+      "it": "Italiano", // "Italian",
+      "ja": "日本人", // "Japanese",
+      "ko": "한국어", // "Korean",
+      "lt": "Lietuvių", // "Lithuanian",
+      "ms": "Melayu", // "Malaysian",
+      "nl": "Nederlands", // "Dutch",
+      "nb": "Norsk", // "Norwegian",
+      "pl": "Polskie", // "Polish",
+      "pt": "Português", // "Porteguese",
+      "ro": "Română", // "Romanian",
+      "ru": "Pусский", // "Russian",
+      "sr": "Српски", // "Serbian",
+      "sk": "Slovenský", // "Slovakian",
+      "sl": "Slovenija", // "Slovenian",
+      "es": "Español", // "Spanish",
+      "sv": "Svenska", // "Swedish",
+      "th": "ไทย", // "Thai",
+      "tr": "Türk", // "Turkish",
+      "uk": "Українська", // "Ukrainian",
+      "vi": "Tiếng Việt", // "Vietnamese",
+      "zu": "Zulu"
+    },
     languages: {
       "Afrikaans": [ // 1000 to EN DONE
         ["South Africa", "af-ZA"]
@@ -280,13 +326,13 @@ const store = new Vuex.Store({
     },
     languagesArr(state) {
       let arr = [];
-      for (var category in state.languages) {
-        for (var i = 0; i < state.languages[category].length; i++) {
-          let langCategory = state.languages[category][i],
-              menuCode = langCategory[1].substr(0, 2),
-              tempArr = [langCategory[0]+' ('+langCategory[1]+')', menuCode];
-          arr.push(tempArr)
-        }
+      for (var category in state.languages) {        
+        let langCategory = state.languages[category][0],
+            prefixIndex = langCategory[1].indexOf("-"),
+            menuCode = langCategory[1].substr(0, prefixIndex),
+            tempArr = [state.languagesKey[menuCode], menuCode];
+
+        arr.push(tempArr)       
       }
       arr.sort();
       console.log(arr);
