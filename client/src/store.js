@@ -390,8 +390,6 @@ const store = new Vuex.Store({
       return state.showModal;
     },
     menuKey(state) {
-      console.log("menuKeyGetter");
-      console.log(state.menuKey);
       return state.menuKey;
     }
   },
@@ -653,6 +651,11 @@ const store = new Vuex.Store({
         }
         this.commit("addList", filteredRes);
         this.commit("setCurrentList", filteredRes[0]);
+        console.log("getStockWordList");
+        console.log("filteredRes[0]");
+        // Josh Reversed the language and nativeLanguage values on the lists
+        // So it's the opposite of common sense
+        this.dispatch("getMenuByLanguage", filteredRes[0].language.toLowerCase());
         this.commit("setWordListLoaded", 1);
       });
     },
