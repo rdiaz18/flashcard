@@ -31,6 +31,7 @@
         this.accountText = translation.account;
         this.passwordText = translation.password;
         this.wordsText = translation.words;
+        this.cardsText = translation.cards;
       }
     },
     beforeMount(){

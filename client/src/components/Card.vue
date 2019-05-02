@@ -145,17 +145,17 @@
 
         console.log(that.recognition);
 
-        this.recognition.onresult = function (event) {
+        this.recognition.onresult = event => {
           var word = event.results[0][0].transcript;
-          that.speechWord = word;
-          that.recording = false;
+          this.speechWord = word;
+          this.recording = false;
 
-          if (word === that.$store.getters.currentWord) {
-            that.speechMatch = true;
-            that.playCorrectBeep();
+          if (word === this.$store.getters.currentWord) {
+            this.speechMatch = true;
+            this.playCorrectBeep();
           } else {
-            that.speechMatch = false;
-            that.playIncorrectBeep();
+            this.speechMatch = false;
+            this.playIncorrectBeep();
           }
         }
       },
@@ -164,9 +164,54 @@
         this.recognition.stop();
       },
       playTTS() {
-        let utterance = new SpeechSynthesisUtterance(this.$store.getters.currentWord);
-        utterance.lang = this.$store.getters.currentLang;
-        utterance.voice = speechSynthesis.getVoices()[18]; // Russian Voice
+        let utterance = new SpeechSynthesisUtterance(this.$store.getters.currentWord),
+            currentLang = this.$store.getters.currentLang,
+            voiceIndex;
+
+        utterance.lang = currentLang;
+
+        if (currentLang == "en-UK") {
+          voiceIndex = 5; // English Voice
+        } else if (currentLang == "en-US") {
+          voiceIndex = 4; // American Voice
+        } else if (currentLang == "es-US") {
+          voiceIndex = 8; // American Spanish Voice
+        } else if (currentLang == "es-ES") {
+          voiceIndex = 7; // Spanish Voice
+        } else if (currentLang == "de-DE") {
+          voiceIndex = 3; // German Voice
+        } else if (currentLang == "fr-FR") {
+          voiceIndex = 9; // French Voice
+        } else if (currentLang == "hi-IN") {
+          voiceIndex = 10; // Hindi Voice
+        } else if (currentLang == "id-ID") {
+          voiceIndex = 11; // Indonesian Voice
+        } else if (currentLang == "it-IT") {
+          voiceIndex = 12; // Italian Voice
+        } else if (currentLang == "ja-JP") {
+          voiceIndex = 13; // Japanese Voice
+        } else if (currentLang == "ko-KR") {
+          voiceIndex = 14; // Korean Voice
+        } else if (currentLang == "nl-NL") {
+          voiceIndex = 15; // Dutch Voice
+        } else if (currentLang == "pl-PL") {
+          voiceIndex = 16; // Polish Voice
+        } else if (currentLang == "pt-BR") {
+          voiceIndex = 17; // Portugues Brazilian Voice
+        } else if (currentLang == "ru-RU") {
+          voiceIndex = 18; // Russian Voice
+        } else if (currentLang == "cmn-Hans-CN") {
+          voiceIndex = 19; // Mandarin (Chinese Simplified) Voice
+        } else if (currentLang == "cmn-Hans-HK") {
+          voiceIndex = 20; // Mandarin (Hong Kong) Voice
+        } else if (currentLang == "cmn-Hans-TW") {
+          voiceIndex = 21; // Mandarin (Tawain) Voice
+        } else {
+          voiceIndex = 0;
+          alert("Current TTS Language Not Supported");
+        }
+
+        utterance.voice = speechSynthesis.getVoices()[voiceIndex]; 
         speechSynthesis.speak(utterance);
       },
       playCorrectBeep() {
