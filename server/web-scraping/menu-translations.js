@@ -3,8 +3,8 @@ function createMenuLanguage(language, translation){
 	var xhttp = new XMLHttpRequest(),
 		url = 'http://18.188.201.66:8081/createMenu',
 		obj = JSON.stringify({ 
-			"language": `${language}`,
-			"translation": `${translation}` 
+			"language": JSON.stringify(language),
+			"translation": JSON.stringify(translation) 
 		});
 
 	xhttp.onreadystatechange = function() {
@@ -25,7 +25,7 @@ for (var i = 0; i < menuTranslations.length; i++) {
 	createMenuLanguage(menuTranslations[i]["LANGCODE"], menuTranslations[i]);
 }
 
-// Get Menu Translation
+// Get Menu Translation By Language
 function getMenuLanguage(language){
 	var xhttp = new XMLHttpRequest(),
 		url = 'http://18.188.201.66:8081/getMenuByLanguage',
@@ -50,6 +50,32 @@ function getMenuLanguage(language){
 }
 
 getMenuLanguage("uk");
+
+// Get Menu Translation By ID
+function getMenuByID(id){
+	var xhttp = new XMLHttpRequest(),
+		url = 'http://18.188.201.66:8081/getMenuByID',
+		obj = JSON.stringify({ 
+			"id": id
+		});
+
+	xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+			console.log(xhttp.responseText);
+			let res = JSON.parse(xhttp.responseText);
+			console.log(res);
+			console.log(res.menu);
+			console.log(res.menu.translation);
+			console.log(JSON.parse(res.menu.translation))
+		}
+	};
+
+	xhttp.open("POST", url, true);
+	xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+	xhttp.send(obj);
+}
+
+getMenuByID(126);
 
 
 // Send To Yandex For Translation
@@ -138,6 +164,33 @@ var textArr = [
 
 
 var menuTranslations = [
+	{
+		LANGCODE: "en",
+		account: "account",
+		cards: "cards",
+		check: "check",
+		create_list_from_CSV: "Create List From CSV",
+		create_new_list: "Create New List",
+		delete_list: "Delete List",
+		email: "Email",
+		enter_meaning: "Enter Meaning",
+		forgot_password: "Forgot Password",
+		i_know: "I Know",
+		i_learn: "I Learn",
+		login: "Login",
+		login_settings: "Login Settings",
+		meaning: "Meaning",
+		menu_language: "Menu Language",
+		password: "Password",
+		register: "Register",
+		save_list: "Save List",
+		save_password: "Save Password",
+		select_word_list: "Select Word List",
+		word: "Word",
+		word_list: "Word List",
+		word_list_select: "Word List Select",
+		words: "Words"
+	},
 	{
 		LANGCODE: "af",
 		account: "rekening",
@@ -1301,10 +1354,10 @@ var menuTranslations = [
 	}
 ];
 
-// INIT
-(function(){
-	for (var i = 0; i < menuTranslations.length; i++) {
-		var lang = menuTranslations[i]["LANGCODE"];
-		yandexTranslate(textStr, "en", lang);
-	}
-})();
+// INIT TRANSLATE
+// (function(){
+// 	for (var i = 0; i < menuTranslations.length; i++) {
+// 		var lang = menuTranslations[i]["LANGCODE"];
+// 		yandexTranslate(textStr, "en", lang);
+// 	}
+// })();
