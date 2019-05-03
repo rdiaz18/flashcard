@@ -73,6 +73,24 @@ const store = new Vuex.Store({
       "vi": "Tiếng Việt", // "Vietnamese",
       "zu": "Zulu"
     },
+    supportedLanguagesKey: {
+      "US": "en-US", 
+      "ES": "es-ES", 
+      "DE": "de-DE", 
+      "FR": "fr-FR", 
+      "IN": "hi-IN", 
+      "ID": "id-ID", 
+      "IT": "it-IT", 
+      "JP": "ja-JP", 
+      "KR": "ko-KR", 
+      "NL": "nl-NL", 
+      "PL": "pl-PL", 
+      "BR": "pt-BR", 
+      "RU": "ru-RU", 
+      "CN": "cmn-Hans-CN", 
+      "HK": "cmn-Hands-HK", 
+      "TW": "cmn-Hans-TW"
+    },
     languages: {
       "Afrikaans": [ // 1000 to EN DONE
         ["South Africa", "af-ZA"]
@@ -651,11 +669,10 @@ const store = new Vuex.Store({
         }
         this.commit("addList", filteredRes);
         this.commit("setCurrentList", filteredRes[0]);
-        console.log("getStockWordList");
-        console.log("filteredRes[0]");
         // Josh Reversed the language and nativeLanguage values on the lists
         // So it's the opposite of common sense
-        this.dispatch("getMenuByLanguage", filteredRes[0].language.toLowerCase());
+        // Below code forces menu language to match list translation language
+        // this.dispatch("getMenuByLanguage", filteredRes[0].language.toLowerCase());
         this.commit("setWordListLoaded", 1);
       });
     },

@@ -31,11 +31,11 @@
       <input type="text" name="meaningInput" :placeholder="enterMeaningText" v-model="cardInput"
              @keyup.enter="checkSubmission">
       <!-- 		<md-button @click="skipWord">Skip</md-button> -->
-      <div id="control-wrap">
-        <div id="soundIcon" @click="playTTS"></div>
-        <md-button @click="checkSubmission">{{checkText}}</md-button>
-        <div id="microphone" @click="recordAudio" v-show="recording === false"></div>
-        <div id="microphone-stop" @click="stopRecord" v-show="recording === true"></div>
+      <div id="control-wrap">  
+        <div id="soundIcon" @click="playTTS" v-if="isTTSSupported === true"></div>
+        <md-button @click="checkSubmission" :class="{ marginAuto: isTTSSupported === false }">{{checkText}}</md-button>
+        <div id="microphone" @click="recordAudio" v-show="recording === false" v-if="isTTSSupported === true"></div>
+        <div id="microphone-stop" @click="stopRecord" v-show="recording === true" v-if="isTTSSupported === true"></div>
       </div>
     </div>
     <audio id="correctSound" nocontrols hidden>
@@ -66,6 +66,9 @@
         if (this.speechWord !== "...") {
           return this.speechWord.toLowerCase() === this.$store.getters.currentWord ? "green" : "red"
         }
+      },
+      isTTSSupported(){
+        return this.$store.getters.currentLang === undefined ? false : true;
       }
     },
     mounted () {
@@ -76,6 +79,7 @@
         if (item) {
           let list = this.$store.getters.wordLists.find((v) => v.id === item);
           this.$store.commit("setCurrentList", list);
+          this.$store.commit("updateLang", this.$store.state.supportedLanguagesKey[this.$store.state.currentList.nativeLanguage]);
         }
       },
       checkSubmission() {
@@ -254,6 +258,10 @@
 </style>
 
 <style scoped lang="scss">
+
+  .marginAuto {
+    margin: auto !important;
+  }
 
   #flashcardInnerContainer {
     width: 80%;
