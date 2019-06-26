@@ -1,15 +1,21 @@
-const express = require('express')
-const bodyParser = require('body-parser')
-const cors = require('cors')
-const morgan = require('morgan')
-const {sequelize} = require('../models')
+const express = require('express'),
+      expressStaticGzip = require("express-static-gzip"),
+      bodyParser = require('body-parser'),
+      cors = require('cors'),
+      morgan = require('morgan'),
+      {sequelize} = require('../models'),
+      app = express();
 
-const app = express()
+require('./routes')(app);
+
 app.use(morgan('combined'))
 app.use(bodyParser.json())
 app.use(cors())
+app.use('/', expressStaticGzip(path.join(__dirname, 'client/dist'), {
+  enableBrotli: true,
+  orderPreference: ['br', 'gz']
+}))
 
-require('./routes')(app)
 app.get('/', (req, res) => res.send('Hello World!'))
 
 sequelize
