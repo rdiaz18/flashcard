@@ -16,7 +16,7 @@ app.use('/', expressStaticGzip(path.join(__dirname, 'client/dist'), {
   orderPreference: ['br', 'gz']
 }))
 
-app.get('/', (req, res) => res.send('Hello World!'))
+app.get('/', (req, res) => res.send('Hello World! Directory: '+__dirname))
 
 sequelize
   .authenticate()
