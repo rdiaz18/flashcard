@@ -1,5 +1,4 @@
 const express = require('express'),
-      expressStaticGzip = require("express-static-gzip"),
       bodyParser = require('body-parser'),
       cors = require('cors'),
       morgan = require('morgan'),
@@ -11,10 +10,6 @@ require('./routes')(app);
 app.use(morgan('combined'))
 app.use(bodyParser.json())
 app.use(cors())
-app.use('/', expressStaticGzip(path.join(__dirname, 'client/dist'), {
-  enableBrotli: true,
-  orderPreference: ['br', 'gz']
-}))
 
 app.get('/', (req, res) => res.send('Hello World! Directory: '+__dirname))
 
