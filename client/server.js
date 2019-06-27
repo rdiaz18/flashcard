@@ -20,4 +20,4 @@ app.get('/', function(req, res) {
 // 	res.sendFile(path.join(__dirname, 'privacy-policy', 'privacy_policy.html'))
 // })
 
-app.listen(8080, () => console.log("Static client listening on 8080"))
+app.listen(3000, () => console.log("Static client listening on 3000"))
