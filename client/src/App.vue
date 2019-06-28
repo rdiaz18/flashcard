@@ -35,20 +35,22 @@
       }
     },
     beforeMount(){
-      var that = this;
+      const that = this;
       function importAll (r) {
         console.log(r);
         r.keys().forEach(key => that.imgCache[key] = r(key));
       }
 
-      importAll(require.context('./assets/backgrounds/', true, /\.jpg$/));
+      window.innerWidth > 768 ? 
+        importAll(require.context('./assets/backgrounds/desktop', true, /\.jpg$/)) :
+        importAll(require.context('./assets/backgrounds/mobile', true, /\.jpg$/));
     },
     computed: {
       src(){
-        var lang = this.$store.getters.currentLang,
-            key = `./bg-${lang}.jpg`,
-            url = this.imgCache[key],
-            that = this;
+        const lang = this.$store.getters.currentLang,
+              key = `./bg-${lang}.jpg`,
+              url = this.imgCache[key],
+              that = this;
 
         return url;
       }
