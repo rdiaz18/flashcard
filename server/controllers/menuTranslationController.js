@@ -1,6 +1,6 @@
 const {menuTranslate} = require('../models')
 
-module.exports{
+module.exports = {
 	async createMenu(req, res){
 		try{
 			const menu = await menuTranslate.create(req.body)
