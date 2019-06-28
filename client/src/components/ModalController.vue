@@ -18,8 +18,8 @@
         <textarea v-model="textCSV"></textarea>
       </md-card-content>
       <md-card-actions>
-        <md-button @click="closeModal">Cancel</md-button>
-        <md-button @click="uploadCSV">Upload</md-button>
+        <md-button @click="closeModal" name="Cancel">Cancel</md-button>
+        <md-button @click="uploadCSV" name="Upload">Upload</md-button>
       </md-card-actions>
     </md-card>
 
@@ -62,8 +62,8 @@
         </md-field>
       </md-card-content>
       <md-card-actions>
-        <md-button @click="closeModal">Cancel</md-button>
-        <md-button @click="createNewList">Create</md-button>
+        <md-button @click="closeModal" name="Cancel">Cancel</md-button>
+        <md-button @click="createNewList" name="Create">Create</md-button>
       </md-card-actions>
     </md-card>
 
@@ -84,8 +84,8 @@
         </md-field>
       </md-card-content>
       <md-footer>
-        <md-button @click="closeModal">Cancel</md-button>
-        <md-button @click="deleteList">Delete</md-button>
+        <md-button @click="closeModal" name="Cancel">Cancel</md-button>
+        <md-button @click="deleteList" name="Delete">Delete</md-button>
       </md-footer>
     </md-card>
 
@@ -100,7 +100,7 @@
       </div>
       <md-input v-model="email" placeholder="Enter Email"></md-input>
       <md-card-actions>
-        <md-button @click="resetPassword">Okay</md-button>
+        <md-button @click="resetPassword" name="Reset Password">Okay</md-button>
       </md-card-actions>
     </md-card>
 

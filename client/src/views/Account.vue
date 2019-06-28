@@ -13,7 +13,7 @@
 					<label>{{passwordText}}</label>
 					<md-input name="password" type="password" :value="password" v-model="password">{{ $store.getters.password }}</md-input>
 				</md-field>
-				<md-button @click="savePassword" id="save-password-btn">{{savePasswordText}}</md-button>
+				<md-button @click="savePassword" id="save-password-btn" :name="savePasswordText">{{savePasswordText}}</md-button>
 			</div>
 			<md-field id="expiry-field" class="icon-field" style="display: none">
 				<label>TTS Expiry</label>
@@ -66,7 +66,7 @@
 				</div>
 			</div>
 			<div v-show="selectedPackage != 0">
-				<button id="paypal-button">Purchase</button>
+				<button id="paypal-button" name="Purchasee">Purchase</button>
 			</div>
 		</md-card>
 	</div>

@@ -26,8 +26,8 @@
       </md-card-content>
     </md-card>
     <br />
-    <md-button type="submit" class="md-primary" @click="register">{{registerText}}</md-button>
-    <md-button type="submit" class="md-primary" @click="login">{{loginText}}</md-button>
+    <md-button type="submit" class="md-primary" @click="register" :name="registerText">{{registerText}}</md-button>
+    <md-button type="submit" class="md-primary" @click="login" :name="loginText">{{loginText}}</md-button>
     <p id="forgotPassword" @click="forgotPassword">{{forgotPasswordText}}?</p>
     <ModalController :PasswordResetModal="passwordResetModal" v-if="$store.state.showModal == true" />
   </div>

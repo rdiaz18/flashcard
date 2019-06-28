@@ -8,9 +8,9 @@
 			<label>List Description</label>
 			<md-input v-model="description"></md-input>
 		</md-field>
-		<button @click="importText('AF', 'en')">Import</button>
-		<button @click="translate">Translate</button>
-		<button @click="upload">Upload</button>
+		<button @click="importText('AF', 'en')" name="Import">Import</button>
+		<button @click="translate" name="Translate">Translate</button>
+		<button @click="upload" name="Upload">Upload</button>
 		<div id="tableContainer">
 			<table>
 				<thead>

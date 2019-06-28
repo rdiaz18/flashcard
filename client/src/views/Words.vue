@@ -15,10 +15,10 @@
             </md-option>
           </md-select>
         </md-field>
-        <md-button @click="showModal('newListModal')">{{createNewListText}}</md-button>
-        <md-button @click="showModal('CSVModal')">{{createListFromCSVText}}</md-button>
-        <md-button @click="showModal('deleteListModal')">{{deleteListText}}</md-button>
-        <md-button @click="showModal('saveListModal')" :class="{ listEdit: editedList }">{{saveListText}}</md-button>
+        <md-button @click="showModal('newListModal')" :name="createNewListText">{{createNewListText}}</md-button>
+        <md-button @click="showModal('CSVModal')" :name="createListFromCSVText">{{createListFromCSVText}}</md-button>
+        <md-button @click="showModal('deleteListModal')" :name="deleteListText">{{deleteListText}}</md-button>
+        <md-button @click="showModal('saveListModal')" :class="{ listEdit: editedList }" :name="saveListText">{{saveListText}}</md-button>
       </div>
 
       <!-- Left Col Flag Img -->

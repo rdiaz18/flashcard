@@ -33,7 +33,7 @@
       <!-- 		<md-button @click="skipWord">Skip</md-button> -->
       <div id="control-wrap">  
         <div id="soundIcon" @click="playTTS" v-if="isTTSSupported === true"></div>
-        <md-button @click="checkSubmission" :class="{ marginAuto: isTTSSupported === false }">{{checkText}}</md-button>
+        <md-button @click="checkSubmission" :class="{ marginAuto: isTTSSupported === false }" :name="checkText">{{checkText}}</md-button>
         <div id="microphone" @click="recordAudio" v-show="recording === false" v-if="isTTSSupported === true"></div>
         <div id="microphone-stop" @click="stopRecord" v-show="recording === true" v-if="isTTSSupported === true"></div>
       </div>
