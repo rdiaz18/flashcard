@@ -115,12 +115,15 @@ module.exports = {
 	},
 	async updateList(req, res){
 		try{
-			const {id, name, description, words, language, nativeLanguage, editable, share} = req.body
+			const {id, name, description, words, language, nativeLanguage, editable, share, userId} = req.body
 			const list = await List.findOne({
 				where: {id: id}
 			})
 			if(!list){
 				return res.status(400).send({error: "list not found"})
+			}
+			if(list.userId != userId){
+				return res.status(401).send({error: "You are not authorized to edit this list"})
 			}
 			list.update({
 				name,

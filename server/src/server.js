@@ -1,17 +1,16 @@
-const express = require('express'),
-      bodyParser = require('body-parser'),
-      cors = require('cors'),
-      morgan = require('morgan'),
-      {sequelize} = require('../models'),
-      app = express();
+const express = require('express')
+const bodyParser = require('body-parser')
+const cors = require('cors')
+const morgan = require('morgan')
+const {sequelize} = require('../models')
 
-require('./routes')(app);
-
+const app = express()
 app.use(morgan('combined'))
 app.use(bodyParser.json())
 app.use(cors())
 
-app.get('/', (req, res) => res.send('Hello World! Directory: '+__dirname))
+require('./routes')(app)
+app.get('/', (req, res) => res.send('Hello World!'))
 
 sequelize
   .authenticate()
