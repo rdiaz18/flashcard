@@ -122,7 +122,7 @@ module.exports = {
 			if(!list){
 				return res.status(400).send({error: "list not found"})
 			}
-			if(list.userId !== userId){
+			if(list.userId != userId){
 				return res.status(401).send({error: "You are not authorized to edit this list"})
 			}
 			list.update({
