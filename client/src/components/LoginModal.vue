@@ -17,7 +17,7 @@
         </md-field>
         <md-field>
           <label>{{menuLanguageText}}</label>
-          <md-select id="list-select" v-model="menuLanguageCode" @input="onChangeMenuLanguage">
+          <md-select id="list-select" v-model="menuLanguageCode" @input="onChangeMenuLanguage" required>
             <md-option v-for="(list, index) in languagesArr" :key="index" :value="list[1]">
               {{list[0]}}
             </md-option>

@@ -504,7 +504,7 @@ const store = new Vuex.Store({
   actions: {
     login(state, payload) {
       var that = this;
-      fetch('http://18.188.201.66:8081/login', {
+      fetch('https://api.wordza.app/login', {
         method: "POST",
         body: JSON.stringify(payload),
         headers: {
@@ -530,7 +530,7 @@ const store = new Vuex.Store({
 
     register(state, payload) {
       var that = this;
-      fetch('http://18.188.201.66:8081/register', {
+      fetch('https://api.wordza.app/register', {
         method: "POST",
         body: JSON.stringify(payload),
         headers: {
@@ -557,7 +557,7 @@ const store = new Vuex.Store({
     savePassword(state, payload) {
       var that = this;
       this.commit("setPreloaderMsg", "Creating New Password");
-      fetch('http://18.188.201.66:8081/createNewPassword', {
+      fetch('https://api.wordza.app/createNewPassword', {
         method: "POST",
         body: JSON.stringify(payload),
         headers: {
@@ -584,7 +584,7 @@ const store = new Vuex.Store({
     resetPassword(state, payload) {
       var that = this;
       this.commit("setPreloaderMsg", "Emailing Password");
-      fetch('http://18.188.201.66:8081/resetPassword', {
+      fetch('https://api.wordza.app/resetPassword', {
         method: "POST",
         body: JSON.stringify(payload),
         headers: {
@@ -624,7 +624,7 @@ const store = new Vuex.Store({
         nativeLanguage = "EN";
       }
 
-      fetch('http://18.188.201.66:8081/getListByLanguage', {
+      fetch('https://api.wordza.app/getListByLanguage', {
         method: "POST",
         body: JSON.stringify({
           fromLang: nativeLanguage,
@@ -681,7 +681,7 @@ const store = new Vuex.Store({
       this.commit("setPreloaderMsg", "Downloading User WordLists");
       console.log(state);
 
-      fetch('http://18.188.201.66:8081/getListByUser', {
+      fetch('https://api.wordza.app/getListByUser', {
         method: "POST",
         body: JSON.stringify({
           userId: state.state.user.id
@@ -734,7 +734,7 @@ const store = new Vuex.Store({
     userCreateList(state, payload) {
       this.commit("setPreloaderMsg", "Uploading WordList");
 
-      fetch('http://18.188.201.66:8081/userCreateList', {
+      fetch('https://api.wordza.app/userCreateList', {
         method: "POST",
         body: JSON.stringify(payload),
         headers: {
@@ -767,7 +767,7 @@ const store = new Vuex.Store({
     updateList(state, payload) {
       this.commit("setPreloaderMsg", "Saving WordList");
 
-      fetch('http://18.188.201.66:8081/updateList', {
+      fetch('https://api.wordza.app/updateList', {
         method: "POST",
         body: JSON.stringify(payload),
         headers: {
@@ -799,7 +799,7 @@ const store = new Vuex.Store({
     deleteList(state, payload) {
       this.commit("setPreloaderMsg", "Deleting WordList");
 
-      fetch('http://18.188.201.66:8081/deleteList', {
+      fetch('https://api.wordza.app/deleteList', {
         method: "POST",
         body: JSON.stringify(payload),
         headers: {
@@ -846,7 +846,7 @@ const store = new Vuex.Store({
       const editedPayload = `"${payload}"`;
       this.commit("setPreloaderMsg", "Downloading Menu Translation");
 
-      fetch('http://18.188.201.66:8081/getMenuByLanguage', {
+      fetch('https://api.wordza.app/getMenuByLanguage', {
         method: "POST",
         body: JSON.stringify({'language': editedPayload}),
         headers: {
