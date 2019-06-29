@@ -33,12 +33,14 @@ module.exports = (app) => {
 			ListController.addAdminList)
 		//User Create List
 		app.post('/userCreateList',
+			AuthenticationController.matchUserToken,
 			ListController.userCreateList)
 		//get list by list ID
 		app.post('/getListByID',
 			ListController.getListByID)
 		//update List
 		app.post('/updateList',
+			AuthenticationController.matchUserToken,
 			ListController.updateList)
 		//Get list by user ID
 		app.post('/getListByUser',

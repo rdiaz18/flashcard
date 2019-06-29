@@ -34,6 +34,7 @@ module.exports = {
 	},
 	async login(req, res) {
 		try{
+			console.log(req)
 			const {email, password} = req.body
 			const user = await users.findOne({
 				where: {
@@ -134,7 +135,7 @@ module.exports = {
 		}
 	},
 	async matchUserToken(req, res, next) {
-		const {id} = req.body
+		const {userId} = req.body
 		const token = req.headers['x-access-token']
 		if (!token) {
 			res.status(401).send({ auth: false, message: 'You are not logged in'})
@@ -145,7 +146,7 @@ module.exports = {
 				return res.status(500).send({message: 'Invalid Account'})
 			}else{
 				const tmpuser = await users.findById(token.id)
-				if(tmpuser.id != id){
+				if(tmpuser.id != userId){
 					return res.status(403).send({message: 'Unauthorized to perform this action'})
 				}
 				next()
