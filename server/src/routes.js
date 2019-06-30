@@ -42,12 +42,16 @@ module.exports = (app) => {
 		app.post('/updateList',
 			AuthenticationController.matchUserToken,
 			ListController.updateList)
-		//Get list by user ID
-		app.post('/getListByUser',
-			ListController.getListByUser)
-		//Get lists by language
-		app.post('/getListByLanguage',
-			ListController.getListByLanguage)
+		//Get Lists:
+			//Get list by user ID
+			app.post('/getListByUser',
+				ListController.getListByUser)
+			//Get lists by language
+			app.post('/getListByLanguage',
+				ListController.getListByLanguage)
+			//Get user page lists
+			app.post('/getUserPage',
+				ListController.getUserPage)
 		//Insert list from fname
 		app.post('/insertList',
 			ListController.insertList)
