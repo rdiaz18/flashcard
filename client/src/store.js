@@ -14,8 +14,8 @@ const store = new Vuex.Store({
     showPreloader: false,
     showModal: false,
     preloaderMsg: "Loading",
-    email: "mpaccione1991@gmail.com",
-    password: "rspaccio",
+    email: "",
+    password: "",
     // ttsExpiry: "Purchased",// "Not Purchased",
     currentWord: 0,
     correct: 0,
@@ -25,7 +25,7 @@ const store = new Vuex.Store({
     tempList: [],
     menuLanguage: "",
     menuKey: null,
-    language: "ru-RU",
+    language: "",
     nativeLanguage: "en-US",
     languagesKey: {
       "ar": "Arabic",
@@ -463,6 +463,7 @@ const store = new Vuex.Store({
     },
     setCurrentList(state, payload) {
       state.currentList = payload;
+      state.language = payload.nativeLanguage; // Need to update backend since Josh reversed this property with language
     },
     setTempList(state, payload) {
       console.log('setTempList');

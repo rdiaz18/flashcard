@@ -79,18 +79,28 @@
       ...mapGetters({
         showModalState: 'showModal',
         computedList: 'currentListWords',
-        wordLists: 'wordLists'
+        wordLists: 'wordLists',
+        country: "currentLang",
+        nativeCountry: "currentNativeLang"
       }),
       langSrc() {
         const key = `./flag-${this.country}.png`,
               url = this.imgCache[key];
 
+        console.log("langSrc");
+        console.log(key);
+        console.log(url);
+        // Edit Flag Names to Remove prehyphen then Edit Code to reflect changes
         return url;
       },
       nativeLangSrc() {
         const key = `./flag-${this.nativeCountry}.png`,
               url = this.imgCache[key];
 
+
+        console.log("nativeLangSrc");
+        console.log(key);
+        console.log(url);
         return url;
       }
     },
@@ -134,8 +144,6 @@
         currentListID: null,
         currentList: this.$store.getters.currentList,
         newListName: '',
-        country: this.$store.getters.currentLang,
-        nativeCountry: this.$store.getters.currentNativeLang,
         imgCache: {},
         CSVModal: false,
         newListModal: false,
