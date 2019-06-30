@@ -95,13 +95,16 @@
           No Problem!
         </div>
       </md-card-header>
-      <div class="md-subhead">
-        Please enter your Wordza email
-      </div>
-      <md-input v-model="email" placeholder="Enter Email"></md-input>
+      <md-field>
+        <label>
+          Please enter your Wordza email
+        </label>
+        <md-input v-model="email" type="email" required></md-input>
+      </md-field>
       <md-card-actions>
-        <md-button @click="resetPassword" name="Reset Password">Okay</md-button>
-      </md-card-actions>
+        <md-button @click="closeModal" name="Cancel">Cancel</md-button>
+        <md-button @click="resetPassword" name="Reset Password">Reset</md-button>
+      </md-card-actions> 
     </md-card>
 
     <div id="modalFade"></div>
@@ -132,10 +135,14 @@
         this.$emit('close')
       },
       resetPassword(){
-        this.PasswordResetModal = false;
-        this.$store.commit("setPreloader", true);
-        this.$store.dispatch("resetPassword", {"email": this.email});
-        this.$emit('close')
+        if (this.email === "" ) {
+          alert("Please complete email field.");
+        } else {
+          this.PasswordResetModal = false;
+          this.$store.commit("setPreloader", true);
+          this.$store.dispatch("resetPassword", {"email": this.email});
+          this.$emit('close')
+        }
       },
       closeModal(){
         this.$emit('close')
