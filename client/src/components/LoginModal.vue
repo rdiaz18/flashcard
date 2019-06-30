@@ -54,12 +54,13 @@ export default {
     '$store.state.jwt'(val, oldVal){
       if (val != '' && oldVal == '') {
         // Get Lists
-        this.$store.dispatch("getStockWordList");
-        this.$store.dispatch("getListByUser");
+        // this.$store.dispatch("getStockWordList");
+        // this.$store.dispatch("getListByUser");
+        this.$store.dispatch("getCombinedUserLists");
       }
     },
     '$store.state.wordListsLoaded'(val, oldVal){
-      if (val === 2){
+      if (val === 1){
         this.$router.push({ name: "words" })
       }
     },

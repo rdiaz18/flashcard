@@ -677,59 +677,60 @@ const store = new Vuex.Store({
       });
     },
 
-    // getUserPage(state) {
-    //   this.commit("setPreloaderMsg", "Downloading User WordLists");
-    //   console.log(state);
+    getCombinedUserLists(state) {
+      this.commit("setPreloaderMsg", "Downloading User WordLists");
+      console.log(state);
 
-    //   fetch('https://api.wordza.app/getListByUser', {
-    //     method: "POST",
-    //     body: JSON.stringify({
-    //       userId: state.state.user.id
-    //     }),
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //       'x-access-token': state.jwt
-    //     }
-    //   }).then(res => {
-    //     if (!res.ok) {
-    //       res.json().then(function (err) {
-    //         this.commit("setPreloaderMsg", err["error"]);
-    //         setTimeout(function () { // UX
-    //           this.commit("setPreloader", false);
-    //         }, 500);
-    //         throw new Error();
-    //       });
-    //     }
-    //     return res.json();
-    //   }).then(response => {
-    //     console.log('Success');
-    //     console.log(response);
-    //     this.commit("setPreloaderMsg", "Parsing User WordLists");
-    //     var res = response["listArr"],
-    //       filteredRes = [];
+      fetch('https://api.wordza.app/getUserPage', {
+        method: "POST",
+        body: JSON.stringify({
+          userId: state.state.user.id,
+          fromLang: state.state.menuLanguage,
+          toLang: null
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+          'x-access-token': state.jwt
+        }
+      }).then(res => {
+        if (!res.ok) {
+          res.json().then(function (err) {
+            this.commit("setPreloaderMsg", err["error"]);
+            setTimeout(function () { // UX
+              this.commit("setPreloader", false);
+            }, 500);
+            throw new Error();
+          });
+        }
+        return res.json();
+      }).then(response => {
+        console.log('Success');
+        console.log(response);
+        let res = response.combined,
+            filteredRes = [];
+        for (let i = 0; i < res.length; i++) {
 
-    //     for (var i = 0; i < res.length; i++) {
+          if (res[i]["words"] != null) {
+            let newWordsArr = [],
+                splitArr = res[i]["words"].toString().split(",");
 
-    //       if (res[i]["words"] != null) {
-    //         let newWordsArr = [],
-    //           splitArr = res[i]["words"].toString().split(",");
+            for (var n = 0; n < splitArr.length; n = n + 2) {
+              let arr = [splitArr[n], splitArr[n + 1]];
+              newWordsArr.push(arr);
+            }
 
-    //         for (var n = 0; n < splitArr.length; n = n + 2) {
-    //           let arr = [splitArr[n], splitArr[n + 1]];
-    //           newWordsArr.push(arr);
-    //         }
+            res[i]["words"] = newWordsArr;
+            filteredRes.push(res[i]);
+          }
 
-    //         res[i]["words"] = newWordsArr;
-    //         filteredRes.push(res[i]);
-    //       }
-
-    //     }
-    //     console.log(filteredRes);
-    //     this.commit("addList", filteredRes);
-    //     this.commit("setWordListLoaded", 1);
-    //     this.commit("setPreloader", false);
-    //   });
-    // },
+        }
+        this.commit("setPreloaderMsg", "Parsing User WordLists");
+        console.log(response.combined);
+        this.commit("addList", filteredRes);
+        this.commit("setWordListLoaded", 1);
+        this.commit("setPreloader", false);
+      });
+    },
 
     getListByUser(state) {
       this.commit("setPreloaderMsg", "Downloading User WordLists");
