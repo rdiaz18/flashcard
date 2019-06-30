@@ -3,12 +3,18 @@
     <md-table-cell id="index-cell" v-if="!mobile">
       {{ index + 1 }}
     </md-table-cell>
-    <md-table-cell>
+    <md-table-cell v-if="currentList.editable !== false">
       <input v-model="wordData" @keyup="inputChange" placeholder="Enter Word">
     </md-table-cell>
-    <md-table-cell>
+    <md-table-cell v-if="currentList.editable !== false">
       <input v-model="meaningData" @keyup="inputChange" placeholder="Enter Meaning">
     </md-table-cell>
+    <md-table-cell v-if="currentList.editable === false">
+      <input :value="wordData" disabled>
+    </md-table-cell>
+    <md-table-cell v-if="currentList.editable === false">
+      <input :value="meaningData" disabled>
+    </md-table-cell>    
   </md-table-row>
 </template>
 

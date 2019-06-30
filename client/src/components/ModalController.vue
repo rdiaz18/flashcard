@@ -77,8 +77,8 @@
         <md-field>
           <label>Select WordList to Delete</label>
           <md-select v-model="listIdToDelete">
-            <md-option v-for="(list, index) in $store.getters.wordLists" :value="list['id']" :key="index">
-              {{ list['name'] }}
+            <md-option v-for="(list, index) in editableLists" :value="list['id']" :key="index">
+              {{ list['description'] }}
             </md-option>
           </md-select>
         </md-field>
@@ -112,6 +112,7 @@
 </template>
 
 <script>
+  import {mapGetters} from 'vuex';
   export default {
     name: "ModalController",
     props: {
@@ -120,6 +121,14 @@
       DeleteListModal: Boolean,
       SaveListModal: Boolean,
       PasswordResetModal: Boolean
+    },
+    computed: {
+      ...mapGetters({
+        wordLists: 'wordLists'
+      }),
+      editableLists(){
+        return this.wordLists.filter(list => list.editable !== false);
+      }
     },
     methods: {
       createNewList(){
