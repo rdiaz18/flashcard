@@ -265,5 +265,54 @@ module.exports = {
 				error: "Failed to delete List"
 			})
 		}
+	},
+	async getUserPage(req, res){
+		let userLists
+		let listArr
+		try{
+			const{userId} = req.body
+			userLists = await List.findAll({
+				where:{
+					userId: userId
+				}
+			})
+		}catch(err){
+			console.log(err)
+			res.status(500).send("Could not fetch User's lists")
+		}
+		try{
+			const{toLang, fromLang} = req.body
+			let query = {where: {}}
+			if (toLang) {
+				query.where.nativeLanguage = toLang
+			}
+			if (fromLang) {
+				query.where.language = fromLang
+			}
+			listArr = await List.findAll(query)
+		}catch(err){
+			console.log(err)
+			res.status(500).send("Error Fetching List")
+		}
+		try{
+			userLists.sort((a,b)=>{
+				let aSort = a.description ? a.description : a.name
+				let bSort = b.description ? b.description : b.name
+
+				return(aSort.localeCompare(bSort))
+			})
+			listArr.sort((a,b)=>{
+				let aSort = a.description ? a.description : a.name
+				let bSort = b.description ? b.description : b.name
+
+				return(aSort.localeCompare(bSort))
+			})
+
+			let combined = userLists.concat(listArr)
+			return res.send({combined})
+		}catch(err){
+			console.log(err)
+			return res.setatus(500).send("Internal Server Error")
+		}
 	}
 }
