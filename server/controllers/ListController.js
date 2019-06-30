@@ -160,10 +160,10 @@ module.exports = {
 			const{toLang, fromLang} = req.body
 			let query = {where: {}}
 			if (toLang) {
-				query.where.nativeLanguage = toLang
+				query.where.language = toLang
 			}
 			if (fromLang) {
-				query.where.language = fromLang
+				query.where.nativeLanguage = fromLang
 			}
 			const listArr = await List.findAll(query)
 			res.send({listArr})
@@ -282,12 +282,12 @@ module.exports = {
 		}
 		try{
 			const{toLang, fromLang} = req.body
-			let query = {where: {}}
+			let query = {where: {userId: 1}}
 			if (toLang) {
-				query.where.nativeLanguage = toLang
+				query.where.language = toLang
 			}
 			if (fromLang) {
-				query.where.language = fromLang
+				query.where.nativeLanguage = fromLang
 			}
 			listArr = await List.findAll(query)
 		}catch(err){
