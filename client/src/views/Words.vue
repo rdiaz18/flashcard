@@ -11,7 +11,7 @@
           <label style="margin-left: 5px">{{wordListText}}</label>
           <md-select id="list-select" v-model="currentListID" @input="onChangeCurrentList">
             <md-option v-for="(list, index) in wordLists" :key="index" :value="list.id">
-              {{list.name}}
+              {{list.description}}
             </md-option>
           </md-select>
         </md-field>
@@ -64,7 +64,7 @@
     },
     beforeMount() {
       // Map Asset Flags
-      importAll = (r) => {
+      const importAll = (r) => {
         r.keys().forEach(key => this.imgCache[key] = r(key));
       }
 
@@ -82,14 +82,14 @@
         wordLists: 'wordLists'
       }),
       langSrc() {
-        var key = `./flag-${this.country}.png`,
-          url = this.imgCache[key];
+        const key = `./flag-${this.country}.png`,
+              url = this.imgCache[key];
 
         return url;
       },
       nativeLangSrc() {
-        var key = `./flag-${this.nativeCountry}.png`,
-          url = this.imgCache[key];
+        const key = `./flag-${this.nativeCountry}.png`,
+              url = this.imgCache[key];
 
         return url;
       }
@@ -156,16 +156,6 @@
     }
   };
 </script>
-
-<style>
-  .md-card-header,
-  h1 {
-    background-color: #2799f9;
-    color: white;
-    margin: auto;
-    padding: 20px 0px;
-  }
-</style>
 
 <style lang="scss" scoped>
   #words {
@@ -380,6 +370,13 @@
 </style>
 
 <style>
+  .md-card-header,
+  h1 {
+    background-color: #2799f9;
+    color: white;
+    margin: auto;
+    padding: 20px 0px;
+  }
   @media (max-width: 420px) {
     .md-table-cell-container {
       padding: 0px !important;

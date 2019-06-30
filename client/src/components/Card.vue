@@ -32,10 +32,10 @@
              @keyup.enter="checkSubmission">
       <!-- 		<md-button @click="skipWord">Skip</md-button> -->
       <div id="control-wrap">  
-        <div id="soundIcon" @click="playTTS" v-if="isTTSSupported === true"></div>
-        <md-button @click="checkSubmission" :class="{ marginAuto: isTTSSupported === false }" :name="checkText">{{checkText}}</md-button>
-        <div id="microphone" @click="recordAudio" v-show="recording === false" v-if="isTTSSupported === true"></div>
-        <div id="microphone-stop" @click="stopRecord" v-show="recording === true" v-if="isTTSSupported === true"></div>
+        <div id="soundIcon" @click="playTTS" v-if="ttsSupported === true"></div>
+        <md-button @click="checkSubmission" :class="{ marginAuto: ttsSupported === false }" :name="checkText">{{checkText}}</md-button>
+        <div id="microphone" @click="recordAudio" v-show="recording === false" v-if="ttsSupported === true"></div>
+        <div id="microphone-stop" @click="stopRecord" v-show="recording === true" v-if="ttsSupported === true"></div>
       </div>
     </div>
     <audio id="correctSound" nocontrols hidden>
@@ -68,7 +68,7 @@
         }
       },
       isTTSSupported(){
-        return this.$store.getters.currentLang === undefined ? false : true;
+        this.ttsSupported = this.$store.getters.currentLang === undefined ? false : true;
       }
     },
     mounted () {
@@ -212,7 +212,8 @@
           voiceIndex = 21; // Mandarin (Tawain) Voice
         } else {
           voiceIndex = 0;
-          alert("Current TTS Language Not Supported");
+          ttsSupported = false;
+          console.log("Current TTS Language Not Supported");
         }
 
         utterance.voice = speechSynthesis.getVoices()[voiceIndex]; 
@@ -228,19 +229,19 @@
     },
     data() {
       return {
+        audioSrc: "",
         currentListID: null,
         cardInput: "",
         cardAnswer: "",
+        checkText: this.$store.getters.menuKey.translation.check,
         currentList: this.$store.getters.currentList,
+        enterMeaningText: this.$store.getters.menuKey.translation.enter_meaning,
         speechMatch: null,
         speechWord: "",
+        ttsSupported: true,
         recognition: null,
         recording: false,
-        audioSrc: "",
-        checkText: this.$store.getters.menuKey.translation.check,
-        enterMeaningText: this.$store.getters.menuKey.translation.enter_meaning,
         wordListText: this.$store.getters.menuKey.translation.word_list
-
       }
     }
   }
@@ -258,7 +259,6 @@
 </style>
 
 <style scoped lang="scss">
-
   .marginAuto {
     margin: auto !important;
   }

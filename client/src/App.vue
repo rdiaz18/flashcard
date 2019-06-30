@@ -115,6 +115,7 @@
       font-weight: bold;
       color: white;
       display: inline-block;
+      text-transform: lowercase;
       &.router-link-exact-active {
         transform: scale(1.4);
         margin: 20px;
