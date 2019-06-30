@@ -123,13 +123,18 @@
     },
     methods: {
       createNewList(){
+        const languageHyphenIndex = this.language.indexOf("-"),
+              nativeLangugeHyphenIndex = this.nativeLanguage.indexOf("-"),
+              languageCode = this.language.substring(0, languageHyphenIndex),
+              nativeLanguageCode = this.nativeLanguage.substring(0, nativeLangugeHyphenIndex);
+
         this.$store.commit("setPreloader", true);
         this.$store.dispatch("userCreateList", {
           "name": this.listName,
           "description": this.listDescription,
           "words": "",
-          "language": this.language,
-          "nativeLanguage": this.nativeLanguage,
+          "language": languageCode,
+          "nativeLanguage": nativeLanguageCode,
           "userId": this.$store.state.user.id
         });
         this.$emit('close')
@@ -157,7 +162,7 @@
     },
     data() {
       return {
-        email: "",
+        email: this.$store.getters.email,
         listName: "",
         listDescription: "",
         language: "",
@@ -166,13 +171,14 @@
         listIdToDelete: null,
         textCSV:
           `Example CSV Format Below
-				Word, Meaning #1, Meaning #2...
+				Word, Meaning
+        Word, Meaning
 
-				и, "and, though",
-				в, "in, at",
+				и, "and",
+				в, "in",
 				не, "not",
 				он, "he",
-				на, "on, in, at, to"`
+				на, "on"`
 
       }
     }

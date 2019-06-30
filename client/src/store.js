@@ -562,7 +562,7 @@ const store = new Vuex.Store({
         body: JSON.stringify(payload),
         headers: {
           'Content-Type': 'application/json',
-          'x-access-token': state.jwt
+          'x-access-token': state.state.jwt
         }
       }).then(res => {
         if (!res.ok) {
@@ -589,7 +589,7 @@ const store = new Vuex.Store({
         body: JSON.stringify(payload),
         headers: {
           'Content-Type': 'application/json',
-          'x-access-token': state.jwt
+          'x-access-token': state.state.jwt
         }
       }).then(res => {
         if (!res.ok) {
@@ -632,7 +632,7 @@ const store = new Vuex.Store({
         }),
         headers: {
           'Content-Type': 'application/json',
-          'x-access-token': state.jwt
+          'x-access-token': state.state.jwt
         }
       }).then(res => {
         if (!res.ok) {
@@ -690,7 +690,7 @@ const store = new Vuex.Store({
         }),
         headers: {
           'Content-Type': 'application/json',
-          'x-access-token': state.jwt
+          'x-access-token': state.state.jwt
         }
       }).then(res => {
         if (!res.ok) {
@@ -743,7 +743,7 @@ const store = new Vuex.Store({
         }),
         headers: {
           'Content-Type': 'application/json',
-          'x-access-token': state.jwt
+          'x-access-token': state.state.jwt
         }
       }).then(res => {
         if (!res.ok) {
@@ -788,17 +788,20 @@ const store = new Vuex.Store({
 
     userCreateList(state, payload) {
       this.commit("setPreloaderMsg", "Uploading WordList");
-
+      console.log("payload");
+      console.log(payload);
+      console.log(state);
       fetch('https://api.wordza.app/userCreateList', {
         method: "POST",
         body: JSON.stringify(payload),
         headers: {
           'Content-Type': 'application/json',
-          'x-access-token': state.jwt
+          'x-access-token': state.state.jwt
         }
       }).then(res => {
         if (!res.ok) {
           res.json().then((err) => {
+            console.log(err);
             this.commit("setPreloaderMsg", err["message"]);
             setTimeout(() => { // UX
               this.commit("setPreloader", false);
@@ -827,7 +830,7 @@ const store = new Vuex.Store({
         body: JSON.stringify(payload),
         headers: {
           'Content-Type': 'application/json',
-          'x-access-token': state.jwt
+          'x-access-token': state.state.jwt
         }
       }).then(res => {
         if (!res.ok) {
@@ -859,7 +862,7 @@ const store = new Vuex.Store({
         body: JSON.stringify(payload),
         headers: {
           'Content-Type': 'application/json',
-          'x-access-token': state.jwt
+          'x-access-token': state.state.jwt
         }
       }).then(res => {
         if (!res.ok) {
