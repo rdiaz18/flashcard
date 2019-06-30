@@ -35,22 +35,19 @@
       }
     },
     beforeMount(){
-      const that = this;
-      function importAll (r) {
-        console.log(r);
-        r.keys().forEach(key => that.imgCache[key] = r(key));
+      const importAll = (r) => {
+        r.keys().forEach(key => this.imgCache[key] = r(key));
       }
 
-      window.innerWidth > 768 ? 
-        importAll(require.context('./assets/backgrounds/desktop', true, /\.jpg$/)) :
-        importAll(require.context('./assets/backgrounds/mobile', true, /\.jpg$/));
+      importAll(require.context('./assets/', true, /\.jpg$/));
     },
     computed: {
       src(){
         const lang = this.$store.getters.currentLang,
-              key = `./bg-${lang}.jpg`,
-              url = this.imgCache[key],
-              that = this;
+              key = window.innerWidth > 768 ? 
+                      `./backgrounds/desktop/bg-${lang}.jpg` :
+                      `./backgrounds/mobile/bg-${lang}.jpg`,
+              url = this.imgCache[key];
 
         return url;
       }
@@ -67,86 +64,85 @@
 </script>
 
 <style lang="scss">
-html {
-  background-color: #337EFF;
-  overflow: hidden;
-}
-html, body, #app {
-  padding: 0px;
-  margin: 0px;
-}
-h1,h2,h3,h4, optgroup, thead, .md-title {
-  font-family: 'Montserrat', sans-serif;
-  font-weight: 700 !important;
-  font-style: bolder;
-}
-#app {
-  font-family: 'Montserrat', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50; 
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-  width: 100%;
-  min-height: 100%;
-  position: absolute;
-
-  #bgFade {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: black;
-    opacity: 0.6;
-    z-index: 1;
+  html {
+    background-color: #337EFF;
+    overflow: hidden;
   }
-
-  #view {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    z-index: 2;
+  html, body, #app {
+    padding: 0px;
+    margin: 0px;
   }
-}
-nav {
-  padding: 30px;
-  z-index: 9;
-  a {
-    font-weight: bold;
-    color: white;
-    display: inline-block;
-    &.router-link-exact-active {
-      transform: scale(1.4);
-      margin: 20px;
+  h1,h2,h3,h4, optgroup, thead, .md-title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700 !important;
+    font-style: bolder;
+  }
+  #app {
+    font-family: 'Montserrat', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50; 
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    width: 100%;
+    min-height: 100%;
+    position: absolute;
+
+    #bgFade {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: black;
+      opacity: 0.6;
+      z-index: 1;
+    }
+
+    #view {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
     }
   }
-}
-
-.md-menu-content-container {
-  background-color: white !important;
-}
-
-@media (max-width: 1023px){
-  #app {
-    background-repeat: repeat-y;
-    background-size: contain;
-    background-position: top center;
-  }
-}
-
-@media (max-width: 850px) and (orientation: landscape){
   nav {
-    padding: 0px !important;
+    padding: 30px;
+    z-index: 9;
+    a {
+      font-weight: bold;
+      color: white;
+      display: inline-block;
+      &.router-link-exact-active {
+        transform: scale(1.4);
+        margin: 20px;
+      }
+    }
   }
-}
 
-@media (max-width: 420px){
-  nav {
-    padding: 0px !important;
+  .md-menu-content-container {
+    background-color: white !important;
   }
-}
 
+  @media (max-width: 1023px){
+    #app {
+      background-repeat: repeat-y;
+      background-size: contain;
+      background-position: top center;
+    }
+  }
+
+  @media (max-width: 850px) and (orientation: landscape){
+    nav {
+      padding: 0px !important;
+    }
+  }
+
+  @media (max-width: 420px){
+    nav {
+      padding: 0px !important;
+    }
+  }
 </style>

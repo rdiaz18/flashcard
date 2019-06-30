@@ -83,8 +83,8 @@ export default {
       this.emptyCheck("register");  
     },
     emptyCheck(loginType){
-      if (this.email == "" || this.password == "") {
-        alert("Please Complete Email and Password Fields");
+      if (this.email == "" || this.password == "" || this.menuLanguageCode == null) {
+        alert("Please Complete Email, Password and Menu Language Fields");
       } else {
         this.$store.commit("setPreloader", true);
 
