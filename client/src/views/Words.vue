@@ -80,27 +80,26 @@
         showModalState: 'showModal',
         computedList: 'currentListWords',
         wordLists: 'wordLists',
-        country: "currentLang",
-        nativeCountry: "currentNativeLang"
+        currentList: "currentList"
       }),
       langSrc() {
-        const key = `./flag-${this.country}.png`,
+        const key = `./flag-${this.currentList.nativeLanguage}.png`,
               url = this.imgCache[key];
 
-        console.log("langSrc");
+        console.log(this.currentList);
+        console.log(this.currentList.nativeLanguage);
         console.log(key);
-        console.log(url);
-        // Edit Flag Names to Remove prehyphen then Edit Code to reflect changes
+
         return url;
       },
       nativeLangSrc() {
-        const key = `./flag-${this.nativeCountry}.png`,
+        const key = `./flag-${this.currentList.language}.png`,
               url = this.imgCache[key];
 
-
-        console.log("nativeLangSrc");
+        console.log(this.currentList);
+        console.log(this.currentList.language);
         console.log(key);
-        console.log(url);
+
         return url;
       }
     },
@@ -142,7 +141,6 @@
     data() {
       return {
         currentListID: null,
-        currentList: this.$store.getters.currentList,
         newListName: '',
         imgCache: {},
         CSVModal: false,
