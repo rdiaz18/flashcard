@@ -16,6 +16,8 @@
 
 <script>
   import Preloader from "./components/Preloader.vue";
+  import {mapGetters} from 'vuex';
+
   export default {
     components: {
       Preloader
@@ -42,12 +44,18 @@
       importAll(require.context('./assets/', true, /\.jpg$/));
     },
     computed: {
+      ...mapGetters({
+        currentList: "currentList"
+      }),
       src(){
-        const lang = this.$store.getters.currentLang,
+        const lang = this.currentList.language,
               key = window.innerWidth > 768 ? 
                       `./backgrounds/desktop/bg-${lang}.jpg` :
                       `./backgrounds/mobile/bg-${lang}.jpg`,
               url = this.imgCache[key];
+
+        console.log("App.vue lang");
+        console.log(lang);
 
         return url;
       }
