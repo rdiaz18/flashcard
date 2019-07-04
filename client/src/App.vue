@@ -1,5 +1,5 @@
 <template>
-  <div id="app" :style="{ backgroundImage: `url(${src})` }">
+  <div id="app" :style="{ backgroundImage: `url(${url})` }">
     <div id="bgFade"></div>
     <div id="view">
       <!-- <nav> -->
@@ -34,6 +34,20 @@
         this.passwordText = translation.password;
         this.wordsText = translation.words;
         this.cardsText = translation.cards;
+      },
+      '$store.state.currentList.nativeLanguage'(nativeLanguage){
+        console.log("nativeLanguage");
+        console.log(nativeLanguage);
+        // if (nativeLanguage !== undefined) {
+          const language = this.$store.state.languagesBGKey[nativeLanguage.toLowerCase()],
+                languagesList = this.$store.state.languages[language],
+                languageBG = languagesList[Math.floor(Math.random() * ((languagesList.length-1) - 0) + 0)][1],
+                key = window.innerWidth > 768 ? 
+                        `./backgrounds/desktop/bg-${languageBG}.jpg` :
+                        `./backgrounds/mobile/bg-${languageBG}.jpg`;
+                
+          this.url = this.imgCache[key];
+        // }
       }
     },
     beforeMount(){
@@ -43,29 +57,13 @@
 
       importAll(require.context('./assets/', true, /\.jpg$/));
     },
-    computed: {
-      ...mapGetters({
-        currentList: "currentList"
-      }),
-      src(){
-        const lang = this.currentList.language,
-              key = window.innerWidth > 768 ? 
-                      `./backgrounds/desktop/bg-${lang}.jpg` :
-                      `./backgrounds/mobile/bg-${lang}.jpg`,
-              url = this.imgCache[key];
-
-        console.log("App.vue lang");
-        console.log(lang);
-
-        return url;
-      }
-    },
     data(){ 
       return {
         imgCache: {},
         accountText: "Account",
         cardsText: "Cards",
         wordsText: "Words",
+        url: ""
       }
     }
   }
