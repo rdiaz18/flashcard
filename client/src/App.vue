@@ -36,18 +36,14 @@
         this.cardsText = translation.cards;
       },
       '$store.state.currentList.nativeLanguage'(nativeLanguage){
-        console.log("nativeLanguage");
-        console.log(nativeLanguage);
-        // if (nativeLanguage !== undefined) {
-          const language = this.$store.state.languagesBGKey[nativeLanguage.toLowerCase()],
-                languagesList = this.$store.state.languages[language],
-                languageBG = languagesList[Math.floor(Math.random() * ((languagesList.length-1) - 0) + 0)][1],
-                key = window.innerWidth > 768 ? 
-                        `./backgrounds/desktop/bg-${languageBG}.jpg` :
-                        `./backgrounds/mobile/bg-${languageBG}.jpg`;
-                
-          this.url = this.imgCache[key];
-        // }
+        const language = this.$store.state.languagesBGKey[nativeLanguage.toLowerCase()],
+              languagesList = this.$store.state.languages[language],
+              languageBG = languagesList[Math.floor(Math.random() * ((languagesList.length-1) - 0) + 0)][1],
+              key = window.innerWidth > 768 ? 
+                      `./backgrounds/desktop/bg-${languageBG}.jpg` :
+                      `./backgrounds/mobile/bg-${languageBG}.jpg`;
+              
+        this.url = this.imgCache[key];
       }
     },
     beforeMount(){
