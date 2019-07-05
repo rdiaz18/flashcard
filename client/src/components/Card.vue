@@ -73,6 +73,10 @@
     },
     mounted () {
       this.currentListID = this.currentList ? this.currentList.id : null;
+      // Delayed Playng of TTS First Word
+      setTimeout(() => {
+        this.playTTS();
+      }, 2000);
     },
     methods: {
       onChangeCurrentList(item) {
@@ -80,6 +84,9 @@
           let list = this.$store.getters.wordLists.find((v) => v.id === item);
           this.$store.commit("setCurrentList", list);
           this.$store.commit("updateLang", this.$store.state.supportedLanguagesKey[this.$store.state.currentList.nativeLanguage]);
+          setTimeout(()=> {
+            this.playTTS();
+          }, 500)
         }
       },
       checkSubmission() {
@@ -145,9 +152,7 @@
         this.recognition.maxAlternatives = 1;
         this.recognition.start();
 
-        var that = this;
-
-        console.log(that.recognition);
+        console.log(this.recognition);
 
         this.recognition.onresult = event => {
           var word = event.results[0][0].transcript;
