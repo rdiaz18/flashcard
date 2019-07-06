@@ -86,19 +86,11 @@
         const key = `./flag-${this.currentList.nativeLanguage}.png`,
               url = this.imgCache[key];
 
-        console.log(this.currentList);
-        console.log(this.currentList.nativeLanguage);
-        console.log(key);
-
         return url;
       },
       nativeLangSrc() {
         const key = `./flag-${this.currentList.language}.png`,
               url = this.imgCache[key];
-
-        console.log(this.currentList);
-        console.log(this.currentList.language);
-        console.log(key);
 
         return url;
       }
@@ -122,7 +114,8 @@
           this.deleteListModal = true;
         } else if (p === "saveListModal") {
           // this.saveListModal = true
-          this.$store.dispatch("updateList", this.$store.state.currentList);
+          const payload = (({ id, name, description, language, nativeLanguage, words, userId }) => ({ id, name, description, language, nativeLanguage, words, userId }))(this.$store.state.currentList);
+          this.$store.dispatch("updateList", payload);
           this.editedList = false;
         }
         this.$store.commit("setModal", true);

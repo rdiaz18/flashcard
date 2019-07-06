@@ -870,7 +870,11 @@ const store = new Vuex.Store({
     },
 
     updateList(state, payload) {
+      this.commit("setPreloader", true);
       this.commit("setPreloaderMsg", "Saving WordList");
+
+      console.log("updateList payload");
+      console.log(JSON.stringify(payload));
 
       fetch('https://api.wordza.app/updateList', {
         method: "POST",

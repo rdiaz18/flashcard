@@ -12,14 +12,41 @@
       </md-card-header>
       <md-card-content>
         <md-field>
-          <label>New List Name</label>
-          <md-input v-model="newListName"></md-input>
+          <label>List Name</label>
+          <md-input v-model="listName"></md-input>
         </md-field>
+        <md-field>
+          <label>List Description</label>
+          <md-input v-model="listDescription"></md-input>
+        </md-field>
+        <md-field class="select-container">
+          <label>Select Language You Plan to Learn</label>
+          <md-select v-model="language">
+            <md-optgroup v-for="(category, index) in $store.getters.languageCategories" :key="index" :label="category">
+              <md-option v-for="(lang, i) in $store.state.languages[category]" :key="i" :value="lang[1]" :data-category="category"
+                      class="lang-flag">
+                {{ lang[0] }}
+              </md-option>
+            </md-optgroup>
+          </md-select>
+        </md-field>
+        <md-field class="select-container">
+          <label>Select Language You Already Know</label>
+          <md-select v-model="nativeLanguage">
+            <md-optgroup v-for="(category, index) in $store.getters.languageCategories" :key="index" :label="category">
+              <md-option v-for="(lang, i) in $store.state.languages[category]" :value="lang[1]" :key="i" :data-category="category"
+                      class="lang-flag">
+                {{ lang[0] }}
+              </md-option>
+            </md-optgroup>
+          </md-select>
+        </md-field>
+        <label>Paste in CSV Below</label>
         <textarea v-model="textCSV"></textarea>
       </md-card-content>
       <md-card-actions>
         <md-button @click="closeModal" name="Cancel">Cancel</md-button>
-        <md-button @click="uploadCSV" name="Upload">Upload</md-button>
+        <md-button @click="createNewList(textCSV)" name="Upload">Upload</md-button>
       </md-card-actions>
     </md-card>
 
@@ -63,7 +90,7 @@
       </md-card-content>
       <md-card-actions>
         <md-button @click="closeModal" name="Cancel">Cancel</md-button>
-        <md-button @click="createNewList" name="Create">Create</md-button>
+        <md-button @click="createNewList('')" name="Create">Create</md-button>
       </md-card-actions>
     </md-card>
 
@@ -131,7 +158,7 @@
       }
     },
     methods: {
-      createNewList(){
+      createNewList(words){
         const languageHyphenIndex = this.language.indexOf("-"),
               nativeLangugeHyphenIndex = this.nativeLanguage.indexOf("-"),
               languageCode = this.language.substring(0, languageHyphenIndex),
@@ -141,7 +168,7 @@
         this.$store.dispatch("userCreateList", {
           "name": this.listName,
           "description": this.listDescription,
-          "words": "",
+          "words": JSON.stringify(words),
           "language": languageCode,
           "nativeLanguage": nativeLanguageCode,
           "userId": this.$store.state.user.id
@@ -176,19 +203,9 @@
         listDescription: "",
         language: "",
         nativeLanguage: "",
-        newListName: '',
         listIdToDelete: null,
         textCSV:
-          `Example CSV Format Below
-				Word, Meaning
-        Word, Meaning
-
-				и, "and",
-				в, "in",
-				не, "not",
-				он, "he",
-				на, "on"`
-
+          `Example CSV Format Below\n\nWord, Meaning,\nWord, Meaning,\n\nи, "and",\nв, "in",\nне, "not",\nон, "he",\nна, "on"`
       }
     }
   }
@@ -212,7 +229,6 @@
     .modal {
       top: 50%;
       left: 50%;
-      max-height: 50%;
       width: 50%;
       transform: translateX(-50%) translateY(-50%);
       background-color: white;
