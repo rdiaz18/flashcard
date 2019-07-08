@@ -22,6 +22,10 @@ module.exports = (app) => {
 			AuthenticationController.resetPassword)
 		app.post('/createNewPassword',
 			AuthenticationController.createNewPassword)
+		app.post('/requestEmailVerification',
+			AuthenticationController.requestEmailVerification)
+		app.get('/verifyEmail/:token',
+			AuthenticationController.verifyEmail)
 
 	//List Endpoints
 		//Read file for langs

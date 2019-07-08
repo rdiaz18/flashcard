@@ -161,7 +161,7 @@ module.exports = {
 				}
 			})
 			if(!user){
-				res.status(400).send({"message": "user not found"})
+				return res.status(400).send({"message": "user not found"})
 			}
 			let userJson = user.toJSON()
 			delete userJson.resetToken
@@ -169,38 +169,40 @@ module.exports = {
 			user.update({
 				resetToken: resetToken
 			}).then(() => {
-				// var smtpTransport = nodemailer.createTransport('SMTP', {
-			 //        service: 'SendGrid',
-			 //        auth: {
-			 //          user: '!!! YOUR SENDGRID USERNAME !!!',
-			 //          pass: '!!! YOUR SENDGRID PASSWORD !!!'
-			 //        }
-			 //    });
-			 //    var mailOptions = {
-			 //        to: user.email,
-			 //        from: 'passwordreset@demo.com',
-			 //        subject: 'Node.js Password Reset',
-			 //        text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
-			 //          'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
-			 //          'http://' + req.headers.host + '/reset/' + token + '\n\n' +
-			 //          'If you did not request this, please ignore this email and your password will remain unchanged.\n'
-			 //    };
-			 //    smtpTransport.sendMail(mailOptions, function(err) {
-			 //        req.flash('info', 'An e-mail has been sent to ' + user.email + ' with further instructions.');
-			 //        done(err, 'done');
-			 //    });
-				res.send({
-					user,
-					resetToken
-				})
+				let url = `wordza.app/reset/${resetToken}`
+				let message = `<h3>Wordza Password reset</h3><p>A request has been made to reset the password for the account associated with this email. If you did not make this request please ignore this message, otherwise follow this <a target="_blank" href='${url}'>link</a></p>`
+				try{
+					let transporter = nodemailer.createTransport({
+					    sendmail: true,
+					    newline: 'unix',
+					    path: '/usr/sbin/sendmail'
+					});
+					transporter.sendMail({
+					    from: 'noreply@wordza.app',
+					    to: email,
+					    subject: 'Password reset for Worza account',
+					    html: message
+					}, (err, info) => {
+					    console.log(info.envelope);
+					    console.log(info.messageId);
+					});
+
+					return res.send({message: `An email has been sent tp ${email}`})
+				}catch(err){
+					console.log(err)
+					res.status(500).send({error: "Server Error"})
+					return -1
+				}
 			})
 		}catch(err){
 			console.log(err)
 			res.status(500).send({"error" : "Server Error"})
 		}
-	}, async createNewPassword(req, res){
+	}, 
+	async createNewPassword(req, res){
 		try{
-			const {resetToken, password} = req.body
+			const {password} = req.body
+			const resetToken = req.headers['x-access-token']
 			jwt.verify(resetToken, config.authentication.jwtSecret, async function(err, token){
 				if(err){
 					return res.status(500).send({message: 'Invalid Account'})
@@ -212,7 +214,8 @@ module.exports = {
 						return res.status(403).send({message: 'Token has expired'})
 					}
 					tmpuser.update({
-						password: password
+						password: password,
+						resetToken: -1,
 					}).then(() => {
 						res.send({tmpuser})
 					})
@@ -223,6 +226,80 @@ module.exports = {
 			console.log(err)
 			res.status(500).send({"error": "Server error setting new password"})
 		}
-	}
+	},
+	async requestEmailVerification(req,res){
+		try{
+			const {email} = req.body
+			const user = await users.findOne({
+				where: {
+					email: email
+				}
+			})
+			if(!user){
+				return res.status(400).send({"message": "user not found"})
+			}
+			let userJson = user.toJSON()
+			delete userJson.resetToken
+			const resetToken = jwtSignReset(userJson)
+			user.update({
+				resetToken: resetToken
+			}).then(() => {
+				try{
+					let url = 'api.wordza.app/verifyEmail/' + resetToken
+					let message = `<h3>Wordza.app Email Verification</h3><p>This email has been registered for a Wordza account, to conform you are the owner of this email please <a target='_blank' href='${url}'>click here</a> </p>`
+					let transporter = nodemailer.createTransport({
+					    sendmail: true,
+					    newline: 'unix',
+					    path: '/usr/sbin/sendmail'
+					});
+					transporter.sendMail({
+					    from: 'noreply@wordza.app',
+					    to: email,
+					    subject: 'Email Verification for Worza account',
+					    html: message
+					}, (err, info) => {
+					    console.log(info.envelope);
+					    console.log(info.messageId);
+					});
 
+					return res.send({message: `An email has been sent to ${email}`})
+				}catch(err){
+					console.log(err)
+					res.status(500).send({error: "Server Error"})
+					return -1
+				}
+			})
+		}catch(err){
+			console.log(err)
+			return res.status(500).send({error: "Could not request email verification"})
+		}
+	},
+	async verifyEmail(req, res){
+		try{
+			const resetToken = req.params.token
+			console.log({params: req.params, token: resetToken})
+			jwt.verify(resetToken, config.authentication.jwtSecret, async function(err, token){
+				if(err){
+					return res.status(500).send({message: 'Invalid Account'})
+				}else{
+					const tmpuser = await users.findById(token.id)
+					console.log({usr: tmpuser.resetToken})
+					console.log({sent: resetToken})
+					if(tmpuser.resetToken != resetToken){
+						return res.status(403).send({message: 'Token has expired'})
+					}
+					console.log("VERIFICATION SUCCESS")
+					tmpuser.update({
+						verified: 1
+					}).then(() => {
+						return res.send({message: "Email has been verified"})
+					})
+					
+				}
+			})			
+		}catch(err){
+			console.log(err)
+			res.status(500).send({"error": "Server error setting new password"})
+		}		
+	}
 }
