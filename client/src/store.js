@@ -430,6 +430,10 @@ const store = new Vuex.Store({
     },
     currentListWords(state) {
       if (state.currentList.words) {
+        // adding blank at the end for editing
+        state.currentList.words.push(["", ""]);
+        console.log("currentListWords Getter");
+        console.log(state.currentList.words);
         return state.currentList.words;
       } else {
         return [];
