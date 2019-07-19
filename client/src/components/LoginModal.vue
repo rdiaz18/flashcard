@@ -7,7 +7,7 @@
         </div>
       </md-card-header>
       <md-card-content>
-        <md-field>
+        <md-field class="">
           <label>{{emailText}}</label>
           <md-input name="email" type="email" required v-model="email"></md-input>
         </md-field>
@@ -209,4 +209,18 @@ a {
     text-decoration: underline;
   }
 }
+
+@media(max-width: 1023px){
+  #login, #login .md-card {
+    width: 100%;
+  }
+}
+
+@media (max-width: 767px){
+  #logo {
+    background-position: center;
+    padding: 0px;
+  }
+}
+
 </style>
