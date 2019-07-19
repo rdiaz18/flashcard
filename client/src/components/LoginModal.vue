@@ -7,7 +7,7 @@
         </div>
       </md-card-header>
       <md-card-content>
-        <md-field class="">
+        <md-field>
           <label>{{emailText}}</label>
           <md-input name="email" type="email" required v-model="email"></md-input>
         </md-field>
@@ -210,7 +210,7 @@ a {
   }
 }
 
-@media(max-width: 1023px){
+@media (max-width: 1023px){
   #login, #login .md-card {
     width: 100%;
   }
@@ -220,6 +220,20 @@ a {
   #logo {
     background-position: center;
     padding: 0px;
+  }
+}
+
+@media (max-width: 900px) and (orientation: landscape){
+  #login .md-card .md-card-content{
+    display: flex !important;
+  }
+
+  #login .md-card .md-card-content .md-field {
+    width: calc(100%/3) !important;
+  }
+
+  #login .md-button {
+    margin-top: -10px;
   }
 }
 
