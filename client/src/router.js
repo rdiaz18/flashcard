@@ -34,7 +34,7 @@ export default new Router({
       // route level code-splitting
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "Account" */ './views/Account.vue')
+      component: () => import(/* webpackChunkName: "account" */ './views/Account.vue')
     },
     {
       path: '/upload',
@@ -42,7 +42,15 @@ export default new Router({
       // route level code-splitting
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "Upload" */ './views/Upload.vue')
+      component: () => import(/* webpackChunkName: "upload" */ './views/Upload.vue')
+    },
+    {
+      path: '/reset',
+      name: 'reset',
+      // route level code-splitting
+      // this generates a separate chunk (about.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import(/* webpackChunkName: "reset" */ './views/Reset.vue')      
     }
   ]
 })
