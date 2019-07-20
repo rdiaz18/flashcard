@@ -4,9 +4,10 @@
     <md-card id="list-select-container">
       <md-card-header>
         <div class="md-title">{{wordListSelectText}}</div>
+        <md-switch v-model="boolean" class="md-primary" v-if="getWidth"></md-switch>
       </md-card-header>
 
-      <div id="listController">
+      <div id="listController" v-bind:class="{ collapsed: boolean }">
         <md-field>
           <label style="margin-left: 5px">{{wordListText}}</label>
           <md-select id="list-select" v-model="currentListID" @input="onChangeCurrentList">
@@ -102,6 +103,9 @@
           this.$store.commit("setCurrentList", list);
         }
       },
+      getWidth(){
+          return window.innerWidth < 768;
+      },
       mobile() {
         return window.innerWidth < 480;
       },
@@ -133,6 +137,7 @@
     },
     data() {
       return {
+        boolean: window.innerWidth < 768 ? true : false,
         currentListID: null,
         newListName: '',
         imgCache: {},
@@ -157,6 +162,19 @@
 </script>
 
 <style lang="scss" scoped>
+  #listController {
+    animation-duration: 0.5s;
+  }
+  .collapsed {
+    height: 0px;
+    overflow: hidden;
+    padding: 0px !important;
+    display: none;
+  }
+  .md-switch .md-switch-thumb .md-ripple, 
+  .md-switch .md-switch-thumb:before {
+      background-color: none !important;
+  }
   #words {
     .md-card-header,
     h1 {
@@ -356,6 +374,12 @@
     }
   }
 
+  @media (max-width: 767px){
+    .lang-select {
+      margin-top: -15px !important;
+    }
+  }
+
   @media (max-width: 420px) {
     h1 {
       font-size: 1.6em !important;
@@ -375,6 +399,14 @@
     color: white;
     margin: auto;
     padding: 20px 0px;
+  }
+  .md-switch .md-switch-thumb {
+    background-color: white !important;
+  }
+  .md-switch .md-switch-container {
+    margin: auto;
+    display: block;
+    background-color: rgba(255, 255, 255, 0.5);
   }
   @media (max-width: 420px) {
     .md-table-cell-container {

@@ -662,6 +662,36 @@ const store = new Vuex.Store({
       });
     },
 
+    createNewPassword(state, payload) {
+      var that = this;
+      this.commit("setPreloaderMsg", "Emailing Password");
+      fetch('https://api.wordza.app/createNewPassword', {
+        method: "POST",
+        body: JSON.stringify(payload),
+        headers: {
+          'Content-Type': 'application/json',
+          'x-access-token': state.state.jwt
+        }
+      }).then(res => {
+        if (!res.ok) {
+          res.json().then(function (err) {
+            console.log(err);
+            that.commit("setPreloaderMsg", err["message"]);
+            setTimeout(function () { // UX
+              that.commit("setPreloader", false);
+              // that.commit("setModal", false);
+            }, 500);
+            throw new Error();
+          });
+        }
+        return res.json();
+      }).then(response => {
+        console.log('Success:', response);
+        this.commit("setPreloaderMsg", "Password Reset");
+        this.commit("setPreloader", false);
+      });
+    },
+
     getStockWordList(state) {
       this.commit("setPreloaderMsg", "Downloading Stock WordLists");
 
