@@ -51,8 +51,8 @@ for (var prop in languageObj){
 
 (function(){
 
-	var nativeLanguage = "AF",
-		language = "EN";
+	var language = "AF",
+		nativeLanguage = "EN";
 
 	login(nativeLanguage, language);
 
