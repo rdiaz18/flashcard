@@ -894,11 +894,12 @@ const store = new Vuex.Store({
       }).then(response => {
         console.log('Success');
         console.log(response);
+        this.commit("setCurrentList", response);
         this.commit("setPreloaderMsg", "Created WordList");
         this.dispatch("getListByUser");
-        // setTimeout(() => {
-        //   this.commit("setPreloader", false);
-        // }, 500);
+        setTimeout(() => {
+          this.commit("setPreloader", false);
+        }, 500);
       });
 
     },

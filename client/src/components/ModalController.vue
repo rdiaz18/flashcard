@@ -68,23 +68,17 @@
         <md-field class="select-container">
           <label>Select Language You Plan to Learn</label>
           <md-select v-model="language">
-            <md-optgroup v-for="(category, index) in $store.getters.languageCategories" :key="index" :label="category">
-              <md-option v-for="(lang, i) in $store.state.languages[category]" :key="i" :value="lang[1]" :data-category="category"
-                      class="lang-flag">
-                {{ lang[0] }}
-              </md-option>
-            </md-optgroup>
+            <md-option v-for="(category, index) in $store.getters.languageCategories" :key="index" :label="category" :value="category" class="lang-flag">
+              {{ category }}
+            </md-option>
           </md-select>
         </md-field>
         <md-field class="select-container">
           <label>Select Language You Already Know</label>
           <md-select v-model="nativeLanguage">
-            <md-optgroup v-for="(category, index) in $store.getters.languageCategories" :key="index" :label="category">
-              <md-option v-for="(lang, i) in $store.state.languages[category]" :value="lang[1]" :key="i" :data-category="category"
-                      class="lang-flag">
-                {{ lang[0] }}
-              </md-option>
-            </md-optgroup>
+            <md-option v-for="(category, index) in $store.getters.languageCategories" :key="index" :label="category" :value="category" class="lang-flag">
+              {{ category }}
+            </md-option>
           </md-select>
         </md-field>
       </md-card-content>
@@ -159,21 +153,38 @@
     },
     methods: {
       createNewList(words){
-        const languageHyphenIndex = this.language.indexOf("-"),
+        const languageHyphenIndex      = this.language.indexOf("-"),
               nativeLangugeHyphenIndex = this.nativeLanguage.indexOf("-"),
-              languageCode = this.language.substring(0, languageHyphenIndex),
-              nativeLanguageCode = this.nativeLanguage.substring(0, nativeLangugeHyphenIndex);
+              languageCode             = this.language.substring(0, languageHyphenIndex),
+              nativeLanguageCode       = this.nativeLanguage.substring(0, nativeLangugeHyphenIndex),
+              obj                      = {
+                                            "name": this.listName,
+                                            "description": this.listDescription,
+                                            "words": words != '' ? JSON.stringify(words) : JSON.stringify(""),
+                                            "language": this.getLanguageCode(this.language),
+                                            "nativeLanguage": this.getLanguageCode(this.nativeLanguage),
+                                            "userId": this.$store.state.user.id
+                                          };
 
         this.$store.commit("setPreloader", true);
-        this.$store.dispatch("userCreateList", {
-          "name": this.listName,
-          "description": this.listDescription,
-          "words": JSON.stringify(words),
-          "language": languageCode,
-          "nativeLanguage": nativeLanguageCode,
-          "userId": this.$store.state.user.id
-        });
+        this.$store.dispatch("userCreateList", obj);
+        // This should be a callback of above - connection can be lost mid dispatch
         this.$emit('close')
+      },
+      closeModal(){
+        this.$emit('close')
+      },
+      deleteList() {
+        this.$store.dispatch("deleteList", {"id": this.listIdToDelete});
+        this.$emit('close')
+      },
+      getLanguageCode(language){
+        console.log(this.$store.state);
+        console.log(this.$store.state.languagesBGKey);
+        const langKey = this.$store.state.languagesBGKey,
+              code    = Object.keys(langKey)[Object.values(langKey).indexOf(language)];
+        
+        return code;
       },
       resetPassword(){
         if (this.email === "" ) {
@@ -185,15 +196,8 @@
           this.$emit('close')
         }
       },
-      closeModal(){
-        this.$emit('close')
-      },
       uploadCSV(){
         // this.$emit('close')
-      },
-      deleteList() {
-        this.$store.dispatch("deleteList", {"id": this.listIdToDelete});
-        this.$emit('close')
       }
     },
     data() {
@@ -205,7 +209,7 @@
         nativeLanguage: "",
         listIdToDelete: null,
         textCSV:
-          `Example CSV Format Below\n\nWord, Meaning,\nWord, Meaning,\n\nи, "and",\nв, "in",\nне, "not",\nон, "he",\nна, "on"`
+          `Example CSV Format Below (Delete This Text)\n\nи, and,\nв, in,\nне, not,\nон, he,\nна, on`
       }
     }
   }
