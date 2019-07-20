@@ -4,7 +4,7 @@
     <md-card id="list-select-container">
       <md-card-header>
         <div class="md-title">{{wordListSelectText}}</div>
-        <md-switch v-model="boolean" class="md-primary" v-if="getWidth"></md-switch>
+        <md-switch v-model="boolean" class="md-primary" v-if="getWidth == true"></md-switch>
       </md-card-header>
 
       <div id="listController" v-bind:class="{ collapsed: boolean }">

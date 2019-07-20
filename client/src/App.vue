@@ -111,7 +111,7 @@
     }
   }
   nav {
-    padding: 30px;
+    padding: 0px;
     z-index: 9;
     a {
       font-weight: bold;
