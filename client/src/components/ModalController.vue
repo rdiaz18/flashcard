@@ -13,15 +13,15 @@
       <md-card-content>
         <md-field>
           <label>List Name</label>
-          <md-input v-model="listName"></md-input>
+          <md-input v-model="listName" required></md-input>
         </md-field>
         <md-field>
           <label>List Description</label>
-          <md-input v-model="listDescription"></md-input>
+          <md-input v-model="listDescription" required></md-input>
         </md-field>
         <md-field class="select-container">
           <label>Select Language You Plan to Learn</label>
-          <md-select v-model="language">
+          <md-select v-model="language" required>
             <md-optgroup v-for="(category, index) in $store.getters.languageCategories" :key="index" :label="category">
               <md-option v-for="(lang, i) in $store.state.languages[category]" :key="i" :value="lang[1]" :data-category="category"
                       class="lang-flag">
@@ -32,7 +32,7 @@
         </md-field>
         <md-field class="select-container">
           <label>Select Language You Already Know</label>
-          <md-select v-model="nativeLanguage">
+          <md-select v-model="nativeLanguage" required>
             <md-optgroup v-for="(category, index) in $store.getters.languageCategories" :key="index" :label="category">
               <md-option v-for="(lang, i) in $store.state.languages[category]" :value="lang[1]" :key="i" :data-category="category"
                       class="lang-flag">
@@ -153,23 +153,32 @@
     },
     methods: {
       createNewList(words){
-        const languageHyphenIndex      = this.language.indexOf("-"),
-              nativeLangugeHyphenIndex = this.nativeLanguage.indexOf("-"),
-              languageCode             = this.language.substring(0, languageHyphenIndex),
-              nativeLanguageCode       = this.nativeLanguage.substring(0, nativeLangugeHyphenIndex),
-              obj                      = {
-                                            "name": this.listName,
-                                            "description": this.listDescription,
-                                            "words": words != '' ? JSON.stringify(words) : JSON.stringify(""),
-                                            "language": this.getLanguageCode(this.language),
-                                            "nativeLanguage": this.getLanguageCode(this.nativeLanguage),
-                                            "userId": this.$store.state.user.id
-                                          };
+        console.log("conditions");
+        console.log(this.listName);
+        console.log(this.listDescription);
+        console.log(this.language);
+        console.log(this.nativeLanguage);
+        if (this.listName !== "" && this.listDescription !== "" && this.language !== "" && this.nativeLanguage !== "") {
+          const languageHyphenIndex      = this.language.indexOf("-"),
+                nativeLangugeHyphenIndex = this.nativeLanguage.indexOf("-"),
+                languageCode             = this.language.substring(0, languageHyphenIndex),
+                nativeLanguageCode       = this.nativeLanguage.substring(0, nativeLangugeHyphenIndex),
+                obj                      = {
+                                              "name": this.listName,
+                                              "description": this.listDescription,
+                                              "words": words != '' ? JSON.stringify(words) : JSON.stringify(""),
+                                              "language": this.getLanguageCode(this.language),
+                                              "nativeLanguage": this.getLanguageCode(this.nativeLanguage),
+                                              "userId": this.$store.state.user.id
+                                            };
 
-        this.$store.commit("setPreloader", true);
-        this.$store.dispatch("userCreateList", obj);
-        // This should be a callback of above - connection can be lost mid dispatch
-        this.$emit('close')
+          this.$store.commit("setPreloader", true);
+          this.$store.dispatch("userCreateList", obj);
+          // This should be a callback of above - connection can be lost mid dispatch
+          this.$emit('close')
+        } else {
+          alert("Please Complete All Fields");
+        }
       },
       closeModal(){
         this.$emit('close')

@@ -42,6 +42,7 @@
     },
     methods: {
       inputChange() {
+        console.log("inputChange()");
         // Update Word in State
         this.$store.commit("updateWord", {
           "index": this.index,
