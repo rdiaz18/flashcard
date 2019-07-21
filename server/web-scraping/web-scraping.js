@@ -192,9 +192,23 @@ for (var prop in languageObj){
 
 // Access Text Files
 function readFile(prop, key){
-	var xhttp = new XMLHttpRequest(),
-		url = 'http://18.188.201.66:8081/readFile',
+	const xhttp = new XMLHttpRequest(),
+		  url = 'http://18.188.201.66:8081/readFile';
+
+	console.log("prop");
+	console.log(prop);
+
+	if (prop == "AR" 
+		|| prop == "CMN" 
+		|| prop == "HE" 
+		|| prop == "HI" 
+		|| prop == "JA"
+		|| prop == "KO"
+		|| prop == "TH") {
+		  fUrl = JSON.stringify({ 'file': `${prop}-EN-1000.txt` });
+	} else {
 		fUrl = JSON.stringify({ 'file': `${prop}-EN-1000.csv` });
+	}
 
 	xhttp.onreadystatechange = function() {
 		if (this.readyState == 4 && this.status == 200) {
